@@ -1,0 +1,146 @@
+[
+  {
+    "pattern_type": "multi_tool_workflow",
+    "description": "Sequential or parallel tool chaining with decision logic",
+    "examples": ["build pipeline", "test + lint", "search + analyze", "config validation"],
+    "complexity": "medium to high",
+    "tools_used": ["BashTool", "GlobTool", "GrepTool", "FileReadTool", "FileWriteTool", "FileEditTool"],
+    "performance_characteristics": ["sequential_execution", "parallel_execution", "conditional_chain", "validation_pipeline"]
+  },
+  {
+    "pattern_type": "error_recovery",
+    "description": "Retry mechanisms, fallback strategies, circuit breakers",
+    "examples": ["exponential backoff", "retry with timeout", "fallback endpoints", "circuit breaker"],
+    "complexity": "medium to high",
+    "tools_used": ["BashTool"],
+    "performance_characteristics": ["retry_mechanism", "fallback_strategy", "circuit_breaker", "saga_pattern"]
+  },
+  {
+    "pattern_type": "performance_caching",
+    "description": "Memoization, LRU, TTL, write-through caching patterns",
+    "examples": ["memoize function", "LRU cache", "TTL cache", "cache-aside"],
+    "complexity": "high",
+    "tools_used": ["BashTool"],
+    "performance_characteristics": ["cache_memoization", "lru_cache", "ttl_cache", "read_through", "stampede_prevention"]
+  },
+  {
+    "pattern_type": "performance_optimization",
+    "description": "Efficient algorithms, data structures, resource management",
+    "examples": ["binary heap", "bloom filter", "trie", "skip list", "connection pooling"],
+    "complexity": "high",
+    "tools_used": ["BashTool"],
+    "performance_characteristics": ["debounce_throttle", "concurrent_requests", "batch_processing", "connection_pool", "optimized_data_structures"]
+  },
+  {
+    "pattern_type": "performance_lazy_loading",
+    "description": "Lazy evaluation, generators, iterators for memory efficiency",
+    "examples": ["generator functions", "lazy iterators", "proxy-based lazy loading"],
+    "complexity": "medium to high",
+    "tools_used": ["BashTool"],
+    "performance_characteristics": ["lazy_iteration", "generator_lazy", "lazy_promise"]
+  },
+  {
+    "pattern_type": "performance_streaming",
+    "description": "Stream processing, backpressure, async iterators",
+    "examples": ["async iterators", "backpressure pipeline", "SSE streams"],
+    "complexity": "high",
+    "tools_used": ["BashTool"],
+    "performance_characteristics": ["stream_processing", "backpressure", "async_iterator", "sse"]
+  },
+  {
+    "pattern_type": "performance_parallel",
+    "description": "Concurrent execution, worker threads, parallel processing",
+    "examples": ["Promise.all", "worker threads", "barrier sync", "semaphore"],
+    "complexity": "high",
+    "tools_used": ["BashTool"],
+    "performance_characteristics": ["concurrent_requests", "worker_threads", "barrier", "semaphore", "scatter_gather"]
+  },
+  {
+    "pattern_type": "state_management",
+    "description": "Session lifecycle, state machines, context management",
+    "examples": ["session state machine", "context window", "ring buffer", "affinity routing"],
+    "complexity": "medium to high",
+    "tools_used": ["BashTool"],
+    "performance_characteristics": ["state_machine", "context_management", "session_affinity", "ring_buffer"]
+  },
+  {
+    "pattern_type": "state_persistence",
+    "description": "Persistence, versioning, event sourcing, CRDTs",
+    "examples": ["file-based session", "versioned state", "event sourcing", "CRDT counter", "WAL"],
+    "complexity": "high",
+    "tools_used": ["BashTool"],
+    "performance_characteristics": ["checkpointing", "event_sourcing", "crdt", "versioned_state", "write_ahead_log"]
+  },
+  {
+    "pattern_type": "state_memory",
+    "description": "Memory management, TTL, team sync, selective forgetting",
+    "examples": ["TTL cache", "team memory sync", "selective memory pruning", "priority queue"],
+    "complexity": "high",
+    "tools_used": ["BashTool"],
+    "performance_characteristics": ["ttl_cache", "team_sync", "selective_pruning", "priority_queue"]
+  },
+  {
+    "pattern_type": "security_validation",
+    "description": "Input validation, sanitization, pattern detection",
+    "examples": ["command injection detection", "XSS prevention", "SQL injection detection", "path traversal check"],
+    "complexity": "high",
+    "tools_used": ["BashTool"],
+    "performance_characteristics": ["input_sanitization", "pattern_matching", "xss_detection", "injection_detection", "traversal_check"]
+  },
+  {
+    "pattern_type": "security_permission",
+    "description": "Allowlists, RBAC, ABAC, command validation",
+    "examples": ["command allowlist", "role-based access", "attribute-based access"],
+    "complexity": "high",
+    "tools_used": ["BashTool"],
+    "performance_characteristics": ["allowlist", "rbac", "abac", "command_allowlist"]
+  },
+  {
+    "pattern_type": "security_sandbox",
+    "description": "Process isolation, containers, namespace isolation",
+    "examples": ["Docker sandbox", "chroot jail", "namespace isolation", "seccomp"],
+    "complexity": "high",
+    "tools_used": ["BashTool"],
+    "performance_characteristics": ["isolation", "container_isolation", "chroot_jail", "namespace_isolation"]
+  },
+  {
+    "pattern_type": "security_rate_limiting",
+    "description": "Throttling, token bucket, sliding window, per-user limits",
+    "examples": ["rate limiter", "token bucket", "sliding window", "leaky bucket"],
+    "complexity": "medium to high",
+    "tools_used": ["BashTool"],
+    "performance_characteristics": ["throttling", "token_bucket", "sliding_window", "leaky_bucket", "per_user_limit"]
+  },
+  {
+    "pattern_type": "integration_config",
+    "description": "Configuration loading, merging, hot-reload, env handling",
+    "examples": ["YAML/JSON config", "env overrides", "hot reload", "config precedence"],
+    "complexity": "low to high",
+    "tools_used": ["BashTool"],
+    "performance_characteristics": ["config_loading", "yaml_parsing", "env_config", "hot_reload_config", "config_precedence"]
+  },
+  {
+    "pattern_type": "integration_plugin",
+    "description": "Dynamic loading, lifecycle, hot-reload, sandboxing",
+    "examples": ["plugin registry", "hot reload", "plugin sandbox", "dependency resolution"],
+    "complexity": "high",
+    "tools_used": ["BashTool"],
+    "performance_characteristics": ["dynamic_loading", "autoload", "hot_reload", "plugin_lifecycle", "plugin_isolation"]
+  },
+  {
+    "pattern_type": "integration_hook",
+    "description": "Event hooks, middleware, pub/sub, pipeline patterns",
+    "examples": ["event system", "middleware chain", "pub/sub", "hook priority"],
+    "complexity": "medium to high",
+    "tools_used": ["BashTool"],
+    "performance_characteristics": ["event_system", "middleware_chain", "pub_sub", "hook_priority", "message_queue"]
+  },
+  {
+    "pattern_type": "integration_mcp",
+    "description": "MCP server connection, tool invocation, resource access",
+    "examples": ["MCP filesystem", "MCP tool call", "MCP auth", "MCP batching"],
+    "complexity": "high",
+    "tools_used": ["BashTool"],
+    "performance_characteristics": ["protocol_connection", "mcp_tool_call", "mcp_restricted_filesystem", "mcp_auth"]
+  }
+]

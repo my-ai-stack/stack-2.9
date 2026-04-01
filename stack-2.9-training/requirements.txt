@@ -1,0 +1,14 @@
+torch
+transformers
+sentencepiece
+tokenizers
+accelerate
+peft
+bitsandbytes
+unsloth
+datasets
+trl
+awq
+jupyter
+notebook
+jupyterlab
