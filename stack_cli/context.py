@@ -212,7 +212,7 @@ class ContextManager:
     def get_workspace_context(self) -> str:
         """Get formatted workspace context."""
         lines = ["# Workspace Context"]
-        lines.append(f"\n## Projects ({len(self.projects)})"]
+        lines.append(f"\n## Projects ({len(self.projects)})")
         
         for name, proj in self.projects.items():
             lines.append(f"- **{name}** ({proj.language or 'unknown'})")
