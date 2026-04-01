@@ -1,0 +1,45 @@
+# Stack 2.9 Configuration
+# This file provides additional configuration options
+
+server:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 1
+
+model:
+  # Default model - can be overridden by MODEL_ID env var
+  id: "TheBloke/Llama-2-7B-Chat-AWQ"
+  cache_dir: "/home/vllm/.cache/huggingface"
+  trust_remote_code: true
+
+# vLLM engine configuration
+vllm:
+  tensor_parallel_size: 1
+  gpu_memory_utilization: 0.9
+  max_model_len: 4096
+  max_num_seqs: 64
+  max_num_batched_tokens: 4096
+  quantization: "awq"
+  enforce_eager: false
+  disable_log_stats: false
+
+# Performance tuning
+performance:
+  # Thread configuration
+  omp_num_threads: 4
+  # CUDA settings
+  cuda_launch_blocking: 0
+  cudnn_loginfo_dbg: 1
+
+# CORS (if needed for web UI)
+cors:
+  enabled: false
+  allow_origins: ["*"]
+  allow_methods: ["*"]
+  allow_headers: ["*"]
+
+# Logging
+logging:
+  level: "INFO"
+  format: "json"
+  include_timestamps: true
