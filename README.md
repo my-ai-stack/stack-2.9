@@ -50,9 +50,9 @@ python -m stack_2_9.cli
 stack-2.9/
 ├── stack-2.9-voice/     # Voice integration (TTS/STT)
 ├── stack-2.9-training/  # LoRA training, quantization
-├── stack-2.9-deploy/     # RunPod, VastAI, local deploy
-├── stack-2.9-eval/       # HumanEval, MBPP, tool-use eval
-├── training-data/         # Datasets & manifests
+├── stack-2.9-deploy/    # RunPod, VastAI, local deploy
+├── stack-2.9-eval/      # HumanEval, MBPP, tool-use eval
+├── training-data/        # Datasets & manifests
 └── scripts/              # Data processing, augmentation
 ```
 
