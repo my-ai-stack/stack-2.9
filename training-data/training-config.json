@@ -1,7 +1,7 @@
 {
   "model_name": "Qwen/Qwen2.5-Coder-32B",
   "dataset_path": "./training-data/synthetic/examples.jsonl",
-  "max_seq_length": 32768,
+  "max_seq_length": 131072,
   "load_in_4bit": true,
   "bf16": true,
   "batch_size": 1,

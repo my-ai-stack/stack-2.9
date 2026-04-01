@@ -172,7 +172,7 @@ Stack 2.9 supports OpenAI-compatible tool calling:
 
 | Model | Description | Context Length |
 |-------|-------------|----------------|
-| `qwen/qwen2.5-coder-32b` | Main coding model | 32768 |
+| `qwen/qwen2.5-coder-32b` | Main coding model | 131072 |
 | `qwen/qwen2.5-coder-14b` | Lightweight version | 16384 |
 
 ### Model Parameters

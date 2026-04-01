@@ -47,15 +47,20 @@ check_prerequisites() {
         exit 1
     fi
     
-    # Check Docker Compose
-    if ! command -v docker-compose &> /dev/null; then
+    # Check Docker Compose (v1 or v2)
+    if docker compose version &> /dev/null; then
+        COMPOSE_CMD="docker compose"
+    elif command -v docker-compose &> /dev/null; then
+        COMPOSE_CMD="docker-compose"
+    else
         print_error "Docker Compose is not installed or not in PATH"
         exit 1
     fi
     
     # Check NVIDIA Docker support
-    if ! docker info | grep -q "nvidia"; then
+    if ! docker info 2>/dev/null | grep -q "nvidia"; then
         print_warning "NVIDIA Docker support not detected. GPU acceleration may not work."
+        print_warning "Ensure nvidia-docker2 is installed and configured."
     fi
     
     print_success "Prerequisites check passed"
@@ -109,17 +114,17 @@ download_model() {
 start_services() {
     print_status "Starting services..."
     
-    docker-compose -f ${COMPOSE_FILE} up -d
+    ${COMPOSE_CMD} -f ${COMPOSE_FILE} up -d
     
     print_status "Waiting for services to be ready..."
     sleep 30
     
     # Check if services are running
-    if docker-compose -f ${COMPOSE_FILE} ps | grep -q "Up"; then
+    if ${COMPOSE_CMD} -f ${COMPOSE_FILE} ps | grep -q "Up"; then
         print_success "Services started successfully"
     else
         print_error "Failed to start services"
-        docker-compose -f ${COMPOSE_FILE} logs
+        ${COMPOSE_CMD} -f ${COMPOSE_FILE} logs
         exit 1
     fi
 }
@@ -128,10 +133,10 @@ start_services() {
 check_status() {
     print_status "Checking service status..."
     
-    docker-compose -f ${COMPOSE_FILE} ps
+    ${COMPOSE_CMD} -f ${COMPOSE_FILE} ps
     
     print_status "Health check..."
-    if curl -f http://localhost:8000/health &> /dev/null; then
+    if python3 -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health').read()" &> /dev/null; then
         print_success "vLLM server is healthy"
     else
         print_warning "vLLM server health check failed"
@@ -190,7 +195,7 @@ done
 # Clean up if requested
 if [[ "${CLEAN}" == "true" ]]; then
     print_status "Cleaning up existing deployment..."
-    docker-compose -f ${COMPOSE_FILE} down -v
+    ${COMPOSE_CMD} -f ${COMPOSE_FILE} down -v
     rm -rf models logs
 fi
 
@@ -232,8 +237,8 @@ main() {
     echo ""
     echo "Health check: http://localhost:8000/health"
     echo ""
-    echo "To stop services: docker-compose -f ${COMPOSE_FILE} down"
-    echo "To view logs: docker-compose -f ${COMPOSE_FILE} logs -f"
+    echo "To stop services: ${COMPOSE_CMD} -f ${COMPOSE_FILE} down"
+    echo "To view logs: ${COMPOSE_CMD} -f ${COMPOSE_FILE} logs -f"
 }
 
 # Run main function

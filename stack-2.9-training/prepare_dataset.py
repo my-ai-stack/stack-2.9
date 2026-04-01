@@ -37,7 +37,7 @@ dataset = dataset.map(
         x["prompt"],
         padding="max_length",
         truncation=True,
-        max_length=32768,
+        max_length=131072,
         return_tensors="np"
     ),
     batched=True,
