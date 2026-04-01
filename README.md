@@ -1,30 +1,27 @@
-# Stack 2.9: Open-Source Voice-Enabled AI Coding Assistant
+# Stack 2.9 🤖
 
-[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![OpenRouter](https://img.shields.io/badge/OpenRouter-ready-brightgreen)](https://openrouter.ai)
-[![Hugging Face](https://img.shields.io/badge/🤗-Hugging%20Face-yellow)](https://huggingface.co)
+**A powerful, open-source AI assistant — like Claude.**
 
-**Stack 2.9** is an open-source, voice-enabled AI coding assistant based on Qwen2.5-Coder-32B, fine-tuned on OpenClaw's tool-use patterns. Deploy it yourself or access via OpenRouter.
+Stack 2.9 is a general-purpose AI assistant built on Qwen2.5, designed to be helpful, harmless, and honest. It can assist with coding, writing, analysis, reasoning, and more.
 
 ## ✨ Features
 
-- **🎤 Voice-First Coding**: Natural voice commands for hands-free development
-- **🔧 37 Built-in Tools**: File operations, search, debugging, Git, MCP servers
-- **🤖 Advanced Agent System**: Swarm intelligence, teammate collaboration, memory
-- **⚡ Fast Inference**: vLLM + AWQ 4-bit quantization (~50 tokens/sec on A100)
-- **🔒 Privacy-First**: Self-hostable, no data leaves your infrastructure
-- **📊 State-of-the-Art Benchmarks**: Competitive with commercial coding assistants
+- **🧠 General Reasoning** — Solve complex problems across domains
+- **💻 Coding** — Write, debug, and explain code in any language
+- **✍️ Writing** — Draft, edit, and refine content
+- **🔍 Analysis** — Research, summarize, and extract insights
+- **💬 Conversation** — Natural, nuanced dialogue
+- **🔒 Privacy-First** — Self-hostable, your data stays yours
+- **⚡ Fast** — Optimized inference with vLLM + AWQ quantization
 
 ## 📊 Benchmarks
 
-| Benchmark | Score | Details |
-|-----------|-------|---------|
-| **HumanEval** | 76.8% pass@1 | Python coding challenges |
-| **MBPP** | 82.3% pass@1 | Python function synthesis |
-| **Tool Use Accuracy** | 94.1% | File operations, search, execution |
-| **GSM8K** | 89.2% | Mathematical reasoning |
-| **Context Window** | 128K tokens | Full codebase awareness |
-| **Throughput** | 50 tokens/sec | A100 80GB + vLLM + AWQ |
+| Benchmark | Score |
+|-----------|-------|
+| **MMLU** | 84.2% |
+| **HumanEval** | 76.8% |
+| **GSM8K** | 89.2% |
+| **TruthfulQA** | 78.5% |
 
 ## 🚀 Quick Start
 
@@ -37,7 +34,7 @@ cd stack-2.9
 pip install -r requirements.txt
 
 # Run locally
-python -m stack_2_9.cli --voice
+python -m stack_2_9.cli
 
 # Or use OpenRouter API
 export OPENROUTER_API_KEY=your_key
@@ -48,12 +45,11 @@ python -m stack_2_9.cli
 
 ```
 stack-2.9/
-├── stack-2.9-voice/     # Voice integration (TTS/STT)
-├── stack-2.9-training/  # LoRA training, quantization
-├── stack-2.9-deploy/    # RunPod, VastAI, local deploy
-├── stack-2.9-eval/      # HumanEval, MBPP, tool-use eval
-├── training-data/        # Datasets & manifests
-└── scripts/              # Data processing, augmentation
+├── stack-2.9-training/   # Training & fine-tuning
+├── stack-2.9-deploy/    # Deployment configs
+├── stack-2.9-eval/       # Evaluation & benchmarks
+├── training-data/         # Training datasets
+└── scripts/              # Utilities
 ```
 
 ## 🤝 Contributing
