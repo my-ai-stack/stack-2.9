@@ -3,86 +3,76 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "stack-2.9"
+name = "devpilot"
 version = "0.1.0"
-description = "Open-source voice-enabled coding assistant based on Qwen2.5-Coder-32B"
+description = "AI-powered voice cloning and synthesis platform"
 readme = "README.md"
-license = { file = "LICENSE" }
-requires-python = ">=3.8"
+license = {text = "MIT"}
 authors = [
-    { name = "Stack 2.9 Contributors", email = "hello@stack29.openclaw.org" }
+    {name = "Walid Sobhi", email = "walid@example.com"}
 ]
-keywords = ["ai", "coding-assistant", "voice", "llm", "open-source"]
+keywords = ["voice", "cloning", "tts", "speech-synthesis", "ai", "audio"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: Apache Software License",
+    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
-    "Topic :: Scientific/Engineering :: Artificial Intelligence",
-    "Topic :: Software Development :: Assistants",
+    "Topic :: Multimedia :: Sound/Audio :: Speech",
 ]
-
+requires-python = ">=3.8"
 dependencies = [
-    "fastapi>=0.104.0",
-    "uvicorn[standard]>=0.24.0",
-    "pydantic>=2.0.0",
-    "httpx>=0.25.0",
-    "transformers>=4.36.0",
-    "torch>=2.1.0",
-    "accelerate>=0.24.0",
-    "peft>=0.6.0",
-    "bitsandbytes>=0.41.0",
-    "datasets>=2.14.0",
-    "vllm>=0.4.0",
-    "openai>=1.0.0",
+    "coqui-tts>=0.20.0",
+    "librosa>=0.10.0",
+    "soundfile>=0.12.0",
     "numpy>=1.24.0",
-    "pandas>=2.0.0",
-    "matplotlib>=3.7.0",
-    "plotly>=5.17.0",
-    "python-dotenv>=1.0.0",
+    "torch>=2.0.0",
     "tqdm>=4.65.0",
-    "huggingface-hub>=0.18.0",
+    "pydantic>=2.0.0",
 ]
 
 [project.optional-dependencies]
-voice = [
-    "torchaudio>=2.1.0",
-    "soundfile>=0.12.0",
-    "librosa>=0.10.0",
-    "pyaudio>=0.2.11",
-    "speechrecognition>=3.10.0",
-]
 dev = [
-    "black>=23.0.0",
-    "mypy>=1.5.0",
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
     "flake8>=6.0.0",
-    "pytest>=7.4.0",
-    "pytest-cov>=4.1.0",
-    "eslint>=8.0.0",
-    "types-requests>=2.31.0",
+    "black>=23.0.0",
+    "mypy>=1.0.0",
+]
+web = [
+    "gradio>=3.50.0",
 ]
 
 [project.scripts]
-stack-2.9 = "stack_2_9.cli:main"
+devpilot = "devpilot.cli:main"
+devpilot-web = "devpilot.web:main"
+
+[project.urls]
+Homepage = "https://github.com/my-ai-stack/devpilot"
+Documentation = "https://github.com/my-ai-stack/devpilot#readme"
+Repository = "https://github.com/my-ai-stack/devpilot"
+Issues = "https://github.com/my-ai-stack/devpilot/issues"
+Changelog = "https://github.com/my-ai-stack/devpilot/releases"
 
 [tool.setuptools.packages.find]
 where = ["."]
+include = ["devpilot*"]
 
 [tool.black]
-line-length = 88
-target-version = ['py39']
-
-[tool.mypy]
-python_version = "3.9"
-warn_return_any = true
-warn_unused_configs = true
-disallow_untyped_defs = true
-disallow_incomplete_defs = true
+line-length = 100
+target-version = ['py38', 'py39', 'py310', 'py311']
+include = '\.pyi?$'
 
 [tool.pytest.ini_options]
-testpaths = ["stack-2.9-eval", "stack-2.9-voice"]
-python_files = "*_test.py test_*.py"
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+addopts = "-v --cov=devpilot --cov-report=term-missing"
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
