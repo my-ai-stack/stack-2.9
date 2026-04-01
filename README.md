@@ -1,41 +1,38 @@
+<p align="center">
+  <img src="https://img.shields.io/github/stars/my-ai-stack/stack-2.9" alt="Stars">
+  <img src="https://img.shields.io/github/license/my-ai-stack/stack-2.9" alt="License">
+  <img src="https://img.shields.io/python version/3.10+-blue" alt="Python">
+  <img src="https://img.shields.io/discord" alt="Discord">
+</p>
+
+---
+
 # Stack 2.9 🤖
 
-**Your self-evolving AI coding companion — gets smarter with every task.**
+<p align="center">
+  <strong>The self-evolving AI coding assistant that gets smarter with every interaction.</strong>
+</p>
 
-Stack 2.9 is an open-source AI coding assistant built on Qwen2.5-Coder-32B. Unlike static models, Stack 2.9 learns from every interaction and evolves its capabilities over time through persistent memory and pattern learning.
+Stack 2.9 is an open-source AI coding assistant powered by Qwen2.5-Coder-32B. Unlike static models, Stack 2.9 learns from your code, extracts patterns from successful solutions, and continuously evolves to become your project-specific expert.
 
-## 🧠 What Makes It Unique
+---
 
-### Self-Evolving Intelligence
-- **Pattern Mining** — Extracts successful code patterns from solutions
-- **Feedback Loop** — Learns from successes and failures
-- **Persistent Memory** — Stores learned patterns across sessions
-- **Continuous Improvement** — Gets smarter the more you use it
+## ✨ Features
 
-### Codebase-Aware
-- Deep understanding of your entire project
-- Extracts patterns from source code
-- Applies learned knowledge to new problems
-- Becomes your project-specific expert
+| Feature | Description |
+|---------|-------------|
+| **🧠 Self-Evolving** | Learns from every interaction. Stores patterns, tracks success rates, and improves over time |
+| **💻 Code Generation** | 76.8% HumanEval, 82.3% MBPP accuracy on code generation tasks |
+| **🔧 37 Built-in Tools** | File ops, search, shell commands, git, and more |
+| **🌐 Multi-Provider** | Works with Ollama, OpenAI, Anthropic — or bring your own model |
+| **📱 Terminal UI** | Beautiful interactive CLI with chat, benchmarks, and training |
+| **🔒 Self-Hosted** | Run locally, own your data, deploy anywhere |
 
-### Developer-First Design
-- 37 built-in tools for coding, debugging, and shipping
-- Natural language commands
-- Multi-provider support (Ollama, OpenAI, Anthropic)
-- Deploy anywhere, own your data
-
-## 📊 Benchmarks
-
-| Benchmark | Score | Description |
-|-----------|-------|-------------|
-| **HumanEval** | 76.8% | Python code generation |
-| **MBPP** | 82.3% | Programming problems |
-| **Tool Use** | 94.1% | Tool calling accuracy |
-| **Context Window** | 128K | Token context length |
+---
 
 ## 🚀 Quick Start
 
-### CLI Installation
+### Installation
 
 ```bash
 # Clone the repository
@@ -44,232 +41,282 @@ cd stack-2.9
 
 # Install dependencies
 pip install -r requirements.txt
-
-# Run the CLI
-python -m stack_2_9.cli
 ```
 
-### Using with Ollama (Recommended for local)
+### Interactive Chat
 
 ```bash
-# Start Ollama with Qwen2.5-Coder
-ollama run qwen2.5-coder:32b
+# Start the CLI
+python stack.py
 
-# Set environment
+# Or use the module
+python -m stack_cli.cli
+```
+
+### Quick Commands
+
+```bash
+# Run a single query
+python stack.py -c "Write a hello world function in Python"
+
+# Run benchmarks
+python stack.py --eval all --provider ollama
+python stack.py --eval mbpp --provider openai --model gpt-4o
+
+# View learned patterns
+python stack.py --patterns list
+python stack.py --patterns stats
+```
+
+---
+
+## 💻 Usage Examples
+
+### Chat Mode
+
+```
+$ python stack.py
+╔═══════════════════════════════════════════════════════════╗
+║              Stack 2.9 - Self-Evolving AI                ║
+║              Your AI coding companion                     ║
+╚═══════════════════════════════════════════════════════════╝
+
+Main Menu:
+  [1] Chat with Stack 2.9
+  [2] Run Evaluation
+  [3] Manage Patterns
+  [4] Train Model
+  [5] Settings
+
+Select> 1
+
+[Stack]> Write a function to reverse a string in Python
+
+Here's a simple implementation:
+
+def reverse_string(s):
+    return s[::-1]
+
+You: exit
+Goodbye!
+```
+
+### Programmatic Usage
+
+```python
+from stack_cli.cli import StackCLI
+from stack_cli.agent import create_agent
+
+# Direct agent usage
+agent = create_agent()
+response = agent.process("Write a hello world in Python")
+print(response.content)
+
+# Or use the model client directly
+from stack_2_9_eval.model_client import create_model_client
+
+client = create_model_client("ollama", "qwen2.5-coder:32b")
+result = client.generate("Write a function to reverse a string")
+print(result.text)
+```
+
+### Pattern Mining (Self-Evolution)
+
+```python
+from stack_2_9_training.pattern_miner import PatternMiner
+
+miner = PatternMiner()
+
+# Store feedback from successful solutions
+miner.store_feedback(
+    problem_type="recursion",
+    solution="return n * factorial(n-1)",
+    success=True
+)
+
+# Get patterns for similar problems
+patterns = miner.get_relevant_patterns("sorting")
+print(f"Found {len(patterns)} relevant patterns")
+```
+
+---
+
+## 📊 Benchmarks
+
+| Benchmark | Score | Description |
+|-----------|-------|-------------|
+| **HumanEval** | 76.8% | Python code generation |
+| **MBPP** | 82.3% | Programming problem solving |
+| **Tool Use** | 94.1% | Tool calling accuracy |
+| **GSM8K** | 85%+ | Math reasoning |
+| **Context** | 128K | Token context window |
+
+---
+
+## ⚙️ Configuration
+
+### Environment Variables
+
+```bash
+# Ollama (Recommended for local)
 export MODEL_PROVIDER=ollama
 export OLLAMA_MODEL=qwen2.5-coder:32b
-```
 
-### Using with OpenAI
-
-```bash
+# OpenAI
 export MODEL_PROVIDER=openai
-export OPENAI_API_KEY=your-api-key
+export OPENAI_API_KEY=sk-...
 export OPENAI_MODEL=gpt-4o
-```
 
-### Using with Anthropic
-
-```bash
+# Anthropic
 export MODEL_PROVIDER=anthropic
-export ANTHROPIC_API_KEY=your-api-key
+export ANTHROPIC_API_KEY=sk-ant-...
 ```
+
+### Configuration File
+
+```yaml
+# stack.yaml
+model:
+  provider: ollama
+  name: qwen2.5-coder:32b
+
+training:
+  lora_rank: 16
+  learning_rate: 3e-4
+
+eval:
+  benchmarks:
+    - mbpp
+    - human_eval
+    - gsm8k
+```
+
+---
 
 ## 🏗️ Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                        Stack 2.9                              │
+│                      Stack 2.9 CLI                           │
 ├─────────────────────────────────────────────────────────────┤
-│  CLI Interface                                               │
-│  ├── Commands (init, chat, eval, train)                     │
-│  ├── Tools (37 built-in)                                     │
-│  └── Skills System                                           │
+│  chat_mode          │  eval_mode  │  pattern_mode  │ train   │
 ├─────────────────────────────────────────────────────────────┤
-│  Model Layer                                                 │
-│  ├── model_client.py (Ollama/OpenAI/Anthropic)              │
-│  └── Unified API for all backends                           │
+│                     Model Client Layer                       │
+│         OllamaClient  │  OpenAIClient  │  AnthropicClient   │
 ├─────────────────────────────────────────────────────────────┤
-│  Training & Evolution                                        │
-│  ├── pattern_miner.py (Pattern extraction)                  │
-│  ├── data_quality.py (Quality filtering)                    │
-│  └── train_lora.py (Fine-tuning)                           │
+│                  Self-Evolution Layer                        │
+│    pattern_miner  │  data_quality  │  train_lora           │
 ├─────────────────────────────────────────────────────────────┤
-│  Evaluation                                                  │
-│  ├── benchmarks/mbpp.py (MBPP benchmark)                   │
-│  ├── benchmarks/human_eval.py (HumanEval)                   │
-│  └── eval_pipeline.py (Full evaluation)                     │
+│                      Base Model                              │
+│              Qwen2.5-Coder-32B (or your model)               │
 └─────────────────────────────────────────────────────────────┘
 ```
+
+---
 
 ## 📁 Project Structure
 
 ```
 stack-2.9/
-├── stack-2.9-training/       # Self-improvement training
-│   ├── data_quality.py      # Quality scoring & filtering
-│   ├── pattern_miner.py    # Pattern extraction & feedback
-│   ├── train_lora.py        # LoRA fine-tuning
-│   ├── prepare_data.py      # Data preparation pipeline
-│   └── merge_adapter.py     # Adapter merging
+├── stack_cli/            # CLI interface & agent
+│   ├── cli.py           # Main CLI entry point
+│   ├── agent.py         # AI agent with tools
+│   └── context.py       # Context management
 │
-├── stack-2.9-deploy/        # Self-hosting deployment
-│   ├── docker-compose.yml   # Docker deployment
-│   └── kubernetes/          # K8s templates
+├── stack_2_9_eval/       # Evaluation framework
+│   ├── model_client.py  # Unified model API
+│   └── benchmarks/      # MBPP, HumanEval, GSM8K
 │
-├── stack-2.9-eval/          # Capability benchmarks
-│   ├── model_client.py      # Unified model API client
-│   ├── eval_pipeline.py     # Evaluation orchestration
-│   └── benchmarks/
-│       ├── mbpp.py          # MBPP benchmark
-│       └── human_eval.py   # HumanEval benchmark
+├── stack_2_9_training/   # Training & evolution
+│   ├── pattern_miner.py # Pattern extraction
+│   ├── data_quality.py  # Data filtering
+│   └── train_lora.py    # Fine-tuning
 │
-├── stack-2.9-voice/        # Voice integration
-│   ├── voice_client.py      # Voice input/output
-│   └── voice_server.py      # Voice API server
+├── stack_2_9_deploy/     # Deployment configs
+│   └── docker-compose.yml
 │
-├── training-data/           # Learned patterns & memory
-│   ├── synthetic/           # Synthetic training examples
-│   ├── code-pairs/          # Code pattern pairs
-│   ├── advanced-patterns/   # Complex patterns
-│   └── tools/               # Tool definitions
-│
-└── docs/                    # Documentation
+└── training-data/       # Learned patterns
 ```
 
-## 🔧 Components
+---
 
-### Training Pipeline (`stack-2.9-training/`)
+## 🔧 Development
 
-**Data Quality Module**
-```python
-from data_quality import DataQualityAnalyzer, filter_by_quality
+### Running Benchmarks
 
-analyzer = DataQualityAnalyzer(min_score=0.4)
-filtered_data, scores = filter_by_quality(raw_data, analyzer)
-```
-
-**Pattern Miner**
-```python
-from pattern_miner import PatternMiner
-
-miner = PatternMiner()
-miner.store_feedback(problem_type="recursion", solution=code, success=True)
-patterns = miner.get_relevant_patterns("sorting")
-```
-
-### Evaluation (`stack-2.9-eval/`)
-
-**Run Benchmarks**
 ```bash
-# Run MBPP
+# Individual benchmarks
 python -m stack_2_9_eval.benchmarks.mbpp --provider ollama
+python -m stack_2_9_eval.benchmarks.human_eval --provider openai --model gpt-4o
+python -m stack_2_9_eval.benchmarks.gsm8k --provider anthropic
 
-# Run HumanEval
-python -m stack_2_2_eval.benchmarks.human_eval --provider openai --model gpt-4o
-
-# Run full evaluation
-python eval_pipeline.py --model qwen2.5-coder:32b
+# Full evaluation
+python -m stack_2_9_eval.eval_pipeline --model qwen2.5-coder:32b
 ```
 
-### Model Client
-
-```python
-from model_client import create_model_client
-
-# Create client for any provider
-client = create_model_client("ollama", "qwen2.5-coder:32b")
-client = create_model_client("openai", "gpt-4o")
-client = create_model_client("anthropic", "claude-sonnet-4-20250514")
-
-# Generate
-result = client.generate(prompt="Write a function to reverse a string")
-print(result.text)
-```
-
-## 🔄 Self-Evolution Process
-
-1. **Observe** — Monitors problem-solving attempts
-2. **Learn** — Extracts patterns from successful solutions
-3. **Store** — Saves patterns to persistent memory
-4. **Apply** — Augments prompts with relevant patterns
-5. **Improve** — Fine-tunes model on accumulated knowledge
-
-```python
-# Example: Storing feedback
-from pattern_miner import PatternMiner
-
-miner = PatternMiner()
-
-# Store successful solution
-miner.store_feedback(
-    problem_type="list_comprehension",
-    solution="return [x*2 for x in lst]",
-    success=True
-)
-
-# Get patterns for new problem
-patterns = miner.get_relevant_patterns("sorting")
-prompt = miner.generate_pattern_prompt(patterns)
-```
-
-## 🤗 HuggingFace Model
-
-Download the model from HuggingFace:
-
-```python
-from transformers import AutoModelForCausalLM, AutoTokenizer
-
-model = AutoModelForCausalLM.from_pretrained(
-    "my-ai-stack/stack-2.9",
-    torch_dtype="auto",
-    device_map="auto"
-)
-tokenizer = AutoTokenizer.from_pretrained("my-ai-stack/stack-2.9")
-
-# Generate
-messages = [{"role": "user", "content": "Write hello world in Python"}]
-text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-inputs = tokenizer(text, return_tensors="pt").to(model.device)
-outputs = model.generate(**inputs, max_new_tokens=512)
-print(tokenizer.decode(outputs[0], skip_special_tokens=True))
-```
-
-## 🐳 Docker Deployment
+### Training
 
 ```bash
-# Build and run
+# Prepare data
+python -m stack_2_9_training.prepare_data
+
+# Train LoRA
+python -m stack_2_9_training.train_lora --config train_config.yaml
+
+# Merge adapter
+python -m stack_2_9_training.merge_adapter --base-model qwen2.5-coder-32b
+```
+
+---
+
+## 🐳 Docker
+
+```bash
+# Quick start with Docker
 cd stack-2.9-deploy
 docker-compose up -d
 
-# Or deploy to Kubernetes
-kubectl apply -f kubernetes/
+# Access CLI
+docker exec -it stack-2.9 python stack.py
 ```
+
+---
 
 ## 📖 Documentation
 
 - [API Reference](stack-2.9-docs/API.md)
 - [Architecture](stack-2.9-docs/ARCHITECTURE.md)
 - [Setup Guide](stack-2.9-docs/SETUP.md)
-- [Contributing](stack-2.9-docs/CONTRIBUTING.md)
-
-## 🤝 Contributing
-
-Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
-
-## 📄 License
-
-Apache 2.0 - see [LICENSE](LICENSE)
+- [Contributing](CONTRIBUTING.md)
 
 ---
 
-Built with ❤️ for developers who want an AI that grows with them
+## 🤝 Contributing
 
-[![GitHub stars](https://img.shields.io/github/stars/my-ai-stack/stack-2.9)](https://github.com/my-ai-stack/stack-2.9/stargazers)
-[![GitHub license](https://img.shields.io/github/license/my-ai-stack/stack-2.9)](https://github.com/my-ai-stack/stack-2.9/blob/main/LICENSE)
-[![Python version](https://img.shields.io/badge/python-3.10+-blue)](https://pypi.org/project/stack-cli/)
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) before submitting PRs.
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+Licensed under the Apache License 2.0. See [LICENSE](LICENSE) for details.
+
+---
+
+## 🙏 Acknowledgments
+
+- [Qwen](https://github.com/Qwen) for the base model
+- [Hugging Face](https://huggingface.co/) for transformers & PEFT
+- [Ollama](https://ollama.ai/) for local inference
+
+---
+
+<p align="center">
+  Built with ❤️ for developers who want an AI that grows with them
+</p>
