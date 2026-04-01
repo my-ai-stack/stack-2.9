@@ -43,7 +43,7 @@ def setup_model_and_tokenizer(config: Dict[str, Any]) -> tuple:
     quant_config = config["quantization"]
     
     model_name = model_config["name"]
-    torch_dtype = getattr(torch, model_config.get("torch_dtype", "bfloat16"))
+    torch_dtype = getattr(torch, model_config.get("torch_dtype", "float16"))
     trust_remote_code = model_config.get("trust_remote_code", True)
     
     # Load tokenizer
@@ -57,22 +57,26 @@ def setup_model_and_tokenizer(config: Dict[str, Any]) -> tuple:
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
     
-    # Load model with quantization
+    # Load model - handle MPS/CPU for local training
     print(f"Loading model: {model_name}")
     
-    load_in_4bit = hardware_config.get("use_4bit", True)
+    device = hardware_config.get("device", "mps")
+    load_in_4bit = hardware_config.get("use_4bit", False)
     load_in_8bit = hardware_config.get("use_8bit", False)
     
-    if load_in_4bit:
+    # Check for MPS availability
+    if device == "mps" and not torch.backends.mps.is_available():
+        print("MPS not available, falling back to CPU")
+        device = "cpu"
+    
+    if load_in_4bit and device != "cpu":
         from bitsandbytes import BitsAndBytesConfig
-        
         quantization_config = BitsAndBytesConfig(
             load_in_4bit=True,
             bnb_4bit_compute_dtype=torch_dtype,
             bnb_4bit_use_double_quant=True,
             bnb_4bit_quant_type="nf4"
         )
-        
         device_map = "auto"
         model = AutoModelForCausalLM.from_pretrained(
             model_name,
@@ -82,25 +86,28 @@ def setup_model_and_tokenizer(config: Dict[str, Any]) -> tuple:
             trust_remote_code=trust_remote_code
         )
         print("Model loaded in 4-bit precision")
-        
-    elif load_in_8bit:
-        model = AutoModelForCausalLM.from_pretrained(
-            model_name,
-            load_in_8bit=True,
-            device_map="auto",
-            torch_dtype=torch_dtype,
-            trust_remote_code=trust_remote_code
-        )
-        print("Model loaded in 8-bit precision")
-        
     else:
-        model = AutoModelForCausalLM.from_pretrained(
-            model_name,
-            device_map="auto",
-            torch_dtype=torch_dtype,
-            trust_remote_code=trust_remote_code
-        )
-        print("Model loaded in full precision")
+        # Load without quantization - use device_map for MPS/CPU
+        if device == "mps":
+            # MPS needs device_map="auto" or explicit device placement
+            model = AutoModelForCausalLM.from_pretrained(
+                model_name,
+                device_map="auto",
+                torch_dtype=torch_dtype,
+                trust_remote_code=trust_remote_code
+            )
+            # Force to MPS if not already
+            if next(model.parameters()).device.type != "mps":
+                model = model.to("mps")
+            print("Model loaded in float16 on MPS")
+        else:
+            model = AutoModelForCausalLM.from_pretrained(
+                model_name,
+                device_map="auto",
+                torch_dtype=torch_dtype,
+                trust_remote_code=trust_remote_code
+            )
+            print("Model loaded in full precision")
     
     return model, tokenizer
 
@@ -129,6 +136,7 @@ def create_training_arguments(config: Dict[str, Any]) -> TrainingArguments:
     training_config = config["training"]
     output_config = config["output"]
     logging_config = config["logging"]
+    hardware_config = config["hardware"]
     
     output_dir = output_config["lora_dir"]
     
@@ -147,17 +155,21 @@ def create_training_arguments(config: Dict[str, Any]) -> TrainingArguments:
             name=logging_config.get("run_name")
         )
     
+    # Determine device for training
+    device = hardware_config.get("device", "mps")
+    
     return TrainingArguments(
         output_dir=output_dir,
-        num_train_epochs=training_config["num_epochs"],
         per_device_train_batch_size=training_config["batch_size"],
+        per_device_eval_batch_size=training_config["batch_size"],
         gradient_accumulation_steps=training_config["gradient_accumulation"],
         learning_rate=training_config["learning_rate"],
+        num_train_epochs=training_config["num_epochs"],
         warmup_steps=training_config["warmup_steps"],
         weight_decay=training_config["weight_decay"],
         max_grad_norm=training_config["max_grad_norm"],
         fp16=training_config.get("fp16", True),
-        bf16=training_config.get("bf16", False),
+        bf16=False,  # MPS doesn't support bf16 well
         gradient_checkpointing=training_config.get("gradient_checkpointing", True),
         logging_steps=training_config["logging_steps"],
         eval_strategy="steps",
@@ -171,7 +183,9 @@ def create_training_arguments(config: Dict[str, Any]) -> TrainingArguments:
         logging_first_step=True,
         load_best_model_at_end=True,
         metric_for_best_model="eval_loss",
-        greater_is_better=False
+        greater_is_better=False,
+        ddp_find_unused_parameters=False,
+        dataloader_num_workers=0
     )
 
 
@@ -217,16 +231,22 @@ def train_lora(
     print(f"   Gradient accumulation: {config['training']['gradient_accumulation']}")
     print(f"   Learning rate: {config['training']['learning_rate']}")
     
-    # Load datasets
+    # Load datasets - handle local disk datasets
     print(f"\n📂 Loading datasets...")
     train_dir = data_config["train_dir"]
     eval_dir = data_config["eval_dir"]
     
-    train_dataset = load_dataset(train_dir)
-    eval_dataset = load_dataset(eval_dir)
+    # Check if it's a local disk dataset (saved with save_to_disk)
+    if Path(train_dir).exists() and (Path(train_dir) / "data-00000-of-00001.arrow").exists():
+        from datasets import load_from_disk
+        train_dataset = load_from_disk(train_dir)
+        eval_dataset = load_from_disk(eval_dir)
+    else:
+        train_dataset = load_dataset(train_dir)
+        eval_dataset = load_dataset(eval_dir)
     
-    print(f"   Train samples: {len(train_dataset['train'])}")
-    print(f"   Eval samples: {len(eval_dataset['test'])}")
+    print(f"   Train samples: {len(train_dataset)}")
+    print(f"   Eval samples: {len(eval_dataset)}")
     
     # Setup model and tokenizer
     print(f"\n🤖 Setting up model...")
@@ -251,10 +271,10 @@ def train_lora(
     trainer = Trainer(
         model=model,
         args=training_args,
-        train_dataset=train_dataset["train"],
-        eval_dataset=eval_dataset["test"],
+        train_dataset=train_dataset,
+        eval_dataset=eval_dataset,
         data_collator=data_collator,
-        tokenizer= tokenizer
+        tokenizer=tokenizer
     )
     
     # Train
@@ -268,7 +288,7 @@ def train_lora(
         # Check for latest checkpoint
         checkpoints = list(Path(output_config["lora_dir"]).glob("checkpoint-*"))
         if checkpoints:
-            checkpoint = str(max(checkpoints, key=lambda p: int(p.name.split("-")[-1]))
+            checkpoint = str(max(checkpoints, key=lambda p: int(p.name.split("-")[-1])))
     
     if checkpoint:
         print(f"   Resuming from checkpoint: {checkpoint}")
