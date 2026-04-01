@@ -338,7 +338,74 @@ class StackCLI:
         result = self.command_mode.execute_tools(tools, out_file)
         print(result)
         return result
-    
+
+    def run_eval(self, benchmark: str, provider: str = 'ollama', model: str = None):
+        """Run evaluation benchmarks."""
+        print_colored(f"\n=== Running {benchmark} benchmark ===", "blue")
+
+        import sys
+        from pathlib import Path
+        eval_dir = Path(__file__).parent.parent / "stack-2.9-eval"
+        if eval_dir.exists():
+            sys.path.insert(0, str(eval_dir))
+
+        try:
+            if benchmark == 'mbpp':
+                from benchmarks.mbpp import MBPP
+                b = MBPP(model_provider=provider, model_name=model)
+            elif benchmark == 'human_eval':
+                from benchmarks.human_eval import HumanEval
+                b = HumanEval(model_provider=provider, model_name=model)
+            elif benchmark == 'gsm8k':
+                from benchmarks.gsm8k import GSM8K
+                b = GSM8K(model_provider=provider, model_name=model)
+            elif benchmark == 'all':
+                from benchmarks.mbpp import MBPP
+                from benchmarks.human_eval import HumanEval
+                from benchmarks.gsm8k import GSM8K
+                for name, Benchmark in [('MBPP', MBPP), ('HumanEval', HumanEval), ('GSM8K', GSM8K)]:
+                    print_colored(f"\n--- {name} ---", "yellow")
+                    b = Benchmark(model_provider=provider, model_name=model)
+                    results = b.evaluate()
+                    print(f"  Accuracy: {results['accuracy']*100:.1f}%")
+                return
+
+            results = b.evaluate()
+            print_colored(f"\nResults:", "green")
+            print(f"  Accuracy: {results['accuracy']*100:.1f}%")
+            print(f"  Passed: {results['pass_at_1']}/{results['total_cases']}")
+            print(f"  Model: {results['model']}")
+        except Exception as e:
+            print_colored(f"Error: {e}", "red")
+
+    def run_patterns(self, action: str):
+        """Manage learned patterns."""
+        print_colored(f"\n=== Pattern Management ===", "blue")
+
+        import sys
+        from pathlib import Path
+        train_dir = Path(__file__).parent.parent / "stack-2.9-training"
+        if train_dir.exists():
+            sys.path.insert(0, str(train_dir))
+
+        try:
+            from pattern_miner import PatternMiner
+            miner = PatternMiner()
+
+            if action == 'list':
+                patterns = miner.get_relevant_patterns(limit=20)
+                print_colored(f"\nStored Patterns:", "yellow")
+                for p in patterns:
+                    print(f"  [{p.pattern_type}] {p.code_snippet[:50]}...")
+            elif action == 'stats':
+                stats = miner.get_statistics()
+                print_colored(f"\nStatistics:", "yellow")
+                print(f"  Total Feedback: {stats['total_feedback']}")
+                print(f"  Success Rate: {stats['success_rate']:.1%}")
+                print(f"  Total Patterns: {stats['total_patterns']}")
+        except Exception as e:
+            print_colored(f"Error: {e}", "red")
+
     def run_voice(self):
         """Run voice mode loop."""
         if not self.voice.available:
@@ -417,13 +484,62 @@ Examples:
         default="/Users/walidsobhi/.openclaw/workspace",
         help="Workspace path"
     )
-    
+
+    # Evaluation options
+    parser.add_argument(
+        '-e', '--eval',
+        choices=['mbpp', 'human_eval', 'gsm8k', 'all'],
+        help="Run evaluation benchmark"
+    )
+
+    parser.add_argument(
+        '--eval-provider',
+        default='ollama',
+        choices=['ollama', 'openai', 'anthropic'],
+        help="Model provider for evaluation"
+    )
+
+    parser.add_argument(
+        '--eval-model',
+        type=str,
+        help="Model name for evaluation"
+    )
+
+    # Pattern management
+    parser.add_argument(
+        '--patterns',
+        choices=['list', 'stats', 'clear'],
+        help="Manage patterns for self-evolution"
+    )
+
+    # Training
+    parser.add_argument(
+        '--train',
+        action='store_true',
+        help="Run LoRA training"
+    )
+
     args = parser.parse_args()
     
     try:
         # Create CLI with custom workspace if provided
         cli = StackCLI()
-        
+
+        # Handle evaluation
+        if args.eval:
+            cli.run_eval(args.eval, args.eval_provider, args.eval_model)
+            return
+
+        # Handle pattern management
+        if args.patterns:
+            cli.run_patterns(args.patterns)
+            return
+
+        # Handle training
+        if args.train:
+            cli.run_train()
+            return
+
         if args.voice:
             cli.run_voice()
         elif args.tools:
