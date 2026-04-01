@@ -1,0 +1,60 @@
+{
+  "dataset": {
+    "name": "Stack 2.9 Training Data",
+    "version": "0.2.0",
+    "description": "Training data for Stack 2.9, an open-source coding assistant based on Qwen2.5-Coder",
+    "source": "OpenClaw architecture + synthetic examples + code analysis",
+    "license": "Apache 2.0"
+  },
+  "stats": {
+    "toolSchemas": 37,
+    "syntheticExamples": 213,
+    "codeCommentPairs": 4045,
+    "testExamples": 0,
+    "conversations": 0,
+    "totalExamples": 213
+  },
+  "model_config": {
+    "base_model": "Qwen2.5-Coder-32B",
+    "fine_tuning_method": "LoRA",
+    "lora_rank": 64,
+    "lora_alpha": 128,
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj",
+      "gate_proj",
+      "up_proj",
+      "down_proj"
+    ],
+    "quantization": "AWQ 4-bit (inference)",
+    "max_seq_length": 32768,
+    "template": "chatml"
+  },
+  "tokenizer": {
+    "family": "Qwen2",
+    "pad_token": "<|endoftext|>",
+    "bos_token": "<|endoftext|>",
+    "eos_token": "<|endoftext|>"
+  },
+  "training_data": {
+    "synthetic_examples": "/Users/walidsobhi/.openclaw/workspace/training-data/synthetic/examples.jsonl",
+    "tools_catalog": "/Users/walidsobhi/.openclaw/workspace/training-data/tools/catalog.json",
+    "code_pairs": "/Users/walidsobhi/.openclaw/workspace/training-data/code-pairs/pairs.json",
+    "test_examples": "/Users/walidsobhi/.openclaw/workspace/training-data/code-pairs/test-examples.json",
+    "conversations": "/Users/walidsobhi/.openclaw/workspace/training-data/conversations/parsed.json",
+    "estimated_tokens": "~50M tokens total",
+    "recommended_dataset_size": "100K - 1M examples"
+  },
+  "deployment": {
+    "inference_engine": "vLLM",
+    "api_compatibility": "OpenAI-compatible (chat/completions)",
+    "expected_throughput": "~50 tokens/s on A100 80GB",
+    "platforms": [
+      "Hugging Face",
+      "OpenRouter",
+      "self-hosted"
+    ]
+  }
+}

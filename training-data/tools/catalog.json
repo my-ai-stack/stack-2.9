@@ -1,0 +1,261 @@
+[
+  {
+    "tool": "AgentTool",
+    "description": "Format one agent line for the agent_listing_delta attachment message:\n`- type: whenToUse (Tools: ...)`.",
+    "hasPrompt": true,
+    "hasImplementation": true,
+    "inputSchema": {}
+  },
+  {
+    "tool": "AskUserQuestionTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": true,
+    "inputSchema": {}
+  },
+  {
+    "tool": "BashTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": true,
+    "inputSchema": {}
+  },
+  {
+    "tool": "BriefTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "ConfigTool",
+    "description": "Generate the prompt documentation from the registry",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "EnterPlanModeTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "EnterWorktreeTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "ExitPlanModeTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "ExitWorktreeTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "FileEditTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "FileReadTool",
+    "description": "Renders the Read tool prompt template.  The caller (FileReadTool) supplies\nthe runtime-computed parts.",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "FileWriteTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "GlobTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "GrepTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "LSPTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "ListMcpResourcesTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "MCPTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "NotebookEditTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "PowerShellTool",
+    "description": "Version-specific syntax guidance. The model's training data covers both\neditions but it can't tell which one it's targeting, so it either emits\npwsh-7 syntax on 5.1 (parser error → exit 1) or needlessly avoids && on 7.",
+    "hasPrompt": true,
+    "hasImplementation": true,
+    "inputSchema": {}
+  },
+  {
+    "tool": "ReadMcpResourceTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "RemoteTriggerTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "ScheduleCronTool",
+    "description": "Unified gate for the cron scheduling system. Combines the build-time\n`feature('AGENT_TRIGGERS')` flag (dead code elimination) with the runtime\n`tengu_kairos_cron` GrowthBook gate on a 5-minute refresh window.\n\nAGENT_TRIGGERS is independently shippable from KAIROS — the cron module\ngraph (cronSchedul",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "SendMessageTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "SkillTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "SleepTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "TaskCreateTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "TaskGetTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "TaskListTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "TaskOutputTool",
+    "description": "",
+    "hasPrompt": false,
+    "hasImplementation": true,
+    "inputSchema": {}
+  },
+  {
+    "tool": "TaskStopTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "TaskUpdateTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "TeamCreateTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "TeamDeleteTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "TodoWriteTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "ToolSearchTool",
+    "description": "Check if a tool should be deferred (requires ToolSearch to load).\nA tool is deferred if:\n- It's an MCP tool (always deferred - workflow-specific)\n- It has shouldDefer: true\n\nA tool is NEVER deferred if it has alwaysLoad: true (MCP tools set this via\n_meta['anthropic/alwaysLoad']). This check runs fi",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "WebFetchTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  },
+  {
+    "tool": "WebSearchTool",
+    "description": "",
+    "hasPrompt": true,
+    "hasImplementation": false,
+    "inputSchema": {}
+  }
+]
