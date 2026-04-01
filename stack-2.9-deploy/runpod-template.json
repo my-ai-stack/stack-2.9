@@ -1,0 +1,96 @@
+{
+  "name": "stack-2.9-inference",
+  "description": "Stack 2.9 LLM Inference Server powered by vLLM with AWQ quantization",
+  "author": "Stack Team",
+  "version": "2.9.0",
+  "docker_image": "your-registry/stack-2.9:latest",
+  "env": [
+    {
+      "name": "MODEL_ID",
+      "description": "Hugging Face model ID for loading",
+      "default": "TheBloke/Llama-2-7B-Chat-AWQ",
+      "required": true
+    },
+    {
+      "name": "HUGGING_FACE_TOKEN",
+      "description": "Hugging Face access token for gated models",
+      "default": "",
+      "required": false,
+      "sensitive": true
+    },
+    {
+      "name": "QUANTIZATION",
+      "description": "Quantization method (awq, gptq, squeezellm, or none)",
+      "default": "awq",
+      "required": false
+    },
+    {
+      "name": "TENSOR_PARALLEL_SIZE",
+      "description": "Number of GPUs for tensor parallelism",
+      "default": "1",
+      "required": false
+    },
+    {
+      "name": "GPU_MEMORY_UTILIZATION",
+      "description": "Fraction of GPU memory to use (0.0-1.0)",
+      "default": "0.9",
+      "required": false
+    },
+    {
+      "name": "MAX_MODEL_LEN",
+      "description": "Maximum sequence length",
+      "default": "4096",
+      "required": false
+    },
+    {
+      "name": "MAX_NUM_SEQS",
+      "description": "Maximum number of sequences per batch",
+      "default": "64",
+      "required": false
+    },
+    {
+      "name": "PORT",
+      "description": "Port for the inference server",
+      "default": "8000",
+      "required": false
+    }
+  ],
+  "container_args": [
+    "python3",
+    "app.py"
+  ],
+  "compute": {
+    "gpu_count": 1,
+    "gpu_type_id": "NVIDIA-A100-40GB-PCIe",
+    "min_vcpu_count": 4,
+    "min_ram_in_gb": 16,
+    "max_vcpu_count": 8,
+    "max_ram_in_gb": 32
+  },
+  "volume": {
+    "size_in_gb": 50,
+    "mount_path": "/home/vllm/.cache/huggingface"
+  },
+  "ports": [
+    {
+      "host_port": 8000,
+      "container_port": 8000,
+      "protocol": "tcp"
+    }
+  ],
+  "health_check": {
+    "type": "HTTP",
+    "endpoint": "/health",
+    "interval": 30,
+    "timeout": 10,
+    "max_retries": 3
+  },
+  "auto_sleep": true,
+  "auto_sleep_after_minutes": 30,
+  "min_active_container_count": 0,
+  "min_cost_usd_per_hour": 0.0,
+  "max_cost_usd_per_hour": 5.0,
+  "max_bid_usd_per_hour": 2.5,
+  "spot": true,
+  "label": "stack-2.9"
+}

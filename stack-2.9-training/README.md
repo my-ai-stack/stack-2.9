@@ -1,132 +1,140 @@
 # Stack 2.9 Training Pipeline
 
-This repository contains a complete training pipeline for Stack 2.9, including data preparation, LoRA training, model merging, and AWQ quantization.
+Complete training infrastructure to fine-tune Stack 2.9 (Qwen2.5-Coder-32B) into a super-intelligent coding model.
 
 ## Overview
 
-1. **Data Preparation**: Converts synthetic examples to HuggingFace Dataset format
-2. **LoRA Training**: Fine-tunes Qwen2.5-Coder-32B with LoRA
-3. **Model Merging**: Merges LoRA weights back to base model
-4. **AWQ Quantization**: Quantizes model for efficient inference
+This pipeline provides:
+
+1. **Data Preparation** (`prepare_data.py`) - Load, clean, format, deduplicate, and filter training data
+2. **LoRA Training** (`train_lora.py`) - Fine-tune with LoRA adapters
+3. **Model Merging** (`merge_adapter.py`) - Merge LoRA weights back to base model
+4. **AWQ Quantization** (optional) - Quantize for efficient inference
 
 ## Requirements
 
-- Python 3.8+
+- Python 3.10+
 - CUDA-compatible GPU (recommended)
-- At least 32GB VRAM for base model
-- Recommended: 48GB+ VRAM for training
+- 32GB+ VRAM for base model (48GB+ recommended for training)
+- 128GB+ system RAM
 
-## Installation
+## Quick Start
 
 ```bash
-cd /Users/walidsobhi/.openclaw/workspace/stack-2.9-training
+# Install dependencies
 pip install -r requirements.txt
+
+# Run complete pipeline
+./run_training.sh
 ```
 
-## Data Preparation
+## Individual Steps
+
+### 1. Prepare Data
 
 ```bash
-python prepare_dataset.py
+python prepare_data.py --config train_config.yaml
 ```
 
-This script:
-- Loads training data from `/Users/walidsobhi/.openclaw/workspace/training-data/synthetic/examples.jsonl`
-- Applies chat template using Qwen2 tokenizer
-- Tokenizes with max_length=131072
-- Splits into 90% train / 10% eval
-- Saves to `data/train.parquet` and `data/eval.parquet`
+Features:
+- Loads JSONL training data
+- Handles multiple formats (messages, instruction/response, prompt/completion)
+- Deduplication via content hash
+- Quality filtering (min/max length, response presence)
+- Tokenization with chat template
+- 90/10 train/eval split
 
-## Training with LoRA
+### 2. Train LoRA
 
 ```bash
-python train_lora.py
+python train_lora.py --config train_config.yaml
 ```
 
-Training configuration:
-- Model: Qwen/Qwen2.5-Coder-32B
-- Precision: 4-bit (bitsandbytes/unsloth)
+Features:
+- 4-bit quantization (bitsandbytes)
 - LoRA: r=64, alpha=128
 - Target modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]
-- Batch size: 1 (gradient accumulation: 16)
-- Learning rate: 1e-4
-- Epochs: 3
-- Output: `output/stack-2.9-lora/`
+- Gradient checkpointing
+- Mixed precision (FP16/BF16)
+- wandb/tensorboard logging
+- Checkpointing and resume
 
-## Merging LoRA Weights
+### 3. Merge Adapter
 
 ```bash
-python merge_lora.py
+python merge_adapter.py --config train_config.yaml
 ```
 
-This merges the trained LoRA adapter back into the base model and saves to:
-- `output/stack-2.9-merged/`
+Features:
+- Merges LoRA into base model
+- Exports to HuggingFace format
+- Optional AWQ quantization
 
-## AWQ Quantization
+## Configuration
 
-```bash
-python quantize_awq.py
-```
+All hyperparameters are in `train_config.yaml`:
 
-This applies AWQ 4-bit quantization for efficient inference and saves to:
-- `output/stack-2.9-awq/`
+```yaml
+# Model
+model:
+  name: "Qwen/Qwen2.5-Coder-32B"
+  torch_dtype: "bfloat16"
 
-## Complete Training Pipeline
+# Data
+data:
+  input_path: "path/to/examples.jsonl"
+  max_length: 131072
 
-Run the full pipeline with:
+# LoRA
+lora:
+  r: 64
+  alpha: 128
+  target_modules: [...]
 
-```bash
-./run_training.sh
+# Training
+training:
+  num_epochs: 3
+  batch_size: 1
+  gradient_accumulation: 16
+  learning_rate: 1.0e-4
 ```
 
 ## File Structure
 
 ```
 stack-2.9-training/
-├── requirements.txt          # Python dependencies
-├── prepare_dataset.py       # Data preparation script
-├── train_lora.py           # LoRA training script
-├── merge_lora.py           # Model merging script
-├── quantize_awq.py         # AWQ quantization script
-├── run_training.sh         # Complete pipeline script
-├── README.md               # This file
-├── data/                   # Processed datasets
-│   ├── train/              # Training data
-│   └── eval/               # Evaluation data
-└── output/                 # Trained models
-    ├── stack-2.9-lora/      # LoRA trained model
-    ├── stack-2.9-merged/    # Merged model
-    └── stack-2.9-awq/       # Quantized model
+├── train_config.yaml      # All hyperparameters
+├── prepare_data.py      # Data preparation
+├── train_lora.py        # LoRA training
+├── merge_adapter.py    # Model merging
+├── run_training.sh      # One-command pipeline
+├── requirements.txt    # Python dependencies
+├── data/                # Processed datasets
+│   ├── train/
+│   └── eval/
+└── output/              # Trained models
+    ├── stack-2.9-lora/    # LoRA adapter
+    ├── stack-2.9-merged/  # Merged model
+    └── stack-2.9-awq/     # Quantized model
 ```
 
 ## Hardware Requirements
 
-### Minimum
-- GPU: 32GB VRAM
-- CPU: 8+ cores
-- RAM: 64GB+ system memory
+| Config | GPU VRAM | System RAM | Training Time |
+|--------|----------|------------|---------------|
+| Minimum | 32GB | 64GB | 12-24h |
+| Recommended | 48GB+ | 128GB+ | 6-12h |
+| Optimal | 80GB (A100) | 256GB+ | 4-8h |
 
-### Recommended
-- GPU: 48GB+ VRAM (A100, H100, or multiple 24GB cards)
-- CPU: 16+ cores
-- RAM: 128GB+ system memory
-- Storage: 1TB+ NVMe SSD
-
-## Training Time Estimates
-
-- Data preparation: 5-10 minutes
-- LoRA training: 8-12 hours (depends on GPU)
-- Model merging: 2-5 minutes
-- AWQ quantization: 10-30 minutes
-
-## Usage
-
-After training, use the quantized model for inference:
+## Usage After Training
 
 ```python
 from transformers import AutoModelForCausalLM, AutoTokenizer
+import torch
 
+# Load quantized model
 model = AutoModelForCausalLM.from_pretrained(
-    "/Users/walidsobhi/.openclaw/workspace/stack-2.9-training/output/stack-2.9-awq",
+    "output/stack-2.9-awq",
     torch_dtype=torch.float16,
     load_in_4bit=True,
     device_map="auto"
@@ -138,52 +146,24 @@ tokenizer = AutoTokenizer.from_pretrained("Qwen/Qwen2.5-Coder-32B")
 prompt = "Write a Python function to calculate factorial"
 inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
 output = model.generate(**inputs, max_new_tokens=512)
-result = tokenizer.decode(output[0], skip_special_tokens=True)
-print(result)
+print(tokenizer.decode(output[0], skip_special_tokens=True))
 ```
 
 ## Troubleshooting
 
 ### Memory Issues
-- Reduce `gradient_accumulation` in `train_lora.py`
-- Use CPU offloading: `device_map="auto", offload_dir="/tmp/offload"`
-- Train with smaller batch sizes
+- Reduce `batch_size` in config
+- Enable gradient checkpointing
+- Use 4-bit quantization
 
 ### CUDA Errors
-- Ensure CUDA drivers are up to date
-- Check GPU memory with `nvidia-smi`
-- Reduce model precision if needed
+- Verify CUDA drivers: `nvidia-smi`
+- Check PyTorch CUDA: `python -c "import torch; print(torch.cuda.is_available())"`
 
-### Dataset Errors
-- Verify `examples.jsonl` exists at the specified path
-- Check JSON format is correct
-- Ensure required columns are present
-
-### Installation Issues
-- Use Python 3.8+ environment
-- Install PyTorch with CUDA support
-- Check system dependencies (cmake, g++)
-
-## Performance Tips
-
-1. **Gradient Accumulation**: Use higher values for better GPU utilization
-2. **Mixed Precision**: 4-bit quantization reduces memory usage significantly
-3. **Data Loading**: Use `num_proc` for faster dataset loading
-4. **Checkpointing**: Save intermediate checkpoints during training
-5. **Evaluation**: Monitor validation loss to prevent overfitting
+### Data Errors
+- Verify JSONL format
+- Check required columns: messages OR instruction/response
 
 ## License
 
-This training pipeline is provided as-is for educational and research purposes.
-
-## Support
-
-For issues with the training pipeline, check:
-1. Console error messages
-2. GPU memory usage
-3. Dataset format
-4. Python environment
-
-## Changelog
-
-- v1.0: Initial release with complete training pipeline
+Provided as-is for educational and research purposes.

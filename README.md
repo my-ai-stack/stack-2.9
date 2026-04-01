@@ -47,6 +47,30 @@ pip install -r requirements.txt
 python -m stack_2_9.cli
 ```
 
+## 🤗 HuggingFace
+
+Download the quantized model from HuggingFace:
+
+```python
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+model = AutoModelForCausalLM.from_pretrained(
+    "your-username/stack-2.9",
+    torch_dtype="auto",
+    device_map="auto"
+)
+tokenizer = AutoTokenizer.from_pretrained("your-username/stack-2.9")
+
+# Generate
+messages = [{"role": "user", "content": "Write a hello world in Python"}]
+text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+inputs = tokenizer(text, return_tensors="pt").to(model.device)
+outputs = model.generate(**inputs, max_new_tokens=512)
+print(tokenizer.decode(outputs[0], skip_special_tokens=True))
+```
+
+See [README_OPTIMIZATION.md](stack-2.9-training/README_OPTIMIZATION.md) for optimization details.
+
 ## 🔄 How Self-Evolution Works
 
 1. **Observe** — Watches its own problem-solving process

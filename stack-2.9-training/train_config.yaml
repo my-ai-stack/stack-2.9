@@ -1,0 +1,74 @@
+# Stack 2.9 Training Configuration
+
+# Model Configuration
+model:
+  name: "Qwen/Qwen2.5-Coder-32B"
+  trust_remote_code: true
+  torch_dtype: "bfloat16"
+
+# Data Configuration
+data:
+  input_path: "/Users/walidsobhi/.openclaw/workspace/stack-2.9/training-data/synthetic/examples.jsonl"
+  train_dir: "/Users/walidsobhi/.openclaw/workspace/stack-2.9-training/data/train"
+  eval_dir: "/Users/walidsobhi/.openclaw/workspace/stack-2.9-training/data/eval"
+  max_length: 131072
+  train_split: 0.9
+  test_split: 0.1
+
+# LoRA Configuration
+lora:
+  r: 64
+  alpha: 128
+  dropout: 0.05
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+  bias: "none"
+  task_type: "CAUSAL_LM"
+
+# Training Configuration
+training:
+  num_epochs: 3
+  batch_size: 1
+  gradient_accumulation: 16
+  learning_rate: 1.0e-4
+  warmup_steps: 100
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  logging_steps: 10
+  eval_steps: 100
+  save_steps: 500
+  save_total_limit: 3
+  fp16: true
+  bf16: false
+  gradient_checkpointing: true
+
+# Output Configuration
+output:
+  lora_dir: "/Users/walidsobhi/.openclaw/workspace/stack-2.9-training/output/stack-2.9-lora"
+  merged_dir: "/Users/walidsobhi/.openclaw/workspace/stack-2.9-training/output/stack-2.9-merged"
+  awq_dir: "/Users/walidsobhi/.openclaw/workspace/stack-2.9-training/output/stack-2.9-awq"
+
+# Quantization Configuration  
+quantization:
+  enabled: true
+  bits: 4
+  group_size: 128
+
+# Logging Configuration
+logging:
+  report_to: "wandb"
+  wandb_project: "stack-2.9-training"
+  run_name: null
+
+# Hardware Configuration  
+hardware:
+  device: "cuda"
+  num_gpus: 1
+  use_4bit: true
+  use_8bit: false
