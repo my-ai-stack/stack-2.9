@@ -32,7 +32,7 @@ python prepare_dataset.py
 This script:
 - Loads training data from `/Users/walidsobhi/.openclaw/workspace/training-data/synthetic/examples.jsonl`
 - Applies chat template using Qwen2 tokenizer
-- Tokenizes with max_length=32768
+- Tokenizes with max_length=131072
 - Splits into 90% train / 10% eval
 - Saves to `data/train.parquet` and `data/eval.parquet`
 
