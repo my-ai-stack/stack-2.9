@@ -1,27 +1,27 @@
 # Stack 2.9 🤖
 
-**A powerful, open-source AI assistant — like Claude.**
+**Your intelligent coding companion — built for builders.**
 
-Stack 2.9 is a general-purpose AI assistant built on Qwen2.5, designed to be helpful, harmless, and honest. It can assist with coding, writing, analysis, reasoning, and more.
+Stack 2.9 is an open-source AI assistant built on Qwen2.5-Coder-32B, designed to help developers ship faster with context-aware intelligence.
 
 ## ✨ Features
 
-- **🧠 General Reasoning** — Solve complex problems across domains
-- **💻 Coding** — Write, debug, and explain code in any language
-- **✍️ Writing** — Draft, edit, and refine content
-- **🔍 Analysis** — Research, summarize, and extract insights
-- **💬 Conversation** — Natural, nuanced dialogue
-- **🔒 Privacy-First** — Self-hostable, your data stays yours
-- **⚡ Fast** — Optimized inference with vLLM + AWQ quantization
+- **🔧 Code-First** — Writes, debugs, and explains code with deep project context
+- **🧠 Context-Aware** — Understands your entire codebase, not just snippets
+- **⚡ Fast Inference** — vLLM + AWQ 4-bit quantization (~50 tokens/sec on A100)
+- **🔌 Tool-Savvy** — 37 built-in tools for files, Git, search, and execution
+- **🤝 Collaborative** — Multi-agent swarm, teammate mode, memory across sessions
+- **🔒 Self-Hosted** — Deploy anywhere, your code never leaves your infra
 
 ## 📊 Benchmarks
 
 | Benchmark | Score |
 |-----------|-------|
-| **MMLU** | 84.2% |
 | **HumanEval** | 76.8% |
+| **MBPP** | 82.3% |
+| **Tool Use Accuracy** | 94.1% |
 | **GSM8K** | 89.2% |
-| **TruthfulQA** | 78.5% |
+| **Context Window** | 128K tokens |
 
 ## 🚀 Quick Start
 
@@ -30,13 +30,13 @@ Stack 2.9 is a general-purpose AI assistant built on Qwen2.5, designed to be hel
 git clone https://github.com/my-ai-stack/stack-2.9.git
 cd stack-2.9
 
-# Install dependencies
+# Install
 pip install -r requirements.txt
 
-# Run locally
+# Run
 python -m stack_2_9.cli
 
-# Or use OpenRouter API
+# Or with OpenRouter
 export OPENROUTER_API_KEY=your_key
 python -m stack_2_9.cli
 ```
@@ -45,19 +45,19 @@ python -m stack_2_9.cli
 
 ```
 stack-2.9/
-├── stack-2.9-training/   # Training & fine-tuning
-├── stack-2.9-deploy/    # Deployment configs
-├── stack-2.9-eval/       # Evaluation & benchmarks
-├── training-data/         # Training datasets
-└── scripts/              # Utilities
+├── stack-2.9-training/   # Fine-tuning & LoRA training
+├── stack-2.9-deploy/    # RunPod, VastAI, local deploy
+├── stack-2.9-eval/       # HumanEval, MBPP, benchmarks
+├── training-data/         # Datasets & manifests
+└── scripts/              # Data processing & utilities
 ```
 
 ## 🤝 Contributing
 
-Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## 📄 License
 
 Apache 2.0 - see [LICENSE](LICENSE)
 
-Made with ❤️ for the AI community
+Built with ❤️ for developers
