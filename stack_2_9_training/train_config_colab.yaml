@@ -1,0 +1,80 @@
+# Colab-Optimized Training Configuration for Stack 2.9
+# Target: Google Colab free tier (T4 GPU, 15GB VRAM)
+# Model: Qwen/Qwen2.5-Coder-7B (4-bit quantized fits in ~4.5GB)
+# Expected runtime: 3-5 hours
+
+model:
+  name: "Qwen/Qwen2.5-Coder-7B"  # 7B instead of 32B for Colab
+  trust_remote_code: true
+  use_flash_attention: false  # T4 doesn't support flash attention well
+
+tokenizer:
+  model_max_length: 8192  # Reduced from 131072 for memory
+  padding_side: "right"
+  truncation_side: "right"
+
+peft:
+  peft_type: "LORA"
+  task_type: "CAUSAL_LM"
+  r: 16  # LoRA rank (lower = faster, good enough for 7B)
+  lora_alpha: 32
+  lora_dropout: 0.05
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+    # Optional: add "embed_tokens", "lm_head" for full coverage (increases memory)
+
+quantization:
+  load_in_4bit: true
+  bnb_4bit_compute_dtype: "bfloat16"
+  bnb_4bit_quant_type: "nf4"
+  bnb_4bit_use_double_quant: true
+
+training:
+  output_dir: "./adapters_colab"
+  num_train_epochs: 2  # Sufficient for 7B with decent dataset
+  per_device_train_batch_size: 1  # Tiny batch for 15GB VRAM
+  gradient_accumulation_steps: 16  # Effective batch size = 16
+  optim: "paged_adamw_8bit"  # 8-bit optimizer for memory
+  learning_rate: 1.0e-4
+  weight_decay: 0.01
+  warmup_steps: 100
+  lr_scheduler_type: "cosine"
+  save_steps: 500
+  save_total_limit: 2
+  logging_steps: 10
+  report_to: "none"  # Disable wandb for Colab
+
+  # Memory optimizations
+  gradient_checkpointing: true
+  fp16: false  # Use bf16 instead if available
+  bf16: true  # T4 supports bf16
+  max_grad_norm: 1.0
+  dataloader_num_workers: 2
+  remove_unused_columns: false
+
+data:
+  train_file: "./training-data/train.jsonl"
+  validation_file: "./training-data/eval.jsonl"
+  dataset_format: "chat"  # or "prompt_response"
+  max_seq_length: 8192  # Critical for T4 memory
+  prompt_template: "chatml"  # Qwen's default template
+
+# Hardware
+ddp: false  # Single GPU for Colab
+
+# Misc
+seed: 42
+push_to_hub: false  # Set to true and add HF token to push during training
+hub_model_id: null  # "your-org/stack-2.9-7b-lora"
+
+# Notes:
+# - 4-bit quantization + batch size 1 + gradient checkpointing = fits in 15GB
+# - If OOM: reduce max_seq_length to 4096 or increase gradient_accumulation_steps
+# - If training is slow: increase per_device_train_batch_size to 2 (if memory allows)
+# - After training, merge adapter with base model using merge_adapter.py
