@@ -1,6 +1,10 @@
 <p align="center">
   <img src="https://img.shields.io/github/stars/my-ai-stack/stack-2.9" alt="Stars">
-  <img src="https://img.shields.io/github/license/my-ai-stack-stack-2.9" alt="License">
+  <img src="https://img.shields.io/github/license/my-ai-stack/stack-2.9?logo=apache" alt="License: Apache 2.0">
+  <img src="https://img.shields.io/badge/OpenRouter-Supported-green?logo=openrouter" alt="OpenRouter">
+  <img src="https://img.shields.io/badge/Hugging%20Face-Model-green?logo=huggingface" alt="Hugging Face">
+  <img src="https://img.shields.io/badge/HumanEval-Evaluation%20In%20Progress-yellow?logo=python" alt="HumanEval">
+  <img src="https://img.shields.io/badge/MBPP-Evaluation%20In%20Progress-yellow?logo=python" alt="MBPP">
   <img src="https://img.shields.io/python version/3.10+-blue" alt="Python">
   <img src="https://img.shields.io/discord" alt="Discord">
 </p>
@@ -43,6 +47,8 @@ These scores were therefore **unverifiable** and potentially misleading.
 ### Current Evaluation Framework
 
 We are rebuilding the evaluation infrastructure with proper methodology:
+
+**🔬 Recent Enhancement**: This release's documentation improvements, OpenRouter integration, tool system documentation, and evaluation audit were performed by autonomous sub-agents. See [EVALUATION.md](EVALUATION.md) for details.
 
 1. **Official datasets**: HumanEval (164 problems), MBPP (500 problems)
 2. **Reproducible runs**: Full logs, config files, and per-problem results
