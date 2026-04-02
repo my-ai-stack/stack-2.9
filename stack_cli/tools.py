@@ -1193,48 +1193,103 @@ def list_tools() -> List[str]:
 
 
 def get_tool_schemas() -> List[Dict[str, Any]]:
-    """Get tool schemas for LLM tool calling."""
+    """Get tool schemas for LLM tool calling.
+    
+    Automatically generates JSON Schema from function signatures using inspect.
+    All 38 tools are included with accurate parameter types and descriptions.
+    """
+    import inspect
+    from typing import get_type_hints
+    
     schemas = []
     
-    tool_schemas = {
-        "read": {"description": "Read file contents", "params": ["path", "offset", "limit"]},
-        "write": {"description": "Write content to file", "params": ["path", "content", "append"]},
-        "edit": {"description": "Edit file with text replacement", "params": ["path", "old_text", "new_text"]},
-        "search": {"description": "Search for files matching pattern", "params": ["path", "pattern", "exclude"]},
-        "grep": {"description": "Search for pattern in files", "params": ["path", "pattern", "context"]},
-        "git_status": {"description": "Get git status", "params": ["repo_path"]},
-        "git_commit": {"description": "Create git commit", "params": ["repo_path", "message", "files"]},
-        "git_push": {"description": "Push to remote", "params": ["repo_path", "remote", "branch"]},
-        "git_pull": {"description": "Pull from remote", "params": ["repo_path", "remote", "branch"]},
-        "run": {"description": "Run shell command", "params": ["command", "timeout", "cwd"]},
-        "test": {"description": "Run tests", "params": ["path", "pattern", "verbose"]},
-        "lint": {"description": "Lint code", "params": ["path", "linter"]},
-        "format": {"description": "Format code", "params": ["path", "formatter"]},
-        "web_search": {"description": "Search the web", "params": ["query", "count", "freshness"]},
-        "fetch": {"description": "Fetch URL content", "params": ["url", "max_chars"]},
-        "memory_recall": {"description": "Search memory", "params": ["query", "max_results"]},
-        "memory_save": {"description": "Save to memory", "params": ["key", "value"]},
-        "context_load": {"description": "Load project context", "params": ["projects"]},
-        "project_scan": {"description": "Scan project structure", "params": ["path"]},
-        "create_task": {"description": "Create task", "params": ["title", "description", "priority"]},
-        "list_tasks": {"description": "List tasks", "params": ["status", "priority"]},
-        "update_task": {"description": "Update task", "params": ["task_id", "status"]},
-        "create_plan": {"description": "Create execution plan", "params": ["goal", "steps"]},
-        "execute_plan": {"description": "Execute plan", "params": ["plan_id"]},
-    }
-    
-    for name, info in tool_schemas.items():
-        schemas.append({
+    for name, func in TOOLS.items():
+        sig = inspect.signature(func)
+        doc = func.__doc__ or f"Tool: {name}"
+        
+        # Build parameters schema
+        properties = {}
+        required = []
+        
+        for param_name, param in sig.parameters.items():
+            # Skip self/cls
+            if param_name in ('self', 'cls'):
+                continue
+            
+            # Get type annotation
+            annotation = param.annotation
+            if annotation is inspect.Parameter.empty:
+                json_type = "string"  # default
+            elif annotation is str:
+                json_type = "string"
+            elif annotation is int:
+                json_type = "integer"
+            elif annotation is bool:
+                json_type = "boolean"
+            elif annotation is float:
+                json_type = "number"
+            elif hasattr(annotation, '__origin__') and annotation.__origin__ is list:
+                json_type = "array"
+            elif hasattr(annotation, '__origin__') and annotation.__origin__ is dict:
+                json_type = "object"
+            else:
+                json_type = "string"  # fallback
+            
+            # Build property definition
+            prop = {"type": json_type}
+            
+            # Extract description from docstring
+            param_desc = _extract_param_desc(doc, param_name)
+            if param_desc:
+                prop["description"] = param_desc
+            
+            # Add enum for restricted string values
+            if param_name in ('linter', 'formatter', 'package_manager') and hasattr(annotation, '__args__'):
+                prop["enum"] = list(annotation.__args__)
+            
+            properties[param_name] = prop
+            
+            # Mark as required if no default value
+            if param.default is inspect.Parameter.empty:
+                required.append(param_name)
+        
+        schema = {
             "name": name,
-            "description": info["description"],
+            "description": doc.strip().split('\n')[0],
             "parameters": {
                 "type": "object",
-                "properties": {p: {"type": "string"} for p in info["params"]},
-                "required": info["params"][:1]
+                "properties": properties,
+                "required": required
             }
-        })
+        }
+        
+        schemas.append(schema)
     
     return schemas
+
+
+def _extract_param_desc(docstring: str, param_name: str) -> Optional[str]:
+    """Extract parameter description from docstring.
+    
+    Looks for lines like: "- `param_name`: description" or "param_name: description".
+    """
+    if not docstring:
+        return None
+    
+    lines = docstring.split('\n')
+    for i, line in enumerate(lines):
+        # Match: - `param`: description
+        if f"`{param_name}`" in line or f"{param_name}:" in line:
+            # Try to extract after colon or dash
+            parts = line.split(':', 1)
+            if len(parts) > 1:
+                return parts[1].strip().lstrip(' -').strip()
+            # Alternative: split on backtick
+            parts = line.split('`', 2)
+            if len(parts) > 2:
+                return parts[2].strip().lstrip(': -').strip()
+    
+    return None
 
 
 if __name__ == "__main__":

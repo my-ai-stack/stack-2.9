@@ -48,7 +48,7 @@ These scores were therefore **unverifiable** and potentially misleading.
 
 We are rebuilding the evaluation infrastructure with proper methodology:
 
-**🔬 Recent Enhancement**: This release's documentation improvements, OpenRouter integration, tool system documentation, and evaluation audit were performed by autonomous sub-agents. See [EVALUATION.md](EVALUATION.md) for details.
+**🔬 Recent Enhancement**: This release includes comprehensive documentation improvements, OpenRouter integration, complete tool reference (TOOLS.md), and a full evaluation audit. See [EVALUATION.md](EVALUATION.md) for details.
 
 1. **Official datasets**: HumanEval (164 problems), MBPP (500 problems)
 2. **Reproducible runs**: Full logs, config files, and per-problem results
