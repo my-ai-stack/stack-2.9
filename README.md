@@ -1,7 +1,8 @@
 <p align="center">
   <img src="https://img.shields.io/github/stars/my-ai-stack/stack-2.9" alt="Stars">
   <img src="https://img.shields.io/github/license/my-ai-stack/stack-2.9?logo=apache" alt="License: Apache 2.0">
-  <img src="https://img.shields.io/badge/OpenRouter-Supported-green?logo=openrouter" alt="OpenRouter">
+   <img src="https://img.shields.io/badge/OpenRouter-Supported-green?logo=openrouter" alt="OpenRouter">
+  <img src="https://img.shields.io/badge/Together_AI-Supported-green?logo=databricks" alt="Together AI">
   <img src="https://img.shields.io/badge/Hugging%20Face-Model-green?logo=huggingface" alt="Hugging Face">
   <img src="https://img.shields.io/badge/HumanEval-Evaluation%20In%20Progress-yellow?logo=python" alt="HumanEval">
   <img src="https://img.shields.io/badge/MBPP-Evaluation%20In%20Progress-yellow?logo=python" alt="MBPP">
@@ -28,7 +29,7 @@ Stack 2.9 is an open-source AI coding assistant powered by Qwen2.5-Coder-32B. It
 | **🧠 Pattern Memory** | Learns from interactions. Stores successful patterns, tracks success rates, and retrieves relevant precedents for new tasks |
 | **💻 Code Generation** | Evaluation in progress (see Benchmarks section) |
 | **🔧 37 Built-in Tools** | File ops, search, shell commands, git, and more |
-| **🌐 Multi-Provider** | Works with Ollama, OpenAI, Anthropic, OpenRouter — or bring your own model |
+| **🌐 Multi-Provider** | Works with Ollama, OpenAI, Anthropic, OpenRouter, Together AI — or bring your own model |
 | **📱 Terminal UI** | Beautiful interactive CLI with chat, benchmarks, and training |
 | **🔒 Self-Hosted** | Run locally, own your data, deploy anywhere |
 
@@ -263,6 +264,11 @@ export OPENROUTER_MODEL=qwen/qwen2.5-coder-32b
 # Optional: customize referer and title for OpenRouter dashboard
 export HTTP_REFERER=https://your-app.com
 export X_TITLE="Stack 2.9"
+
+# Together AI (Recommended for Qwen models)
+export MODEL_PROVIDER=together
+export TOGETHER_API_KEY=tog-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+export TOGETHER_MODEL=togethercomputer/qwen2.5-coder-32b-instruct
 ```
 
 ### Configuration File
@@ -295,7 +301,7 @@ eval:
 │  chat_mode          │  eval_mode  │  pattern_mode  │ train   │
 ├─────────────────────────────────────────────────────────────┤
 │                     Model Client Layer                       │
-│         OllamaClient  │  OpenAIClient  │  AnthropicClient  │  OpenRouterClient │
+│         OllamaClient  │  OpenAIClient  │  AnthropicClient  │  OpenRouterClient  │  TogetherClient │
 ├─────────────────────────────────────────────────────────────┤
 │                  Self-Evolution Layer                        │
 │    pattern_miner  │  data_quality  │  train_lora           │

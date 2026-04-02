@@ -22,7 +22,7 @@ for p in paths:
 
 def main():
     parser = argparse.ArgumentParser(description="Stack 2.9 CLI")
-    parser.add_argument("--provider", "-p", choices=["ollama", "openai", "anthropic"],
+    parser.add_argument("--provider", "-p", choices=["ollama", "openai", "anthropic", "together"],
                         default="ollama", help="Model provider")
     parser.add_argument("--model", "-m", type=str, help="Model name")
     parser.add_argument("--chat", "-c", action="store_true", help="Start in chat mode")

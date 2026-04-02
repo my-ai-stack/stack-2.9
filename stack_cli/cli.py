@@ -495,7 +495,7 @@ Examples:
     parser.add_argument(
         '--eval-provider',
         default='ollama',
-        choices=['ollama', 'openai', 'anthropic'],
+        choices=['ollama', 'openai', 'anthropic', 'together'],
         help="Model provider for evaluation"
     )
 
