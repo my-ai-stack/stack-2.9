@@ -1,9 +1,9 @@
 """
-Stack 2.9 - Self-Evolving AI Coding Assistant
+Stack 2.9 - Pattern-Based AI Coding Assistant
 HuggingFace Spaces Demo
 
 A Gradio interface for Stack 2.9 powered by Qwen2.5-Coder-7B
-with tool integration and self-evolution memory.
+with tool integration and pattern memory.
 """
 
 import os
@@ -14,11 +14,11 @@ from typing import List, Dict, Optional
 import gradio as gr
 
 # ============================================================
-# Self-Evolution Memory System
+# Pattern Memory System
 # ============================================================
 
 class SelfEvolutionMemory:
-    """Simple in-memory self-evolution system for demo purposes."""
+    """Simple in-memory pattern memory system for demo purposes."""
     
     def __init__(self):
         self.conversations = []
@@ -60,7 +60,7 @@ class SelfEvolutionMemory:
     
     def get_context(self) -> str:
         """Get accumulated context for the model."""
-        context_parts = [f"## Self-Evolution Memory ({self.interaction_count} interactions)"]
+        context_parts = [f"## Pattern Memory ({self.interaction_count} interactions)"]
         
         if self.learned_patterns:
             context_parts.append("\n### Tool Usage Patterns:")
@@ -236,7 +236,7 @@ class StackModel:
             return "Model not loaded. Please wait for initialization."
         
         # Build the prompt with system and tools
-        system_prompt = f"""You are Stack 2.9 - a self-evolving AI coding assistant.
+        system_prompt = f"""You are Stack 2.9 - a pattern-based AI coding assistant.
 
 ## Available Tools
 {get_tool_descriptions()}
@@ -291,7 +291,7 @@ Now respond to the user:"""
             yield "Model not loaded. Please wait for initialization."
             return
         
-        system_prompt = f"""You are Stack 2.9 - a self-evolving AI coding assistant.
+        system_prompt = f"""You are Stack 2.9 - a pattern-based AI coding assistant.
 
 ## Available Tools
 {get_tool_descriptions()}
@@ -447,7 +447,7 @@ def create_gradio_app():
     """Create the Gradio interface."""
     
     with gr.Blocks(
-        title="Stack 2.9 - Self-Evolving AI Coding Assistant",
+        title="Stack 2.9 - Pattern-Based AI Coding Assistant",
         theme=gr.themes.Soft(
             primary_color="#6366f1",
             secondary_color="#818cf8",
@@ -457,7 +457,7 @@ def create_gradio_app():
         
         # Header
         gr.Markdown("""
-        # 🚀 Stack 2.9 - Self-Evolving AI Coding Assistant
+        # 🚀 Stack 2.9 - Pattern-Based AI Coding Assistant
         
         Powered by **Qwen2.5-Coder-7B** with 4-bit quantization
         
@@ -546,7 +546,7 @@ def create_gradio_app():
         ---
         ### About Stack 2.9
         
-        Stack 2.9 is a self-evolving AI coding assistant that:
+        Stack 2.9 is a pattern-based AI coding assistant that:
         - 🔍 Uses **Qwen2.5-Coder-7B** (4-bit, ~4GB VRAM)
         - 🛠️ Integrates **7 tools** (file, git, web, search, shell)
         - 🧠 Remembers interactions and learns patterns
@@ -572,7 +572,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     print("=" * 50)
-    print("🚀 Stack 2.9 - Self-Evolving AI Coding Assistant")
+    print("🚀 Stack 2.9 - Pattern-Based AI Coding Assistant")
     print("=" * 50)
     print(f"Model: {args.model}")
     print("Loading model...")

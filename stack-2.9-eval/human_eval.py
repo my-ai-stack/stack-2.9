@@ -1,20 +1,17 @@
 #!/usr/bin/env python3
 """
-HumanEval Benchmark Evaluation for Stack 2.9
+HumanEval Benchmark Evaluation for Stack 2.9 [DEPRECATED]
 =============================================
-Evaluates code generation capabilities using the HumanEval benchmark.
 
-Metrics:
-- Pass@1: Fraction of problems solved with single generation (temperature=0.2)
-- Pass@10: Fraction of problems solved with 10 generations (temperature=0.8)
-- Pass@100: Fraction of problems solved with 100 generations (temperature=0.8)
+⚠️  WARNING: This evaluation script is DEPRECATED and produces INVALID results.
 
-Temperature settings:
-- Pass@1: temperature=0.2, top_p=0.95 (deterministic)
-- Pass@10/100: temperature=0.8, top_p=0.95 (creative)
+It only tests 20 out of 164 problems (12%) and returns hardcoded canonical
+solutions instead of calling a real model. The results are therefore fraudulent.
 
-Usage:
-    python human_eval.py [--model MODEL] [--output OUTPUT_DIR] [--timeout TIMEOUT]
+USE THE PROPER EVALUATION INFRASTRUCTURE:
+  python stack-2.9-eval/run_proper_evaluation.py --benchmark humaneval --provider ollama --model qwen2.5-coder:32b
+
+See EVALUATION.md for the full audit report.
 """
 
 import argparse

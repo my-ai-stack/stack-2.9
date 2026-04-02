@@ -1,22 +1,18 @@
 #!/usr/bin/env python3
 """
-Tool Use Evaluation for Stack 2.9
-===================================
-Evaluates tool calling capabilities across 500+ test cases covering:
-- File operations (read, write, edit, glob)
-- Git operations (status, commit, push, branch)
-- Search operations (grep, web search)
-- Execution operations (bash, shell commands)
-- System operations (task management, config)
+Tool Use Evaluation for Stack 2.9 [DEPRECATED]
+==============================================
 
-Metrics:
-- Tool Selection Accuracy: Correct tool chosen for task
-- Parameter Accuracy: Correct parameters provided
-- Execution Success Rate: Task completed successfully
-- Overall Success Rate: Combined metric
+⚠️  WARNING: This evaluation script is DEPRECATED and the methodology is INVALID.
 
-Usage:
-    python tool_use_eval.py [--model MODEL] [--output OUTPUT_DIR]
+This evaluator uses a naive keyword-matching simulation, not actual model inference.
+There is no proper benchmark implementation for tool calling. The claimed 94.1%
+score is unverifiable and misleading.
+
+A proper tool use benchmark needs to be built with 500+ realistic test cases and
+actual model calls. This script remains only as a placeholder.
+
+See EVALUATION.md for the full audit report.
 """
 
 import argparse

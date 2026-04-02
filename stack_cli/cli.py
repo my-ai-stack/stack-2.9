@@ -509,7 +509,7 @@ Examples:
     parser.add_argument(
         '--patterns',
         choices=['list', 'stats', 'clear'],
-        help="Manage patterns for self-evolution"
+        help="Manage learned patterns"
     )
 
     # Training

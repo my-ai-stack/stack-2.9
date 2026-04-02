@@ -1,6 +1,6 @@
 <p align="center">
   <img src="https://img.shields.io/github/stars/my-ai-stack/stack-2.9" alt="Stars">
-  <img src="https://img.shields.io/github/license/my-ai-stack/stack-2.9" alt="License">
+  <img src="https://img.shields.io/github/license/my-ai-stack-stack-2.9" alt="License">
   <img src="https://img.shields.io/python version/3.10+-blue" alt="Python">
   <img src="https://img.shields.io/discord" alt="Discord">
 </p>
@@ -10,10 +10,10 @@
 # Stack 2.9 🤖
 
 <p align="center">
-  <strong>The self-evolving AI coding assistant that gets smarter with every interaction.</strong>
+  <strong>The pattern-based AI coding assistant that improves through experience.</strong>
 </p>
 
-Stack 2.9 is an open-source AI coding assistant powered by Qwen2.5-Coder-32B. Unlike static models, Stack 2.9 learns from your code, extracts patterns from successful solutions, and continuously evolves to become your project-specific expert.
+Stack 2.9 is an open-source AI coding assistant powered by Qwen2.5-Coder-32B. It features **Pattern Memory with Retrieval** - learning from interactions by storing successful patterns and retrieving them for future tasks, becoming more helpful through accumulated experience.
 
 ---
 
@@ -21,14 +21,71 @@ Stack 2.9 is an open-source AI coding assistant powered by Qwen2.5-Coder-32B. Un
 
 | Feature | Description |
 |---------|-------------|
-| **🧠 Self-Evolving** | Learns from every interaction. Stores patterns, tracks success rates, and improves over time |
-| **💻 Code Generation** | 76.8% HumanEval, 82.3% MBPP accuracy on code generation tasks |
+| **🧠 Pattern Memory** | Learns from interactions. Stores successful patterns, tracks success rates, and retrieves relevant precedents for new tasks |
+| **💻 Code Generation** | Evaluation in progress (see Benchmarks section) |
 | **🔧 37 Built-in Tools** | File ops, search, shell commands, git, and more |
-| **🌐 Multi-Provider** | Works with Ollama, OpenAI, Anthropic — or bring your own model |
+| **🌐 Multi-Provider** | Works with Ollama, OpenAI, Anthropic, OpenRouter — or bring your own model |
 | **📱 Terminal UI** | Beautiful interactive CLI with chat, benchmarks, and training |
 | **🔒 Self-Hosted** | Run locally, own your data, deploy anywhere |
 
+## 📊 Benchmark Evaluation
+
+### Evaluation Status
+
+⚠️ **Important**: The benchmark scores previously listed in this README (76.8% HumanEval, 82.3% MBPP, 94.1% Tool Use) have been **removed pending verification**. An audit of the evaluation infrastructure revealed that:
+
+- **HumanEval & MBPP implementations had only 20 problems** (1-4% of full benchmarks)
+- **No proper model inference logs exist** for the claimed numbers
+- **Tool Use evaluation lacked a proper benchmark** implementation
+
+These scores were therefore **unverifiable** and potentially misleading.
+
+### Current Evaluation Framework
+
+We are rebuilding the evaluation infrastructure with proper methodology:
+
+1. **Official datasets**: HumanEval (164 problems), MBPP (500 problems)
+2. **Reproducible runs**: Full logs, config files, and per-problem results
+3. **Standard metrics**: Pass@1 with confidence intervals, using k≥100 samples
+4. **Transparent methodology**: All code and data publicly available
+
+See [EVALUATION.md](EVALUATION.md) for the full audit report and methodology.
+
+### Running Evaluations
+
+Once datasets are prepared, run proper evaluations:
+
+```bash
+# Download official datasets (one-time)
+python scripts/download_benchmark_datasets.py --data-dir ./data
+
+# Run evaluation with a model provider
+python stack_2_9_eval/run_proper_evaluation.py \
+    --benchmark humaneval \
+    --provider ollama \
+    --model qwen2.5-coder:32b \
+    --k-samples 100 \
+    --output-dir ./results/humaneval_run
+```
+
+Or use the built-in CLI:
+
+```bash
+python stack.py --eval all --provider ollama --eval-model qwen2.5-coder:32b
+```
+
+### Expected Results (Base Model)
+
+For reference, the base Qwen2.5-Coder-32B typically scores:
+
+- HumanEval: ~70-72% Pass@1
+- MBPP: ~75-77% Pass@1
+
+Stack 2.9's fine-tuned performance will be published after proper evaluation.
+
 ---
+
+
 
 ## 🚀 Quick Start
 
@@ -42,6 +99,26 @@ cd stack-2.9
 # Install dependencies
 pip install -r requirements.txt
 ```
+
+### Hardware Requirements
+
+Stack 2.9 requires a GPU for optimal performance. Minimum and recommended configurations:
+
+| Configuration | Minimum | Recommended | Production |
+|---------------|---------|-------------|------------|
+| **GPU** | NVIDIA 8GB VRAM | NVIDIA 24GB VRAM | NVIDIA 40-80GB (A100/H100) |
+| **RAM** | 16GB | 32GB | 64GB+ |
+| **Disk** | 20GB free | 50GB free | 100GB+ (NVMe) |
+| **CUDA** | 11.8 | 12.1 | 12.1+ |
+| **Models** | 7B quantized | 32B quantized | 70B+ quantized |
+
+**Notes:**
+- CPU-only mode is possible but extremely slow (not recommended for production)
+- AWQ/GPTQ quantization reduces VRAM requirements by ~50%
+- Multi-GPU (tensor parallelism) supported for large models
+- Ensure NVIDIA drivers and CUDA toolkit are installed
+
+For detailed deployment options (Docker, RunPod, Vast.ai, Kubernetes), see `stack-2.9-deploy/README.md`.
 
 ### Interactive Chat
 
@@ -77,7 +154,7 @@ python stack.py --patterns stats
 ```
 $ python stack.py
 ╔═══════════════════════════════════════════════════════════╗
-║              Stack 2.9 - Self-Evolving AI                ║
+║              Stack 2.9 - Pattern Memory AI             ║
 ║              Your AI coding companion                     ║
 ╚═══════════════════════════════════════════════════════════╝
 
@@ -120,7 +197,7 @@ result = client.generate("Write a function to reverse a string")
 print(result.text)
 ```
 
-### Pattern Mining (Self-Evolution)
+### Pattern Mining (Pattern Memory)
 
 ```python
 from stack_2_9_training.pattern_miner import PatternMiner
@@ -143,13 +220,15 @@ print(f"Found {len(patterns)} relevant patterns")
 
 ## 📊 Benchmarks
 
-| Benchmark | Score | Description |
-|-----------|-------|-------------|
-| **HumanEval** | 76.8% | Python code generation |
-| **MBPP** | 82.3% | Programming problem solving |
-| **Tool Use** | 94.1% | Tool calling accuracy |
-| **GSM8K** | 85%+ | Math reasoning |
-| **Context** | 128K | Token context window |
+⚠️ **Benchmark scores are currently under independent verification.** See [Evaluation Status](#-benchmark-evaluation) above for details.
+
+| Benchmark | Status | Notes |
+|-----------|--------|-------|
+| **HumanEval** | Pending | Full 164-problem evaluation in progress |
+| **MBPP** | Pending | Full 500-problem evaluation in progress |
+| **Tool Use** | Pending | Custom tool-calling benchmark to be created |
+| **GSM8K** | Not started | Math reasoning evaluation planned |
+| **Context** | ✅ 128K | Token context window tested |
 
 ---
 
@@ -170,6 +249,14 @@ export OPENAI_MODEL=gpt-4o
 # Anthropic
 export MODEL_PROVIDER=anthropic
 export ANTHROPIC_API_KEY=sk-ant-...
+
+# OpenRouter
+export MODEL_PROVIDER=openrouter
+export OPENROUTER_API_KEY=sk-or-v1-...
+export OPENROUTER_MODEL=qwen/qwen2.5-coder-32b
+# Optional: customize referer and title for OpenRouter dashboard
+export HTTP_REFERER=https://your-app.com
+export X_TITLE="Stack 2.9"
 ```
 
 ### Configuration File
@@ -202,7 +289,7 @@ eval:
 │  chat_mode          │  eval_mode  │  pattern_mode  │ train   │
 ├─────────────────────────────────────────────────────────────┤
 │                     Model Client Layer                       │
-│         OllamaClient  │  OpenAIClient  │  AnthropicClient   │
+│         OllamaClient  │  OpenAIClient  │  AnthropicClient  │  OpenRouterClient │
 ├─────────────────────────────────────────────────────────────┤
 │                  Self-Evolution Layer                        │
 │    pattern_miner  │  data_quality  │  train_lora           │

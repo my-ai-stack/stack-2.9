@@ -1,19 +1,17 @@
 #!/usr/bin/env python3
 """
-MBPP (Mostly Basic Python Problems) Benchmark Evaluation for Stack 2.9
-=======================================================================
-Evaluates code generation capabilities using the sanitized MBPP benchmark.
+MBPP Benchmark Evaluation for Stack 2.9 [DEPRECATED]
+===================================================
 
-The MBPP dataset contains 974 Python problems ranging from simple
-function calls to complex algorithms. This implementation uses the
-sanitized version (MBPP-santized) with 500 test cases.
+⚠️  WARNING: This evaluation script is DEPRECATED and produces INVALID results.
 
-Metrics:
-- Pass@1: Fraction solved with single generation
-- Pass@10: Fraction solved with 10 generations
+It only tests 20 out of 500 problems (4%) and returns hardcoded canonical
+solutions instead of calling a real model. The scores are therefore fraudulent.
 
-Usage:
-    python mbpp_eval.py [--model MODEL] [--output OUTPUT_DIR] [--timeout TIMEOUT]
+USE THE PROPER EVALUATION INFRASTRUCTURE:
+  python stack-2.9-eval/run_proper_evaluation.py --benchmark mbpp --provider ollama --model qwen2.5-coder:32b
+
+See EVALUATION.md for the full audit report.
 """
 
 import argparse

@@ -9,6 +9,25 @@ Turnkey deployment configurations for Stack 2.9 LLM inference server.
 - For cloud: **runpodctl** or **vastai** CLI installed
 - **chmod +x** may be required on shell scripts
 
+## 🖥️ System Requirements
+
+Stack 2.9 deployment requires appropriate hardware depending on model size:
+
+| Configuration | Minimum | Recommended | Production |
+|---------------|---------|-------------|------------|
+| **GPU VRAM** | 8GB | 24GB | 40-80GB (A100/H100) |
+| **RAM** | 16GB | 32GB | 64GB+ |
+| **Disk** | 20GB free | 50GB free | 100GB+ (NVMe) |
+| **CUDA** | 11.8 | 12.1 | 12.1+ |
+| **Models** | 7B quantized | 32B quantized | 70B+ quantized |
+
+**Notes:**
+- CPU-only mode is possible but extremely slow (not recommended for production)
+- AWQ/GPTQ quantization reduces VRAM requirements by ~50%
+- Multi-GPU (tensor parallelism) supported via `TENSOR_PARALLEL_SIZE`
+
+## 🧪 Validate Setup
+
 ## 🧪 Validate Setup
 
 Before deploying, run the validation script to ensure everything is ready:

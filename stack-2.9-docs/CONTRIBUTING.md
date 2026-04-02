@@ -496,7 +496,7 @@ class TestProcessData:
 | Integration Tests | `tests/integration/` | Test component interactions |
 | API Tests | `tests/api/` | Test API endpoints |
 | Tool Tests | `tests/tools/` | Test tool implementations |
-| Self-Evolution Tests | `tests/self_evolution/` | Test learning system |
+| Pattern Memory Tests | `tests/self_evolution/` | Test learning system |
 
 ### Running Tests
 

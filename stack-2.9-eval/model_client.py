@@ -435,6 +435,139 @@ class AnthropicClient(BaseModelClient):
         return self.model
 
 
+class OpenRouterClient(BaseModelClient):
+    """Client for OpenRouter API (unified interface for multiple models)."""
+
+    def __init__(
+        self,
+        model: str = "qwen/qwen2.5-coder-32b",
+        api_key: Optional[str] = None,
+        base_url: str = "https://openrouter.ai/api/v1",
+        timeout: int = 120,
+        http_referer: Optional[str] = None,
+        x_title: Optional[str] = None
+    ):
+        self.model = model
+        self.api_key = api_key or os.environ.get("OPENROUTER_API_KEY", "")
+        self.base_url = base_url
+        self.timeout = timeout
+        self.http_referer = http_referer or os.environ.get("HTTP_REFERER", "")
+        self.x_title = x_title or os.environ.get("X_TITLE", "Stack 2.9")
+
+        if not self.api_key:
+            raise ValueError("OpenRouter API key required. Set OPENROUTER_API_KEY environment variable.")
+
+    def _get_client(self):
+        """Get OpenAI-compatible client."""
+        try:
+            from openai import OpenAI
+            return OpenAI(api_key=self.api_key, base_url=self.base_url, timeout=self.timeout)
+        except ImportError:
+            raise ImportError("openai package required. Install with: pip install openai")
+
+    def generate(
+        self,
+        prompt: str,
+        temperature: float = 0.2,
+        max_tokens: int = 4096,
+        stop: Optional[List[str]] = None,
+        **kwargs
+    ) -> GenerationResult:
+        """Generate text using OpenRouter."""
+        client = self._get_client()
+
+        start_time = time.time()
+
+        try:
+            response = client.completions.create(
+                model=self.model,
+                prompt=prompt,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                stop=stop,
+                **kwargs
+            )
+
+            duration = time.time() - start_time
+
+            result = GenerationResult(
+                text=response.choices[0].text,
+                model=self.model,
+                tokens=response.usage.completion_tokens,
+                duration=duration,
+                finish_reason=response.choices[0].finish_reason,
+                raw_response=response.model_dump()
+            )
+
+            return result
+        except Exception as e:
+            logger.error(f"OpenRouter request failed: {e}")
+            raise
+
+    def chat(
+        self,
+        messages: List[ChatMessage],
+        temperature: float = 0.2,
+        max_tokens: int = 4096,
+        tools: Optional[List[Dict]] = None,
+        **kwargs
+    ) -> GenerationResult:
+        """Generate chat response using OpenRouter."""
+        client = self._get_client()
+
+        # Convert messages to chat format
+        chat_messages = [{"role": m.role, "content": m.content} for m in messages]
+
+        request_params = {
+            "model": self.model,
+            "messages": chat_messages,
+            "temperature": temperature,
+            "max_tokens": max_tokens,
+        }
+
+        if tools:
+            request_params["tools"] = tools
+
+        request_params.update(kwargs)
+
+        # Add OpenRouter-specific headers
+        extra_headers = {}
+        if self.http_referer:
+            extra_headers["HTTP-Referer"] = self.http_referer
+        if self.x_title:
+            extra_headers["X-Title"] = self.x_title
+
+        start_time = time.time()
+
+        try:
+            response = client.chat.completions.create(
+                extra_headers=extra_headers if extra_headers else None,
+                **request_params
+            )
+
+            duration = time.time() - start_time
+
+            msg = response.choices[0].message
+            text = msg.content or ""
+
+            result = GenerationResult(
+                text=text,
+                model=self.model,
+                tokens=response.usage.completion_tokens,
+                duration=duration,
+                finish_reason=response.choices[0].finish_reason,
+                raw_response=response.model_dump()
+            )
+
+            return result
+        except Exception as e:
+            logger.error(f"OpenRouter chat request failed: {e}")
+            raise
+
+    def get_model_name(self) -> str:
+        return self.model
+
+
 def create_model_client(
     provider: str = "ollama",
     model: Optional[str] = None,
@@ -444,7 +577,7 @@ def create_model_client(
     Factory function to create model client.
 
     Args:
-        provider: One of "ollama", "openai", "anthropic"
+        provider: One of "ollama", "openai", "anthropic", "openrouter"
         model: Model name (defaults to provider's default)
         **kwargs: Additional client configuration
 
@@ -460,8 +593,11 @@ def create_model_client(
     elif provider == "anthropic":
         default_model = model or os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-4-20250514")
         return AnthropicClient(model=default_model, **kwargs)
+    elif provider == "openrouter":
+        default_model = model or os.environ.get("OPENROUTER_MODEL", "qwen/qwen2.5-coder-32b")
+        return OpenRouterClient(model=default_model, **kwargs)
     else:
-        raise ValueError(f"Unknown provider: {provider}. Use: ollama, openai, anthropic")
+        raise ValueError(f"Unknown provider: {provider}. Use: ollama, openai, anthropic, openrouter")
 
 
 class ModelClientPool:

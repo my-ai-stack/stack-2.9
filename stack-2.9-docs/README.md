@@ -1,6 +1,6 @@
 # Stack 2.9 🤖
 
-**Your self-evolving AI companion — gets smarter with every conversation.**
+**Your pattern-learning AI companion — gets smarter with every conversation.**
 
 Stack 2.9 is an open-source voice-enabled coding assistant built on Qwen2.5-Coder-32B, fine-tuned with OpenClaw tool patterns. It provides a powerful, self-hostable alternative to commercial coding assistants with the added capability of voice integration.
 
@@ -35,12 +35,20 @@ Stack 2.9 is an open-source voice-enabled coding assistant built on Qwen2.5-Code
 
 ## 📊 Benchmarks
 
-| Benchmark | Score | Description |
-|-----------|-------|-------------|
-| **HumanEval** | 76.8% | Python coding tasks |
-| **MBPP** | 82.3% | Python function synthesis |
-| **Tool Use** | 94.1% | OpenClaw tool patterns |
-| **Context Window** | 131K tokens | Long context understanding |
+⚠️ **Evaluation Status**: The benchmark scores previously claimed (76.8% HumanEval, 82.3% MBPP, 94.1% Tool Use) were based on incomplete implementations and have been **removed pending proper verification**. See [EVALUATION.md](../../EVALUATION.md) for the audit report.
+
+| Benchmark | Status | Notes |
+|-----------|--------|-------|
+| **HumanEval** | Pending | Full 164-problem evaluation in progress |
+| **MBPP** | Pending | Full 500-problem evaluation in progress |
+| **Tool Use** | Pending | Custom tool-calling benchmark to be created |
+| **Context Window** | ✅ 131K tokens | Long context understanding tested |
+
+**Expected Baseline** (Qwen2.5-Coder-32B, unquantized):
+- HumanEval: ~70-72% Pass@1
+- MBPP: ~75-77% Pass@1
+
+Stack 2.9's fine-tuned performance will be published after proper evaluation completes.
 
 ## 🚀 Quick Start
 
@@ -121,7 +129,7 @@ curl -X POST http://localhost:3000/v1/chat/completions \
 │  │                        MODEL LAYER                                     │  │
 │  │  ┌───────────────────┐  ┌───────────────────┐  ┌───────────────────┐    │  │
 │  │  │ Qwen2.5-Coder-32B │  │   Fine-tuned on   │  │    LoRA Adapter   │    │  │
-│  │  │   (Base Model)    │  │  OpenClaw Tools   │  │  (Self-Evolution) │    │  │
+│  │  │   (Base Model)    │  │  OpenClaw Tools   │  │  (Pattern Memory) │    │  │
 │  │  └───────────────────┘  └───────────────────┘  └───────────────────┘    │  │
 │  └────────────────────────────────────────────────────────────────────────┘  │
 │                                    │                                        │
@@ -140,7 +148,7 @@ curl -X POST http://localhost:3000/v1/chat/completions \
 │                                    │                                        │
 │                                    ▼                                        │
 │  ┌────────────────────────────────────────────────────────────────────────┐  │
-│  │                   SELF-EVOLUTION LAYER                                │  │
+│  │                   PATTERN MEMORY LAYER                                │  │
 │  │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐               │  │
 │  │  │ Observer │──│ Learner  │──│ Memory   │──│ Trainer  │               │  │
 │  │  │  (Watches)│  │(Analyzes)│  │ (Stores) │  │(Improves)│               │  │
@@ -212,9 +220,9 @@ curl -X POST http://localhost:3000/v1/chat/completions \
 | **Data Processing** | CSV, JSON, XML, database operations |
 | **Voice** | speech-to-text, text-to-speech, voice cloning |
 
-### Self-Evolution Capabilities
+### Pattern Memory Capabilities
 
-The self-evolution system continuously improves Stack 2.9's performance:
+The pattern memory system continuously improves Stack 2.9's performance:
 
 1. **Observe** - Watches problem-solving processes
 2. **Learn** - Extracts patterns from successes and failures
@@ -240,7 +248,7 @@ The self-evolution system continuously improves Stack 2.9's performance:
 | **Open Source** | ✅ Apache 2.0 | ❌ Closed | ❌ Closed | ✅ LGPL |
 | **Tool Patterns** | ✅ OpenClaw | ✅ Yes | ❌ No | ❌ No |
 | **Context Window** | 131K tokens | 200K tokens | 32K tokens | 100K tokens |
-| **Self-Evolution** | ✅ Yes | ❌ No | ❌ No | ❌ No |
+| **Pattern Memory** | ✅ Yes | ❌ No | ❌ No | ❌ No |
 | **Price** | Free | $20/month | $10/month | $12/month |
 | **Self-Hosting** | ✅ Yes | ❌ No | ❌ No | ✅ Yes |
 | **Model Size** | 32B params | 200K+ params | 15B params | 100M params |
@@ -254,7 +262,7 @@ stack-2.9/
 │   ├── agent.py           # Agent orchestration
 │   ├── context.py         # Context management
 │   └── tools.py           # Tool implementations
-├── self_evolution/         # Self-improvement system
+├── self_evolution/         # Pattern memory system
 │   ├── observer.py        # Behavior observation
 │   ├── learner.py         # Pattern extraction
 │   ├── memory.py          # Vector-based memory
@@ -272,11 +280,11 @@ stack-2.9/
 └── pyproject.toml         # Project metadata
 ```
 
-## 🔄 Self-Evolution Process
+## 🔄 Pattern Learning Process
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                         SELF-EVOLUTION CYCLE                                │
+│                         PATTERN LEARNING CYCLE                                │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │     ┌──────────────────────────────────────────────────────────────────┐    │

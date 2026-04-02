@@ -7,7 +7,7 @@ This document provides an in-depth look at Stack 2.9's technical architecture, s
 - [System Overview](#system-overview)
 - [System Components](#system-components)
 - [Data Flow](#data-flow)
-- [Self-Evolution Mechanism](#self-evolution-mechanism)
+- [Pattern Memory System](#pattern-memory-system)
 - [Training Pipeline](#training-pipeline)
 - [Tool System](#tool-system)
 - [Memory System](#memory-system)
@@ -42,7 +42,7 @@ This document provides an in-depth look at Stack 2.9's technical architecture, s
 │           │                        │                        │               │
 │           ▼                        ▼                        ▼               │
 │  ┌──────────────────┐   ┌──────────────────┐   ┌──────────────────┐       │
-│  │   MODEL LAYER    │   │   TOOL ENGINE    │   │ SELF-EVOLUTION   │       │
+│  │   MODEL LAYER    │   │   TOOL ENGINE    │   │ PATTERN MEMORY   │       │
 │  │  Qwen2.5-Coder  │   │   37 Tools       │   │  Observe/Learn   │       │
 │  │  32B + LoRA     │   │   Sandbox Exec   │   │  Memory/Train    │       │
 │  └──────────────────┘   └──────────────────┘   └──────────────────┘       │
@@ -153,7 +153,7 @@ The orchestration layer coordinates the agent's activities:
 - **Agent (agent.py)**: Main orchestration logic
 - **Context Manager (context.py)**: Manages conversation context and truncation
 - **Tool Coordinator**: Routes tool calls and manages execution
-- **Memory Bridge**: Interfaces with the self-evolution memory system
+- **Memory Bridge**: Interfaces with the pattern memory memory system
 
 ### 4. Model Layer
 
@@ -258,7 +258,7 @@ MODEL_CONFIG = {
 │  │                                                                       │     │
 │  │   • Format response (OpenAI-compatible)                             │     │
 │  │   • Stream chunks (if requested)                                     │     │
-│  │   • Record to self-evolution system                                  │     │
+│  │   • Record to pattern memory system                                  │     │
 │  │   • Update metrics                                                   │     │
 │  │                                                                       │     │
 │  └─────────────────────────────────────────────────────────────────────┘     │
@@ -314,13 +314,13 @@ MODEL_CONFIG = {
 
 ---
 
-## Self-Evolution Mechanism
+## Pattern Memory System
 
-Stack 2.9's self-evolution system enables continuous improvement through experience:
+Stack 2.9's pattern memory system enables continuous improvement through experience:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                        SELF-EVOLUTION ARCHITECTURE                           │
+│                        PATTERN MEMORY ARCHITECTURE                           │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │  ┌─────────────────────────────────────────────────────────────────────┐   │
@@ -563,7 +563,7 @@ class PersistentMemory:
 │  │   └── Duration: 1-2 epochs                                          │   │
 │  │                                                                      │   │
 │  │   Stage 3: LoRA Adapter Training                                    │   │
-│  │   ├── Self-evolution patterns                                       │   │
+│  │   ├── Pattern Memory patterns                                       │   │
 │  │   ├── Voice integration                                              │   │
 │  │   └── Duration: 1 epoch                                              │   │
 │  │                                                                      │   │
@@ -575,7 +575,7 @@ class PersistentMemory:
 │  │                                                                      │   │
 │  │   • HumanEval, MBPP benchmarks                                      │   │
 │  │   • Tool use accuracy                                               │   │
-│  │   • Self-evolution effectiveness                                    │   │
+│  │   • Pattern Memory effectiveness                                    │   │
 │  │   • Quality regression testing                                      │   │
 │  │                                                                      │   │
 │  └─────────────────────────────────────────────────────────────────────┘   │
@@ -992,7 +992,7 @@ METRICS = {
     "tool_execution_time": Histogram,
     "tool_errors": Counter,
     
-    # Self-evolution metrics
+    # Pattern Memory metrics
     "memories_created": Counter,
     "patterns_extracted": Counter,
     "improvements_applied": Counter,

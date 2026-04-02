@@ -63,16 +63,23 @@ Measured on A100 80GB with vLLM + AWQ 4-bit:
 
 ## Model Performance Benchmarks
 
-### Coding Benchmarks
+⚠️ **Evaluation Status**: The benchmark scores previously claimed (76.8% HumanEval, 82.3% MBPP, 94.1% Tool Use) were based on incomplete implementations and have been **removed pending proper verification**. See [EVALUATION.md](../EVALUATION.md) for the audit report.
 
-| Benchmark | Stack 2.9 (32B, 128K) | Stack 2.9 (32B, 32K) | Claude Code | GitHub Copilot |
-|-----------|-----------------------|-----------------------|-------------|----------------|
-| HumanEval | 76.8%                 | 76.8%                 | 84.0%       | 81.0%          |
-| MBPP      | 82.3%                 | 82.3%                 | 88.0%       | 85.0%          |
-| GSM8K     | 89.2%                 | 89.2%                 | 92.0%       | -              |
-| Tool Use  | 94.1%                 | 94.1%                 | 91.0%       | 88.0%          |
+### Coding Benchmarks (Actual Baseline Expectations)
 
-**Observation**: Context length does not affect benchmark scores for single-turn tasks. Benefits appear in multi-turn and cross-file scenarios.
+| Benchmark | Status | Notes |
+|-----------|--------|-------|
+| **HumanEval** | Pending | Full 164-problem evaluation in progress |
+| **MBPP** | Pending | Full 500-problem evaluation in progress |
+| **Tool Use** | Pending | Custom tool-calling benchmark to be created |
+| **GSM8K** | Not started | Math reasoning evaluation planned |
+| **Context** | ✅ 128K | Token context window tested |
+
+**Expected Baseline** (Qwen2.5-Coder-32B, unquantized):
+- HumanEval: ~70-72% Pass@1
+- MBPP: ~75-77% Pass@1
+
+Stack 2.9's fine-tuned performance will be published after proper evaluation completes.
 
 ### Voice-First Features
 

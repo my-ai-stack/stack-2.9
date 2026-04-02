@@ -1,6 +1,6 @@
-# 🚀 Stack 2.9 - Self-Evolving AI Coding Assistant
+# 🚀 Stack 2.9 - Pattern-Based AI Coding Assistant
 
-A HuggingFace Spaces demo for Stack 2.9, a self-evolving AI coding assistant powered by Qwen2.5-Coder-7B.
+A HuggingFace Spaces demo for Stack 2.9, a pattern-based AI coding assistant powered by Qwen2.5-Coder-7B.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.10+-green.svg)
@@ -10,7 +10,7 @@ A HuggingFace Spaces demo for Stack 2.9, a self-evolving AI coding assistant pow
 
 - **🤖 Qwen2.5-Coder-7B** - State-of-the-art code generation model
 - **🔧 7 Integrated Tools** - File operations, git, web search, shell commands
-- **🧠 Self-Evolution Memory** - Learns from each interaction
+- **🧠 Pattern Memory** - Learns from each interaction
 - **⚡ Fast Streaming** - Real-time token-by-token generation
 - **💾 4-bit Quantization** - Runs on 16GB GPU (~4GB VRAM)
 
@@ -90,7 +90,7 @@ print(memory.get_stats())
 
 ## 📊 Memory System
 
-Stack 2.9 includes a self-evolution memory system that:
+Stack 2.9 includes a pattern memory system that:
 
 1. **Tracks Interactions** - Records every user-assistant exchange
 2. **Learns Patterns** - Identifies frequently used tools
