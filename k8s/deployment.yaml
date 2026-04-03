@@ -1,0 +1,322 @@
+# =============================================================================
+# Stack 2.9 Kubernetes Deployment
+# =============================================================================
+# Deploys Stack 2.9 (Qwen2.5-Coder LoRA training or inference) on a
+# GPU-enabled Kubernetes cluster with nvidia.com/gpu nodes.
+#
+# Usage:
+#   kubectl apply -f k8s/namespace.yaml
+#   kubectl apply -f k8s/secret.yaml      # First, edit with your tokens
+#   kubectl apply -f k8s/configmap.yaml
+#   kubectl apply -f k8s/pvc.yaml
+#   kubectl apply -f k8s/deployment.yaml
+#   kubectl apply -f k8s/service.yaml       # For inference mode
+#
+# Requirements:
+#   - Kubernetes >= 1.26
+#   - NVIDIA GPU operator installed: https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/
+#   - A StorageClass for PVCs (e.g., standard, hostPath for single-node)
+#
+# =============================================================================
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: stack-29
+  labels:
+    app.kubernetes.io/name: stack-29
+    app.kubernetes.io/part-of: ai-voice-clone
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: stack-29-config
+  namespace: stack-29
+data:
+  # Model configuration - override with your values
+  MODEL_NAME: "Qwen/Qwen2.5-Coder-7B"      # Use 7B for single GPU, 32B for multi-GPU A100
+  MAX_SEQ_LENGTH: "8192"                    # Reduce for less VRAM, increase for A100 80GB
+  LOAD_IN_4BIT: "true"
+
+  # LoRA configuration
+  LORA_RANK: "64"
+  LORA_ALPHA: "128"
+  LORA_DROPOUT: "0.05"
+  TARGET_MODULES: "q_proj,k_proj,v_proj,o_proj,gate_proj,up_proj,down_proj"
+
+  # Training configuration
+  LEARNING_RATE: "1.0e-4"
+  NUM_TRAIN_EPOCHS: "3"
+  WARMUP_STEPS: "100"
+  GRADIENT_ACCUMULATION_STEPS: "16"
+  PER_DEVICE_TRAIN_BATCH_SIZE: "1"
+  SAVE_STEPS: "500"
+  LOGGING_STEPS: "10"
+
+  # Application mode: "train" or "inference"
+  APP_MODE: "train"
+
+  # HF Cache directory inside container
+  HF_HOME: "/data/hf_cache"
+
+---
+# Sensitive tokens - stored as a Kubernetes Secret (base64-encoded)
+# Create with: kubectl create secret generic stack-29-secrets \
+#   --from-literal=HF_TOKEN=your_token \
+#   --from-literal=EXTRA_TOKENS=any_other_tokens \
+#   --namespace=stack-29
+apiVersion: v1
+kind: Secret
+metadata:
+  name: stack-29-secrets
+  namespace: stack-29
+type: Opaque
+stringData:
+  HF_TOKEN: "REPLACE_WITH_YOUR_HF_TOKEN"   # Required for Qwen models
+  # Add other secrets as needed:
+  # OPENAI_API_KEY: "sk-..."
+  # ANTHROPIC_API_KEY: "sk-ant-..."
+---
+# PersistentVolumeClaim for model weights and outputs
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: stack-29-models
+  namespace: stack-29
+spec:
+  accessModes:
+    - ReadWriteMany        # ROX for training data, RWX for outputs
+  resources:
+    requests:
+      storage: 100Gi       # Adjust based on model size
+  #storageClassName: standard  # Use 'local-path' for k3s, 'standard' for GKE
+  selector:
+    matchLabels:
+      type: models-cache
+---
+# PersistentVolumeClaim for training outputs
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: stack-29-outputs
+  namespace: stack-29
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stack-29
+  namespace: stack-29
+  labels:
+    app: stack-29
+    version: v1
+spec:
+  replicas: 1
+
+  # Strategy: replace pod on config change (rolling not ideal for training)
+  strategy:
+    type: Recreate
+
+  selector:
+    matchLabels:
+      app: stack-29
+
+  template:
+    metadata:
+      labels:
+        app: stack-29
+        version: v1
+      annotations:
+        # Signal to prometheus/scheduler that this needs a GPU node
+        nvidia.com/gpu.count: "1"
+        nvidia.com/gpu.product: "NVIDIA-A100-80GB"   # Adjust per your node
+    spec:
+      # Schedule on GPU node
+      nodeSelector:
+        # Customize these to match your GPU node labels
+        # Example for nodes with A100:
+        # nvidia.com/gpu.product: "NVIDIA-A100-80GB"
+        # Example for any GPU:
+        nvidia.com/gpu.present: "true"
+
+      tolerations:
+        # Allow scheduling on GPU nodes (they may have taints)
+        - key: "nvidia.com/gpu"
+          operator: "Exists"
+          effect: "NoSchedule"
+
+      # Graceful shutdown
+      terminationGracePeriodSeconds: 120
+
+      containers:
+        - name: stack-29
+          # Use the project's Dockerfile or a pre-built image
+          # Replace with your image registry
+          image: ghcr.io/walidsobhie-code/ai-voice-clone:latest
+          imagePullPolicy: Always
+
+          env:
+            # Import secrets from Kubernetes Secret
+            - name: HF_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: stack-29-secrets
+                  key: HF_TOKEN
+                  optional: false
+
+            # Import config from ConfigMap
+            - name: MODEL_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: stack-29-config
+                  key: MODEL_NAME
+            - name: MAX_SEQ_LENGTH
+              valueFrom:
+                configMapKeyRef:
+                  name: stack-29-config
+                  key: MAX_SEQ_LENGTH
+            - name: LOAD_IN_4BIT
+              valueFrom:
+                configMapKeyRef:
+                  name: stack-29-config
+                  key: LOAD_IN_4BIT
+            - name: LORA_RANK
+              valueFrom:
+                configMapKeyRef:
+                  name: stack-29-config
+                  key: LORA_RANK
+            - name: LORA_ALPHA
+              valueFrom:
+                configMapKeyRef:
+                  name: stack-29-config
+                  key: LORA_ALPHA
+            - name: APP_MODE
+              valueFrom:
+                configMapKeyRef:
+                  name: stack-29-config
+                  key: APP_MODE
+            - name: HF_HOME
+              valueFrom:
+                configMapKeyRef:
+                  name: stack-29-config
+                  key: HF_HOME
+
+            # Performance / memory tuning
+            - name: PYTORCH_CUDA_ALLOC_CONF
+              value: "max_split_size_mb=512,garbage_collection_threshold=0.8"
+            - name: CUDA_VISIBLE_DEVICES
+              value: "0"
+            - name: PYTHONUNBUFFERED
+              value: "1"
+
+          # Training entry point
+          # Override with command for inference mode
+          command:
+            - python
+            - -m
+            - stack_2_9_training.train_lora
+            - --config
+            - /config/train_config.yaml
+
+          # Inference mode: uncomment this command instead
+          # command:
+          #   - python
+          #   - -m
+          #   - uvicorn
+          #   - stack.serve:app
+          #   - --host
+          #   - "0.0.0.0"
+          #   - --port
+          #   - "7860"
+
+          ports:
+            - name: http
+              containerPort: 7860
+              protocol: TCP
+
+          resources:
+            limits:
+              # GPU resources
+              nvidia.com/gpu: "1"          # Request 1 GPU
+              memory: "64Gi"
+              cpu: "8"
+            requests:
+              nvidia.com/gpu: "1"
+              memory: "32Gi"
+              cpu: "4"
+
+          volumeMounts:
+            # Mount config from ConfigMap
+            - name: config
+              mountPath: /config
+              readOnly: true
+            # Mount PVC for model cache
+            - name: models-cache
+              mountPath: /data
+            # Mount PVC for outputs
+            - name: outputs
+              mountPath: /outputs
+
+          # Liveness/readiness probes (for inference mode)
+          # Disabled for training as it runs to completion
+          # livenessProbe:
+          #   httpGet:
+          #     path: /health
+          #     port: 7860
+          #   initialDelaySeconds: 60
+          #   periodSeconds: 30
+          # readinessProbe:
+          #   httpGet:
+          #     path: /health
+          #     port: 7860
+          #   initialDelaySeconds: 30
+          #   periodSeconds: 10
+
+          envFrom:
+            - configMapRef:
+                name: stack-29-config
+
+      volumes:
+        - name: config
+          configMap:
+            name: stack-29-config
+        - name: models-cache
+          persistentVolumeClaim:
+            claimName: stack-29-models
+        - name: outputs
+          persistentVolumeClaim:
+            claimName: stack-29-outputs
+
+---
+# Optional: HorizontalPodAutoscaler for inference mode
+# Uncomment when running inference with multiple replicas
+# apiVersion: autoscaling/v2
+# kind: HorizontalPodAutoscaler
+# metadata:
+#   name: stack-29-hpa
+#   namespace: stack-29
+# spec:
+#   scaleTargetRef:
+#     apiVersion: apps/v1
+#     kind: Deployment
+#     name: stack-29
+#   minReplicas: 1
+#   maxReplicas: 3
+#   metrics:
+#     - type: Resource
+#       resource:
+#         name: nvidia.com/gpu
+#         target:
+#           type: Utilization
+#           averageUtilization: 80
+#     - type: Resource
+#       resource:
+#         name: cpu
+#         target:
+#           type: Utilization
+#           averageUtilization: 70
