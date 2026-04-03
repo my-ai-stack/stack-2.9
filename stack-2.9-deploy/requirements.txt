@@ -1,14 +1,24 @@
-# Stack 2.9 Inference Server Requirements
-# These are pre-baked into the Docker image
+# Stack 2.9 - HuggingFace Spaces Demo
+# Requirements for Gradio interface with Qwen2.5-Coder-7B
 
-# Core dependencies
-fastapi==0.111.0
-uvicorn[standard]==0.30.1
-pydantic==2.7.4
+# Core Gradio
+gradio>=4.0.0
 
-# vLLM and PyTorch (specified in Dockerfile)
-# torch==2.3.1+cu121 --index-url https://download.pytorch.org/whl/cu121
-# vLLM==0.6.3
-# transformers==4.41.2
-# accelerate==0.30.1
-# huggingface-hub==0.23.0
+# Transformers and model loading
+transformers>=4.36.0
+torch>=2.0.0
+
+# Model optimization
+accelerate>=0.24.0
+bitsandbytes>=0.41.0
+
+# Additional utilities
+huggingface-hub>=0.19.0
+safetensors>=0.4.0
+
+# Optional: For better web search
+# brave-search>=0.1.0
+
+# Optional: For web fetching
+# beautifulsoup4>=4.12.0
+# lxml>=4.9.0
