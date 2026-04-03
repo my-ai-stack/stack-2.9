@@ -1,0 +1,57 @@
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Docker
+docker-compose.override.yml
+*.log
+
+# Model cache
+models/
+.huggingface/
+.cache/
+~/.cache/huggingface/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Kubernetes
+kubeconfig
+.kube/
+
+# Secrets
+secrets.yaml
+secrets/
+*.secret
+
+# Backup files
+*.bak
+*.backup
+
+# Credentials
+credentials.json
+tokens.json
+*.pem
+*.key
+*.crt
+
+# Local testing
+test_data/
+samples/

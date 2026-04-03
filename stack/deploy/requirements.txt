@@ -1,0 +1,24 @@
+# Stack 2.9 - HuggingFace Spaces Demo
+# Requirements for Gradio interface with Qwen2.5-Coder-7B
+
+# Core Gradio
+gradio>=4.0.0
+
+# Transformers and model loading
+transformers>=4.36.0
+torch>=2.0.0
+
+# Model optimization
+accelerate>=0.24.0
+bitsandbytes>=0.41.0
+
+# Additional utilities
+huggingface-hub>=0.19.0
+safetensors>=0.4.0
+
+# Optional: For better web search
+# brave-search>=0.1.0
+
+# Optional: For web fetching
+# beautifulsoup4>=4.12.0
+# lxml>=4.9.0

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stack 2.9 — Your Pattern-Learning AI Companion</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+    <meta name="description" content="Stack 2.9 - Open-source AI that learns, adapts, and improves itself over time. Built on Qwen2.5-Coder-32B.">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <span class="logo-icon">🤖</span>
+                <span class="logo-text">Stack 2.9</span>
+            </a>
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#demo">Live Demo</a></li>
+                <li><a href="benchmark.html">Benchmarks</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="https://github.com/my-ai-stack/stack-2.9" class="nav-github" target="_blank">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                    </svg>
+                    GitHub
+                </a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    <span class="gradient-text">Your AI</span> that gets<br>
+                    smarter with use
+                </h1>
+                <p class="hero-subtitle">
+                    Stack 2.9 is an open-source AI that learns, adapts, and improves itself over time. 
+                    Built on Qwen2.5-Coder-32B, but transformed into something new.
+                </p>
+                <div class="hero-buttons">
+                    <a href="https://github.com/my-ai-stack/stack-2.9" class="btn btn-primary" target="_blank">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                        </svg>
+                        Star on GitHub
+                        <span class="star-count" id="starCount">2.4k</span>
+                    </a>
+                    <a href="#demo" class="btn btn-secondary">Try Live Demo</a>
+                </div>
+            </div>
+            <div class="hero-demo">
+                <div class="code-editor">
+                    <div class="editor-header">
+                        <div class="editor-dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <span class="editor-title">stack_2.9</span>
+                    </div>
+                    <div class="editor-content">
+                        <div class="code-lines" id="codeLines"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">Why Stack 2.9?</h2>
+            <p class="section-subtitle">Built for developers who want an AI that grows with them</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <h3>Pattern Learning</h3>
+                    <p>Learns from every conversation and task. Improves its own capabilities through experience. Gets smarter the more you use it.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3>Codebase-Aware</h3>
+                    <p>Deep understanding of your entire project. Extracts patterns and applies learned knowledge to solve new problems.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔧</div>
+                    <h3>37 Built-in Tools</h3>
+                    <p>Coding, debugging, file operations, search, API calls, system commands, and more. Natural language commands.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3>Deploy Anywhere</h3>
+                    <p>Self-host with Docker, run locally, or use cloud. Your data stays yours. Complete control over your AI.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💾</div>
+                    <h3>Persistent Memory</h3>
+                    <p>Remembers past conversations and learned patterns. Builds long-term knowledge across sessions.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤝</div>
+                    <h3>Multi-Agent</h3>
+                    <p>Collaborate with multiple agents. Delegate tasks, share context, work together on complex problems.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="benchmarks-preview">
+        <div class="container">
+            <h2 class="section-title">Performance</h2>
+            <p class="section-subtitle">Competitive results on standard coding benchmarks</p>
+            <div class="benchmark-grid">
+                <div class="benchmark-card">
+                    <div class="benchmark-value">TBD</div>
+                    <div class="benchmark-label">HumanEval</div>
+                    <div class="benchmark-bar">
+                        <div class="benchmark-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="benchmark-card">
+                    <div class="benchmark-value">TBD</div>
+                    <div class="benchmark-label">MBPP</div>
+                    <div class="benchmark-bar">
+                        <div class="benchmark-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="benchmark-card highlight">
+                    <div class="benchmark-value">TBD</div>
+                    <div class="benchmark-label">Tool Use</div>
+                    <div class="benchmark-bar">
+                        <div class="benchmark-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="benchmark-card">
+                    <div class="benchmark-value">Evolves</div>
+                    <div class="benchmark-label">Self-Improvement</div>
+                    <div class="benchmark-bar">
+                        <div class="benchmark-fill pulse" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+            <a href="benchmark.html" class="btn btn-outline">View Full Benchmarks</a>
+        </div>
+    </section>
+
+    <section class="demo" id="demo">
+        <div class="container">
+            <h2 class="section-title">Try It Live</h2>
+            <p class="section-subtitle">Experience Stack 2.9 in action</p>
+            <div class="demo-container">
+                <div class="demo-terminal">
+                    <div class="terminal-header">
+                        <span>Stack 2.9 Interactive</span>
+                        <button class="terminal-clear" id="clearDemo">Clear</button>
+                    </div>
+                    <div class="terminal-body" id="demoOutput">
+                        <div class="terminal-line system">🤖 Stack 2.9 ready! Type a command...</div>
+                    </div>
+                    <div class="terminal-input">
+                        <span class="prompt">></span>
+                        <input type="text" id="demoInput" placeholder="Ask anything... (try 'help' for commands)" autocomplete="off">
+                    </div>
+                </div>
+                <div class="demo-commands">
+                    <p>Try these commands:</p>
+                    <button class="demo-cmd" data-cmd="help">help</button>
+                    <button class="demo-cmd" data-cmd="explain self-evolution">explain self-evolution</button>
+                    <button class="demo-cmd" data-cmd="list tools">list tools</button>
+                    <button class="demo-cmd" data-cmd="benchmark">benchmark</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How Pattern Learning Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Observe</h3>
+                    <p>Watches its own problem-solving process</p>
+                </div>
+                <div class="step-arrow">→</div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Learn</h3>
+                    <p>Extracts patterns from successes</p>
+                </div>
+                <div class="step-arrow">→</div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Remember</h3>
+                    <p>Stores knowledge in persistent memory</p>
+                </div>
+                <div class="step-arrow">→</div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Apply</h3>
+                    <p>Uses wisdom in future tasks</p>
+                </div>
+                <div class="step-arrow">→</div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <h3>Improve</h3>
+                    <p>Gradually becomes smarter</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="faq" id="faq">
+        <div class="container">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h3>What's the difference between Stack 2.9 and other AI assistants?</h3>
+                    <p>Stack 2.9 learns from every interaction. While other assistants reset between sessions, Stack 2.9 remembers, evolves, and gets better over time.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>How does self-evolution work?</h3>
+                    <p>Stack 2.9 observes its problem-solving process, extracts patterns from successful solutions, stores learned knowledge in persistent memory, and applies that knowledge to future tasks.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Can I self-host Stack 2.9?</h3>
+                    <p>Absolutely! Stack 2.9 is designed for self-hosting. Deploy with Docker, run locally, or integrate into your own infrastructure. Your data stays yours.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>What tools are available?</h3>
+                    <p>37 built-in tools including file operations, code execution, search, API calls, git operations, terminal commands, and more. All accessible via natural language.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Is it free to use?</h3>
+                    <p>Yes! Stack 2.9 is open-source under Apache 2.0 license. You can use, modify, and distribute it freely.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>What hardware do I need?</h3>
+                    <p>Stack 2.9 runs on consumer hardware. A machine with 16GB+ RAM can handle the 32B model. GPU acceleration recommended for best performance.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="logo-icon">🤖</span>
+                    <span>Stack 2.9</span>
+                    <p>Your pattern-learning AI companion</p>
+                </div>
+                <div class="footer-links">
+                    <a href="https://github.com/my-ai-stack/stack-2.9" target="_blank">GitHub</a>
+                    <a href="benchmark.html">Benchmarks</a>
+                    <a href="#">Documentation</a>
+                    <a href="#">Community</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2024 Stack 2.9 — Open source under Apache 2.0</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

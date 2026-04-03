@@ -1,0 +1,118 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stack-2.9
+  namespace: stack-2.9
+  labels:
+    app: stack-2.9
+    version: "2.9"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stack-2.9
+  template:
+    metadata:
+      labels:
+        app: stack-2.9
+        version: "2.9"
+    spec:
+      containers:
+      - name: stack-2.9
+        image: your-registry/stack-2.9:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+          name: http
+          protocol: TCP
+        env:
+        - name: MODEL_ID
+          value: "TheBloke/Llama-2-7B-Chat-AWQ"
+        - name: HUGGING_FACE_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: stack-2.9-secrets
+              key: huggingface-token
+        - name: QUANTIZATION
+          value: "awq"
+        - name: TENSOR_PARALLEL_SIZE
+          value: "1"
+        - name: GPU_MEMORY_UTILIZATION
+          value: "0.9"
+        - name: MAX_MODEL_LEN
+          value: "4096"
+        - name: MAX_NUM_SEQS
+          value: "64"
+        - name: MAX_NUM_BATCHED_TOKENS
+          value: "4096"
+        - name: ENFORCE_EAGER
+          value: "false"
+        - name: DISABLE_LOG_STATS
+          value: "false"
+        - name: HOST
+          value: "0.0.0.0"
+        - name: PORT
+          value: "8000"
+        - name: MODEL_CACHE_DIR
+          value: "/models"
+        - name: OMP_NUM_THREADS
+          value: "4"
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+            memory: "16Gi"
+            cpu: "4"
+          requests:
+            nvidia.com/gpu: 1
+            memory: "8Gi"
+            cpu: "2"
+        volumeMounts:
+        - name: model-cache
+          mountPath: /models
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          runAsUser: 1000
+          capabilities:
+            drop:
+            - ALL
+      volumes:
+      - name: model-cache
+        persistentVolumeClaim:
+          claimName: stack-2.9-model-cache
+      nodeSelector:
+        # Uncomment to schedule on GPU nodes only
+        # nvidia.com/gpu.product: A100-80GB
+        accelerator: nvidia-tesla
+      tolerations:
+      - key: "nvidia.com/gpu"
+        operator: "Exists"
+        effect: "NoSchedule"
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - stack-2.9
+              topologyKey: kubernetes.io/hostname

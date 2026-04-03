@@ -1,0 +1,44 @@
+# Stack 2.9 Training Pipeline Requirements
+
+# Core ML libraries
+torch>=2.0.0
+transformers>=4.35.0
+tokenizers>=0.15.0
+sentencepiece>=0.1.99
+
+# Accelerate and optimization
+accelerate>=0.25.0
+bitsandbytes>=0.41.0
+peft>=0.7.0
+
+# Training and datasets
+datasets>=2.14.0
+trl>=0.7.0
+deepspeed>=0.12.0
+
+# AWQ quantization
+awq>=0.1.0
+autoawq>=0.2.0
+
+# Unsloth (optional, for faster training)
+# unsloth
+
+# Logging
+wandb>=0.15.0
+tensorboard>=2.15.0
+
+# Data processing
+pandas>=2.0.0
+numpy>=1.24.0
+pyyaml>=6.0
+
+# Utilities
+ tqdm>=4.66.0
+ requests>=2.31.0
+ safetensors>=0.4.0
+
+# Jupyter (optional)
+jupyter>=1.0.0
+ipykernel>=6.25.0
+ipywidgets>=8.1.0
+notebook>=7.0.0
