@@ -130,7 +130,23 @@ Stack 2.9 requires a GPU for optimal performance. Minimum and recommended config
 - Multi-GPU (tensor parallelism) supported for large models
 - Ensure NVIDIA drivers and CUDA toolkit are installed
 
-For detailed deployment options (Docker, RunPod, Vast.ai, Kubernetes), see `stack-2.9-deploy/README.md`.
+### Free Deployment (No Cost)
+
+Stack 2.9 can be deployed on free platforms:
+
+| Platform | What's Free | How |
+|----------|-------------|-----|
+| **HuggingFace Spaces** | 2CPU 4GB inference | `stack/deploy/FREE_DEPLOYMENT.md` |
+| **Together AI** | Fine-tuning credits | `stack/training/together_finetune.py` |
+| **Google Colab** | ~0.5hr GPU/day | `colab_train_stack29.ipynb` |
+
+**Recommended for free tier:**
+- Model: `Qwen2.5-Coder-7B` (runs on free GPU)
+- Fine-tune: Together AI (free credits)
+- Deploy: HuggingFace Spaces (free hosting)
+
+See `stack/deploy/FREE_DEPLOYMENT.md` for detailed guide.
+For paid deployment (Docker, RunPod, Vast.ai), see `stack/deploy/README.md`.
 
 ### Interactive Chat
 
@@ -424,3 +440,20 @@ Licensed under the Apache License 2.0. See [LICENSE](LICENSE) for details.
 <p align="center">
   Built with ❤️ for developers who want an AI that grows with them
 </p>
+
+
+### Free Deployment (No Cost)
+
+Stack 2.9 can run on free platforms:
+
+| Platform | What's Free | Recommended For |
+|----------|-----------------|-----------------|
+| **HuggingFace Spaces** | 2CPU 4GB hosting | API deployment |
+| **Together AI** | Fine-tuning credits | Model customization |
+| **Google Colab** | ~0.5hr GPU/day | Training experiments |
+
+**Free tier model:** Use Qwen2.5-Coder-7B (runs on free GPU)
+
+See `stack/deploy/FREE_DEPLOYMENT.md` for detailed guide.
+
+For paid options see `stack/deploy/README.md`.
