@@ -8,6 +8,7 @@ import argparse
 import json
 import random
 from pathlib import Path
+from typing import List, Dict
 from collections import defaultdict, Counter
 
 def load_full_dataset(train_path: str = "training-data/final/train.jsonl") -> List[Dict]:
