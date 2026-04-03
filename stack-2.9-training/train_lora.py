@@ -169,7 +169,7 @@ def create_training_arguments(config: Dict[str, Any]) -> TrainingArguments:
         weight_decay=training_config["weight_decay"],
         max_grad_norm=training_config["max_grad_norm"],
         fp16=training_config.get("fp16", True),
-        bf16=False,  # MPS doesn't support bf16 well
+        bf16=training_config.get("bf16", False),  # Use config setting
         gradient_checkpointing=training_config.get("gradient_checkpointing", True),
         logging_steps=training_config["logging_steps"],
         eval_strategy="steps",
@@ -237,13 +237,17 @@ def train_lora(
     eval_dir = data_config["eval_dir"]
     
     # Check if it's a local disk dataset (saved with save_to_disk)
-    if Path(train_dir).exists() and (Path(train_dir) / "data-00000-of-00001.arrow").exists():
+    # save_to_disk creates dataset_info.json
+    if Path(train_dir).exists() and (Path(train_dir) / "dataset_info.json").exists():
         from datasets import load_from_disk
         train_dataset = load_from_disk(train_dir)
         eval_dataset = load_from_disk(eval_dir)
+        print(f"   Loaded pre-processed datasets from disk")
     else:
+        # Try loading as JSONL or other format
         train_dataset = load_dataset(train_dir)
         eval_dataset = load_dataset(eval_dir)
+        print(f"   Loaded datasets from: {train_dir}, {eval_dir}")
     
     print(f"   Train samples: {len(train_dataset)}")
     print(f"   Eval samples: {len(eval_dataset)}")

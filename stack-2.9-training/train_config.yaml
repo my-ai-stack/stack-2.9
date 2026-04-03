@@ -6,12 +6,15 @@ model:
   trust_remote_code: true
   torch_dtype: "bfloat16"
 
-# Data Configuration
+# Data Configuration - supports multiple training files
 data:
-  input_path: "/Users/walidsobhi/.openclaw/workspace/stack-2.9/training-data/synthetic/examples.jsonl"
+  train_files:
+    - "/Users/walidsobhi/.openclaw/workspace/stack-2.9/training-data/final/train.jsonl"
+  val_file: "/Users/walidsobhi/.openclaw/workspace/stack-2.9/training-data/final/val.jsonl"
+  test_file: "/Users/walidsobhi/.openclaw/workspace/stack-2.9/training-data/final/test.jsonl"
   train_dir: "/Users/walidsobhi/.openclaw/workspace/stack-2.9-training/data/train"
   eval_dir: "/Users/walidsobhi/.openclaw/workspace/stack-2.9-training/data/eval"
-  max_length: 131072
+  max_length: 4096  # Reduced for practical training on MPS/consumer GPUs
   train_split: 0.9
   test_split: 0.1
 
@@ -41,18 +44,19 @@ training:
   weight_decay: 0.01
   max_grad_norm: 1.0
   logging_steps: 10
-  eval_steps: 100
-  save_steps: 500
+  eval_steps: 500
+  save_steps: 1000
   save_total_limit: 3
-  fp16: true
-  bf16: false
+  fp16: false
+  bf16: true
   gradient_checkpointing: true
+  optim: "adamw_torch"
 
 # Output Configuration
 output:
-  lora_dir: "/Users/walidsobhi/.openclaw/workspace/stack-2.9-training/output/stack-2.9-lora"
-  merged_dir: "/Users/walidsobhi/.openclaw/workspace/stack-2.9-training/output/stack-2.9-merged"
-  awq_dir: "/Users/walidsobhi/.openclaw/workspace/stack-2.9-training/output/stack-2.9-awq"
+  lora_dir: "/Users/walidsobhi/.openclaw/workspace/stack-2.9-training/output/stack-2.9-32b-lora"
+  merged_dir: "/Users/walidsobhi/.openclaw/workspace/stack-2.9-training/output/stack-2.9-32b-merged"
+  awq_dir: "/Users/walidsobhi/.openclaw/workspace/stack-2.9-training/output/stack-2.9-32b-awq"
 
 # Quantization Configuration  
 quantization:
@@ -62,13 +66,18 @@ quantization:
 
 # Logging Configuration
 logging:
-  report_to: "wandb"
+  report_to: "none"  # Set to "wandb" to enable Weights & Biases tracking
   wandb_project: "stack-2.9-training"
   run_name: null
 
-# Hardware Configuration  
+# Hardware Configuration
 hardware:
-  device: "cuda"
+  device: "cuda"  # Change to "mps" for Mac, "cpu" for CPU
   num_gpus: 1
-  use_4bit: true
+  use_4bit: true  # Enable 4-bit for 32B model on limited VRAM
   use_8bit: false
+
+# Merge Configuration (for after training completes)
+merge:
+  enabled: true
+  output_dir: "/Users/walidsobhi/.openclaw/workspace/stack-2.9-training/output/stack-2.9-32b-merged"

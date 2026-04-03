@@ -257,5 +257,106 @@
     "hasPrompt": true,
     "hasImplementation": false,
     "inputSchema": {}
+  },
+  {
+    "tool": "VoiceRecordingTool",
+    "description": "Record voice input from the microphone for voice commands. Captures audio and converts to base64 for processing. Use for hands-free coding commands.",
+    "hasPrompt": true,
+    "hasImplementation": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "maxDuration": {
+          "type": "number",
+          "description": "Maximum recording duration in seconds"
+        }
+      }
+    }
+  },
+  {
+    "tool": "VoiceSynthesisTool",
+    "description": "Convert text to speech using a cloned voice. Takes text input and synthesizes spoken audio output. Use to speak responses aloud.",
+    "hasPrompt": true,
+    "hasImplementation": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "Text to synthesize to speech"
+        },
+        "voiceName": {
+          "type": "string",
+          "description": "Name of the voice model to use"
+        }
+      },
+      "required": [
+        "text"
+      ]
+    }
+  },
+  {
+    "tool": "VoiceCloneTool",
+    "description": "Clone a voice from audio samples for use in synthesis. Creates a custom voice model from reference audio. Use to create personalized voices.",
+    "hasPrompt": true,
+    "hasImplementation": true,
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "voiceName": {
+          "type": "string",
+          "description": "Name for the cloned voice"
+        },
+        "audioPath": {
+          "type": "string",
+          "description": "Path to audio sample file"
+        }
+      },
+      "required": [
+        "voiceName"
+      ]
+    }
+  },
+  {
+    "tool": "VoiceStatusTool",
+    "description": "Check voice service status and list available voices. Returns recording availability, API status, and available voice models.",
+    "hasPrompt": true,
+    "hasImplementation": true,
+    "inputSchema": {}
+  },
+  {
+    "tool": "McpAuthTool",
+    "description": "McpAuth tool",
+    "hasPrompt": false,
+    "hasImplementation": true,
+    "inputSchema": {}
+  },
+  {
+    "tool": "REPLTool",
+    "description": "REPL tool",
+    "hasPrompt": false,
+    "hasImplementation": true,
+    "inputSchema": {}
+  },
+  {
+    "tool": "SyntheticOutputTool",
+    "description": "SyntheticOutput tool",
+    "hasPrompt": false,
+    "hasImplementation": true,
+    "inputSchema": {}
+  },
+  {
+    "tool": "shared",
+    "description": "shared tool",
+    "hasPrompt": false,
+    "hasImplementation": true,
+    "inputSchema": {}
+  },
+  {
+    "tool": "testing",
+    "description": "testing tool",
+    "hasPrompt": false,
+    "hasImplementation": true,
+    "inputSchema": {}
   }
 ]

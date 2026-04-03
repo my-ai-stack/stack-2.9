@@ -1,18 +1,18 @@
 {
   "dataset": {
     "name": "Stack 2.9 Training Data",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "description": "Training data for Stack 2.9, an open-source coding assistant based on Qwen2.5-Coder",
-    "source": "OpenClaw architecture + synthetic examples + code analysis",
+    "source": "OpenClaw architecture + synthetic examples + code analysis + RTMP extraction",
     "license": "Apache 2.0"
   },
   "stats": {
-    "toolSchemas": 37,
-    "syntheticExamples": 213,
+    "toolSchemas": 46,
+    "syntheticExamples": 228,
     "codeCommentPairs": 4045,
     "testExamples": 0,
     "conversations": 0,
-    "totalExamples": 213
+    "totalExamples": 228
   },
   "model_config": {
     "base_model": "Qwen2.5-Coder-32B",
@@ -39,11 +39,12 @@
     "eos_token": "<|endoftext|>"
   },
   "training_data": {
-    "synthetic_examples": "/Users/walidsobhi/.openclaw/workspace/training-data/synthetic/examples.jsonl",
-    "tools_catalog": "/Users/walidsobhi/.openclaw/workspace/training-data/tools/catalog.json",
-    "code_pairs": "/Users/walidsobhi/.openclaw/workspace/training-data/code-pairs/pairs.json",
-    "test_examples": "/Users/walidsobhi/.openclaw/workspace/training-data/code-pairs/test-examples.json",
-    "conversations": "/Users/walidsobhi/.openclaw/workspace/training-data/conversations/parsed.json",
+    "synthetic_examples": "./synthetic/examples.jsonl",
+    "tools_catalog": "./tools/catalog.json",
+    "code_pairs": "./code-pairs/pairs.json",
+    "test_examples": "./code-pairs/test-examples.json",
+    "conversations": "./conversations/parsed.json",
+    "src_derived": "./src-derived/rtmp_examples.jsonl",
     "estimated_tokens": "~50M tokens total",
     "recommended_dataset_size": "100K - 1M examples"
   },

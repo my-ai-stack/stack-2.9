@@ -27,8 +27,13 @@ Stack 2.9 is an open-source AI coding assistant powered by Qwen2.5-Coder-32B. It
 | Feature | Description |
 |---------|-------------|
 | **🧠 Pattern Memory** | Learns from interactions. Stores successful patterns, tracks success rates, and retrieves relevant precedents for new tasks |
+| **🔊 Voice Integration** | Voice cloning and TTS with Coqui XTTS. Record voice commands and hear responses |
+| **🎤 Speech-to-Text** | Voice recording with microphone input, silence detection |
+| **🤖 Multi-Provider LLM** | Works with Ollama, OpenAI, Anthropic - unified client with automatic fallback |
+| **🔗 MCP Support** | Model Context Protocol integration for extensible tools |
+| **🔍 Code Indexing (RAG)** | Semantic code search - index your codebase for intelligent queries |
 | **💻 Code Generation** | Evaluation in progress (see Benchmarks section) |
-| **🔧 37 Built-in Tools** | File ops, search, shell commands, git, and more |
+| **🔧 46 Built-in Tools** | File ops, search, shell commands, git, voice tools, MCP tools |
 | **🌐 Multi-Provider** | Works with Ollama, OpenAI, Anthropic, OpenRouter, Together AI — or bring your own model |
 | **📱 Terminal UI** | Beautiful interactive CLI with chat, benchmarks, and training |
 | **🔒 Self-Hosted** | Run locally, own your data, deploy anywhere |
