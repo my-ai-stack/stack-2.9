@@ -14,10 +14,10 @@ from typing import Dict, List, Any, Optional
 import signal
 from datetime import datetime
 
-# Add parent to path
-sys.path.insert(0, str(Path(__file__).parent.parent))
+# Add current directory to path
+sys.path.insert(0, str(Path(__file__).parent))
 
-from stack_2_9_eval.model_client import create_model_client, ChatMessage
+from model_client import create_model_client, ChatMessage
 
 class TimeoutException(Exception):
     pass
