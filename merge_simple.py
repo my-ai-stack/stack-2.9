@@ -9,6 +9,8 @@ import os
 from pathlib import Path
 
 import torch
+# Disable LoFTQ to avoid bitsandbytes import
+os.environ['PEFT_DISABLE_LOFTQ'] = '1'
 from peft import PeftModel
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
