@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Create a minimal training dataset for rapid prototyping.
-Samples N examples from the full training-data/final/train.jsonl ensuring tool diversity.
+Samples N examples from the full data/final/train.jsonl ensuring tool diversity.
 """
 
 import argparse
@@ -11,11 +11,11 @@ from pathlib import Path
 from typing import List, Dict
 from collections import defaultdict, Counter
 
-def load_full_dataset(train_path: str = "training-data/final/train.jsonl") -> List[Dict]:
+def load_full_dataset(train_path: str = "data/final/train.jsonl") -> List[Dict]:
     """Load the full dataset."""
     path = Path(train_path)
     if not path.exists():
-        raise FileNotFoundError(f"Training data not found at {path}. Please ensure training-data/final/train.jsonl exists.")
+        raise FileNotFoundError(f"Training data not found at {path}. Please ensure data/final/train.jsonl exists.")
 
     data = []
     with open(path, 'r') as f:
@@ -39,7 +39,7 @@ def extract_tool_calls(example: Dict) -> List[str]:
 def create_mini_dataset(
     output_path: str,
     n_samples: int = 5000,
-    train_source: str = "training-data/final/train.jsonl",
+    train_source: str = "data/final/train.jsonl",
     seed: int = 42
 ):
     """Create a stratified mini dataset."""
@@ -164,7 +164,7 @@ def main():
     parser = argparse.ArgumentParser(description="Create mini dataset for fast prototyping")
     parser.add_argument("--size", type=int, default=5000, help="Number of examples in mini dataset")
     parser.add_argument("--output", type=str, default="./data_mini/train_mini.jsonl", help="Output file path")
-    parser.add_argument("--source", type=str, default="training-data/final/train.jsonl", help="Source full dataset")
+    parser.add_argument("--source", type=str, default="data/final/train.jsonl", help="Source full dataset")
     parser.add_argument("--seed", type=int, default=42, help="Random seed for sampling")
 
     args = parser.parse_args()
