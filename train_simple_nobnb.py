@@ -118,7 +118,7 @@ def train(config: dict):
     peft_config = LoraConfig(
         r=lora_config["r"],
         lora_alpha=lora_config.get("lora_alpha", lora_config.get("alpha", 32)),
-        dropout=lora_config["dropout"],
+        lora_dropout=lora_config.get("lora_dropout", lora_config.get("dropout", 0.05)),
         target_modules=lora_config["target_modules"],
         bias=lora_config["bias"],
         task_type=TaskType.CAUSAL_LM
