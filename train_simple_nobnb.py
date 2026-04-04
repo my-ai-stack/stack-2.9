@@ -40,7 +40,13 @@ def load_model_and_tokenizer(model_name: str, trust_remote_code: bool = True):
 
 
 def load_data(data_path: str, tokenizer, max_length: int = 2048, train_split: float = 0.9):
-    """Load and tokenize dataset."""
+    """Load and tokenize dataset.
+    
+    Args:
+        train_split: If < 1.0, fraction for training (e.g., 0.9 = 90% train, 10% eval).
+                     If >= 1.0, treated as absolute number of training samples.
+                     If train_split equals dataset size, returns all for training (no eval).
+    """
     raw_dataset = load_dataset("json", data_files=data_path, split="train")
 
     def tokenize_function(examples):
@@ -60,8 +66,23 @@ def load_data(data_path: str, tokenizer, max_length: int = 2048, train_split: fl
         return tokenized
 
     tokenized_dataset = raw_dataset.map(tokenize_function, batched=True, remove_columns=raw_dataset.column_names)
-    split = tokenized_dataset.train_test_split(train_size=train_split)
-    return split["train"], split["test"]
+    
+    # Handle train_split logic
+    total_samples = len(tokenized_dataset)
+    if train_split >= 1.0:
+        # Absolute number of training samples
+        n_train = int(train_split)
+        if n_train >= total_samples:
+            # Use all data for training, no eval set
+            return tokenized_dataset, None
+        else:
+            # Split with exact number
+            split = tokenized_dataset.train_test_split(train_size=n_train)
+            return split["train"], split["test"]
+    else:
+        # Fractional split
+        split = tokenized_dataset.train_test_split(train_size=train_split)
+        return split["train"], split["test"]
 
 
 def train(config: dict):
@@ -88,12 +109,15 @@ def train(config: dict):
         train_split=data_config.get("train_split", 0.9)
     )
     print(f"   Train samples: {len(train_dataset)}")
-    print(f"   Eval samples: {len(eval_dataset)}")
+    if eval_dataset:
+        print(f"   Eval samples: {len(eval_dataset)}")
+    else:
+        print("   No eval set (using all data for training)")
 
     # Apply LoRA
     peft_config = LoraConfig(
         r=lora_config["r"],
-        alpha=lora_config["alpha"],
+        lora_alpha=lora_config.get("lora_alpha", lora_config.get("alpha", 32)),
         dropout=lora_config["dropout"],
         target_modules=lora_config["target_modules"],
         bias=lora_config["bias"],
