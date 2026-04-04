@@ -245,6 +245,15 @@ python scripts/merge_lora_adapters.py \
 
 ## 🛠️ Training & Fine-Tuning
 
+### Training Options
+
+| Platform | Notebook | Description |
+|----------|----------|-------------|
+| **Google Colab** | `colab_train_stack29.ipynb` | Free T4 GPU, 3-5 hours |
+| **Kaggle** | `kaggle_train_stack29.ipynb` | Free P100 GPU, 2-4 hours |
+| **Local Mac** | `train_local.py` | MPS/Apple Silicon |
+| **Cloud GPUs** | See below | RunPod, Vast.ai, etc |
+
 ### Quick Training (Colab)
 
 Use the provided notebook for quick prototyping:
@@ -280,6 +289,54 @@ For production training on GPUs:
 - **Docker:** `docker-compose.cloud.yaml` — bare-metal GPU servers
 
 See each script for usage instructions.
+
+### Extracting Training Data from Your Codebase
+
+Extract tool patterns from your codebase to train the model:
+
+```bash
+# Extract tool patterns
+python scripts/extract_rtmp_tools.py
+
+# Create advanced examples
+python scripts/extract_rtmp_tools_advanced.py
+```
+
+This creates `data/rtmp-tools/` with tool usage patterns that can be combined with the main training data.
+
+### Kaggle Training
+
+Free GPU training on Kaggle (P100 16GB VRAM):
+
+```bash
+# Open in Kaggle
+kaggle_train_stack29.ipynb
+```
+
+### Local Mac Training (MPS)
+
+For Apple Silicon Macs without GPU cloud access:
+
+```bash
+python train_local.py
+```
+
+### Extracting Tool Patterns from RTMP
+
+Extract training data from your RTMP codebase to teach the model your custom tools:
+
+```bash
+# Extract tool patterns
+python scripts/extract_rtmp_tools.py
+python scripts/extract_rtmp_tools_advanced.py
+
+# Combined data includes 46+ tool patterns
+data/rtmp-tools/combined_tools.jsonl
+```
+
+The combined training data includes:
+- 41,807 code completion examples
+- 59 RTMP tool usage patterns (BashTool, FileReadTool, Task tools, etc.)
 
 ---
 
