@@ -233,18 +233,32 @@ def train_lora(
     
     # Load datasets - handle local disk datasets
     print(f"\n📂 Loading datasets...")
-    train_dir = data_config["train_dir"]
-    eval_dir = data_config["eval_dir"]
-    
+    train_dir = data_config.get("train_dir")
+    eval_dir = data_config.get("eval_dir")
+    input_path = data_config.get("input_path")
+
+    # Check for input_path first (JSONL file)
+    if input_path and not train_dir:
+        print(f"   Loading from input_path: {input_path}")
+        # Load from JSONL file and split
+        raw_dataset = load_dataset("json", data_files=input_path, split="train")
+        train_split = data_config.get("train_split", 0.9)
+        test_split = data_config.get("test_split", 0.1)
+
+        # Split into train/eval
+        split_dataset = raw_dataset.train_test_split(test_size=test_split, seed=42)
+        train_dataset = split_dataset["train"]
+        eval_dataset = split_dataset["test"]
+        print(f"   Loaded and split JSONL dataset")
     # Check if it's a local disk dataset (saved with save_to_disk)
     # save_to_disk creates dataset_info.json
-    if Path(train_dir).exists() and (Path(train_dir) / "dataset_info.json").exists():
+    elif train_dir and eval_dir and Path(train_dir).exists() and (Path(train_dir) / "dataset_info.json").exists():
         from datasets import load_from_disk
         train_dataset = load_from_disk(train_dir)
         eval_dataset = load_from_disk(eval_dir)
         print(f"   Loaded pre-processed datasets from disk")
     else:
-        # Try loading as JSONL or other format
+        # Try loading as JSONL or other format from directories
         train_dataset = load_dataset(train_dir)
         eval_dataset = load_dataset(eval_dir)
         print(f"   Loaded datasets from: {train_dir}, {eval_dir}")
