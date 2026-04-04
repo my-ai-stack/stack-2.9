@@ -1,39 +1,33 @@
-# Stack 2.9 Training Configuration - Local/MPS Optimized
-
-# Model Configuration
 model:
-  name: "./base_model_qwen7b"
+  name: /kaggle/working/stack-2.9/base_model_qwen7b
   trust_remote_code: true
-  torch_dtype: "float16"
+  torch_dtype: float16
 
-# Data Configuration
 data:
-  input_path: "./data/final/train_with_rtmp.jsonl"
+  input_path: /kaggle/working/stack-2.9/data/final/train.jsonl
   train_dir: null
   eval_dir: null
   max_length: 2048
   train_split: 0.9
   test_split: 0.1
 
-# LoRA Configuration
 lora:
   r: 16
   alpha: 32
   dropout: 0.05
   target_modules:
-    - "q_proj"
-    - "k_proj"
-    - "v_proj"
-    - "o_proj"
-  bias: "none"
-  task_type: "CAUSAL_LM"
+    - q_proj
+    - k_proj
+    - v_proj
+    - o_proj
+  bias: none
+  task_type: CAUSAL_LM
 
-# Training Configuration
 training:
   num_epochs: 1
-  batch_size: 1
+  batch_size: 2
   gradient_accumulation: 4
-  learning_rate: 2.0e-4
+  learning_rate: 0.0002
   warmup_steps: 50
   weight_decay: 0.01
   max_grad_norm: 1.0
@@ -45,27 +39,22 @@ training:
   bf16: false
   gradient_checkpointing: true
 
-# Output Configuration
 output:
-  lora_dir: "./training_output/lora"
-  merged_dir: "./training_output/merged"
-  awq_dir: "./training_output/awq"
+  lora_dir: /kaggle/working/stack-2.9/training_output/lora
+  merged_dir: /kaggle/working/stack-2.9/training_output/merged
+  awq_dir: /kaggle/working/stack-2.9/training_output/awq
 
-# Quantization Configuration  
 quantization:
   enabled: false
   bits: 4
   group_size: 128
 
-# Logging Configuration
 logging:
-  report_to: "none"
-  wandb_project: "stack-2.9-training"
-  run_name: null
+  report_to: none
+  wandb_project: stack-2.9-training
 
-# Hardware Configuration  
 hardware:
-  device: "mps"
-  num_gpus: 0
+  device: cuda
+  num_gpus: 1
   use_4bit: false
   use_8bit: false
