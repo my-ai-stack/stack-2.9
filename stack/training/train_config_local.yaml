@@ -8,9 +8,9 @@ model:
 
 # Data Configuration
 data:
-  input_path: "/Users/walidsobhi/.openclaw/workspace/stack-2.9/training-data/generated/synthetic_50k.jsonl"
-  train_dir: "/Users/walidsobhi/.openclaw/workspace/stack-2.9-training/data/train"
-  eval_dir: "/Users/walidsobhi/.openclaw/workspace/stack-2.9-training/data/eval"
+  input_path: "./data/final/train_with_rtmp.jsonl"
+  train_dir: null
+  eval_dir: null
   max_length: 2048
   train_split: 0.9
   test_split: 0.1
@@ -47,9 +47,9 @@ training:
 
 # Output Configuration
 output:
-  lora_dir: "/Users/walidsobhi/.openclaw/workspace/stack-2.9-training/output/stack-2.9-7b-lora"
-  merged_dir: "/Users/walidsobhi/.openclaw/workspace/stack-2.9-training/output/stack-2.9-7b-merged"
-  awq_dir: "/Users/walidsobhi/.openclaw/workspace/stack-2.9-training/output/stack-2.9-7b-awq"
+  lora_dir: "./training_output/lora"
+  merged_dir: "./training_output/merged"
+  awq_dir: "./training_output/awq"
 
 # Quantization Configuration  
 quantization:
