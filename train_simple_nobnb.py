@@ -67,14 +67,15 @@ def load_model_and_tokenizer(
             torch_dtype=torch.bfloat16,
         )
     else:
-        # No quantization - load in float16 directly to GPU
-        # Use {"": "cuda"} to force ALL layers onto GPU (required for trainer compatibility)
-        # Use low_cpu_mem_usage to avoid RAM spikes during loading
+        # No quantization - load in bfloat16 directly to GPU
+        # Use bfloat16 since it works on all GPU generations (T4 included)
+        # and doesn't conflict with TrainingArguments bf16=True
+        # device_map="auto" works correctly for bfloat16
         model = AutoModelForCausalLM.from_pretrained(
             model_name,
-            torch_dtype=torch.float16,
+            torch_dtype=torch.bfloat16,
             trust_remote_code=trust_remote_code,
-            device_map={"": torch.device("cuda")},  # Force all to GPU
+            device_map="auto",
             use_cache=False,
         )
 
@@ -193,13 +194,18 @@ def train(config: dict):
     model = get_peft_model(model, peft_config)
     model.print_trainable_parameters()
 
-    # Determine bf16 vs fp16 based on GPU compute capability
-    # bf16 requires Ampere+ (compute capability >= 8.0)
-    # fp16 works on all NVIDIA GPUs including T4 (Turing/sm_75)
+    # GPU compute capability check
     compute_capability = torch.cuda.get_device_capability() if torch.cuda.is_available() else (0, 0)
-    supports_bf16 = compute_capability[0] >= 8  # Ampere or newer
-    use_bf16 = training_config.get("bf16", False) and supports_bf16
-    use_fp16 = not use_bf16  # Use fp16 for Turing (T4) and older
+    supports_bf16_compute = compute_capability[0] >= 8  # Ampere+ for bf16 math
+
+    # Model loads in bfloat16 (works on all GPUs as storage dtype)
+    # Training uses fp16 on Turing/Pascal (bf16 math not supported on sm_60/sm_75)
+    # Training uses bf16 on Ampere+ (native bf16 math support)
+    use_bf16 = supports_bf16_compute  # Only use bf16 for training on Ampere+
+    use_fp16 = not use_bf16  # fp16 for T4/Pascal/Turing
+
+    print(f"   GPU compute capability: {compute_capability[0]}.{compute_capability[1]}")
+    print(f"   Mixed precision: bf16={use_bf16}, fp16={use_fp16}")
 
     if training_config.get("bf16", False) and not supports_bf16:
         print(f"   ⚠️  bf16 requested but GPU (Turing/Pascal) doesn't support it — using fp16 instead")
