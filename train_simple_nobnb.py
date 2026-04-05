@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 
 import yaml
+from datasets import load_dataset
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
