@@ -1,0 +1,118 @@
+# =============================================================================
+# .dockerignore — Stack 2.9
+# Excludes everything not needed at runtime to keep image build fast & small.
+# =============================================================================
+
+# --- Git ------------------------------------------------------------
+.git
+.gitignore
+.github
+
+# --- Documentation -------------------------------------------------
+*.md
+LICENSE
+CODE_OF_CONDUCT.md
+CONTRIBUTING.md
+SECURITY.md
+CHANGELOG.md
+DIRECTORY_STRUCTURE.md
+
+# --- Build / CI artifacts ------------------------------------------
+*.egg-info/
+dist/
+build/
+*.whl
+
+# --- Python --------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+.mypy_cache/
+*.egg
+
+# --- Node / npm ----------------------------------------------------
+node_modules/
+package-lock.json
+npm-debug.log*
+tsconfig.json
+
+# --- Jupyter / notebooks -------------------------------------------
+*.ipynb
+.ipynb_checkpoints/
+
+# --- Training -------------------------------------------------------
+# DO NOT include training scripts (per task requirement)
+train_*.py
+train_local.py
+merge_simple.py
+evaluate_model.py
+kaggle_train_stack29_v5.ipynb
+colab_train_stack29.ipynb
+training-configs/
+training-data/
+scripts/
+samples/
+
+# --- Data & output -------------------------------------------------
+data/
+output/
+logs/
+*.log
+*.jsonl
+*.jsonlines
+
+# --- Model weights -------------------------------------------------
+# (These are mounted at runtime via docker-compose.volumes.
+#  Never COPY them into the build context.)
+base_model_qwen7b/
+*.safetensors
+*.bin
+*.ckpt
+*.pt
+*.pth
+
+# --- HuggingFace cache ---------------------------------------------
+.huggingface/
+cache/
+
+# --- Temporary -----------------------------------------------------
+tmp/
+temp/
+*.tmp
+*.npy
+*.npz
+
+# --- IDE / editor --------------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# --- Environment / secrets ----------------------------------------
+.env
+.env.local
+.env.*
+.secrets/
+*.pem
+*.key
+
+# --- Misc ----------------------------------------------------------
+*.npy
+*.npz
+Makefile
+GIT_PUSH.md
+LAUNCH_*.md
+runpod_deploy.sh
+vastai_deploy.sh
+TOOLS.md

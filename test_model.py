@@ -11,7 +11,7 @@ Usage:
 import argparse
 import json
 import time
-from typing import List, Dict, Tuple, Optional
+from typing import Any, Dict, List, Optional, Tuple
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -91,7 +91,7 @@ def extract_code(completion: str) -> str:
     return completion.strip()
 
 
-def execute_code(code: str, timeout: int = 5) -> Tuple[bool, str, Optional[any]]:
+def execute_code(code: str, timeout: int = 5) -> Tuple[bool, str, Optional[Any]]:
     """Safely execute code and return (success, error_msg, result)."""
     import signal
     

@@ -1,0 +1,79 @@
+name: stack-2.9
+
+python_env: python_env.yaml
+
+entry_points:
+  main:
+    command: "python train.py --train_data data/final/train.jsonl --val_data data/final/val.jsonl"
+
+  evaluate:
+    command: "python evaluate_model.py --model models/checkpoint --eval_data data/final/test.jsonl"
+
+  augment:
+    command: "python scripts/augment_training_data.py --input training-data/tool_examples.jsonl --output training-data/augmented.jsonl --multiplier 3"
+
+  validate:
+    command: "python scripts/validate_training_data.py --input training-data/tool_examples.jsonl"
+
+parameters:
+  - name: train_data
+    default: data/final/train.jsonl
+  - name: val_data
+    default: data/final/val.jsonl
+  - name: model_name
+    default: Qwen/Qwen2.5-7B
+  - name: batch_size
+    default: 4
+    type: int
+  - name: learning_rate
+    default: 5.0e-5
+    type: float
+  - name: num_epochs
+    default: 3
+    type: int
+  - name: warmup_steps
+    default: 100
+    type: int
+  - name: max_seq_length
+    default: 8192
+    type: int
+  - name: gradient_accumulation_steps
+    default: 4
+    type: int
+  - name: lora_rank
+    default: 16
+    type: int
+  - name: lora_alpha
+    default: 32
+    type: int
+  - name: lora_dropout
+    default: 0.05
+    type: float
+  - name: use_flash_attention
+    default: true
+    type: bool
+
+run_options:
+  # Storage for MLflow tracking
+  tracking_uri: ./mlruns
+  
+  # Experiment configuration
+  experiment:
+    name: stack-2.9-training
+    description: "Stack 2.9 model training experiments"
+  
+  # Resource limits
+  resources:
+    gpu_count: 1
+    gpu_type: A100
+  
+  # Logging configuration
+  log_model:
+    artifacts: true
+    save_steps: 500
+  
+  # Early stopping
+  early_stopping:
+    metric: eval_loss
+    patience: 2
+    min_delta: 0.001

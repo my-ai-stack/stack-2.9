@@ -1,0 +1,110 @@
+# =============================================================================
+# Docker Compose — Stack 2.9 GPU Deployment
+# =============================================================================
+# Usage:
+#   Start:  docker compose -f docker-compose.gpu.yml up --build -d
+#   Logs:   docker compose -f docker-compose.gpu.yml logs -f
+#   Stop:   docker compose -f docker-compose.gpu.yml down
+#   Restart: docker compose -f docker-compose.gpu.yml restart
+#
+# Prerequisites:
+#   1. NVIDIA Container Toolkit installed:
+#        https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html
+#   2. docker run --gpus all working on the host
+#   3. Model files present at ./base_model_qwen7b (or path set below)
+# =============================================================================
+
+services:
+  stack-2.9:
+    build:
+      context: .
+      dockerfile: Dockerfile.gpu
+      target: runtime
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+
+    image: stack-2.9-gpu:latest
+    container_name: stack-2.9-api
+
+    # ---------------------------------------------------------------------
+    # GPU access — requires nvidia-container-toolkit on the host.
+    # ---------------------------------------------------------------------
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all          # "1" for a specific GPU
+              capabilities: [gpu]
+
+    # ---------------------------------------------------------------------
+    # Environment
+    # ---------------------------------------------------------------------
+    environment:
+      - MODEL_PATH=/model
+      - DEVICE=cuda
+      - PORT=8000
+      - HOST=0.0.0.0
+      - CUDA_VISIBLE_DEVICES=0
+      - PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:512
+      - TRANSFORMERS_CACHE=/model/.cache
+      - HF_HOME=/model/.cache
+      # Optional tuning — increase if you have ample GPU VRAM
+      - DEFAULT_MAX_TOKENS=512
+      - DEFAULT_TEMPERATURE=0.2
+      - DEFAULT_TOP_P=0.95
+
+    # ---------------------------------------------------------------------
+    # Port mapping — REST API
+    # ---------------------------------------------------------------------
+    ports:
+      - "${STACK_PORT:-8000}:8000"
+
+    # ---------------------------------------------------------------------
+    # Volume mounts
+    # ---------------------------------------------------------------------
+    volumes:
+      # ── Model weights (read-only, essential) ──────────────────────────
+      # Mount your fine-tuned or base Qwen-7b model directory here.
+      # Example:  ./base_model_qwen7b  →  /model
+      - ${MODEL_PATH:-./base_model_qwen7b}:/model:ro
+
+      # ── HuggingFace cache (optional, speeds up rebuilds) ──────────────
+      # Uncomment if you want to persist the HF hub cache:
+      # - ./hf_cache:/model/.cache
+
+      # ── Inference data / logs (optional) ───────────────────────────────
+      # Mount a directory for additional prompt templates or static files:
+      # - ./data:/data:ro
+
+    # ---------------------------------------------------------------------
+    # Restart policy
+    # ---------------------------------------------------------------------
+    restart: unless-stopped
+
+    # ---------------------------------------------------------------------
+    # Healthcheck (also defined in Dockerfile; repeated here for compose)
+    # ---------------------------------------------------------------------
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s   # Model loading can take 60–90 seconds
+
+    # ---------------------------------------------------------------------
+    # Resource limits (tune to your GPU VRAM)
+    # ---------------------------------------------------------------------
+    # Uncomment and adjust if you want to cap resource usage:
+    # mem_limit: 16g
+    # shm_size: 4g
+
+    # ---------------------------------------------------------------------
+    # Logging
+    # ---------------------------------------------------------------------
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+        max-file: "3"

@@ -1,4 +1,4 @@
-.PHONY: help install test train deploy clean
+.PHONY: help install test train deploy clean lint format check check-types lint-ci
 
 help: ## Show this help message
 	@echo "Stack 2.9 - Makefile Commands"
@@ -80,10 +80,38 @@ test: ## Run unit tests
 	pytest -xvs 2>/dev/null || echo "No pytest tests found"
 	cd stack-2.9-voice && python -m pytest test_integration.py 2>/dev/null || true
 
-lint: ## Run linters
-	@echo "🔍 Running linters..."
-	eslint src/ 2>/dev/null || true
-	flake8 . 2>/dev/null || true
+lint: ## Run ruff linter
+	@echo "🔍 Running ruff linter..."
+	ruff check .
+	@echo "✅ Lint complete"
+
+format: ## Run black formatter
+	@echo "🎨 Running black formatter..."
+	black .
+	@echo "✅ Format complete"
+
+check: ## Run all quality checks
+	@echo "🔍 Running all checks (lint + format check + type check)..."
+	@echo ""
+	@echo "--- Lint (ruff) ---"
+	ruff check . || true
+	@echo ""
+	@echo "--- Format check (black) ---"
+	black --check . || true
+	@echo ""
+	@echo "--- Type check (mypy) ---"
+	bash scripts/check_types.sh
+	@echo ""
+	@echo "✅ All checks complete"
+
+check-types: ## Run mypy type checks
+	@echo "🔍 Running mypy type checks..."
+	bash scripts/check_types.sh
+	@echo "✅ Type check complete"
+
+lint-ci: ## Run linters (CI-friendly, fail on errors)
+	@echo "🔍 Running linters (CI mode)..."
+	ruff check . --exit-non-zero-on-error
 
 clean: ## Clean build artifacts
 	@echo "🧹 Cleaning..."
