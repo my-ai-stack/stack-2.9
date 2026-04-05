@@ -1,0 +1,104 @@
+# Stack 2.9 Training Configuration for Qwen2.5-Coder-7B
+# Optimized for A100 80GB or multi-GPU setup (2x A100 40GB minimum)
+# For single GPU training with 7B model
+
+model:
+  name: "Qwen/Qwen2.5-Coder-7B"
+  trust_remote_code: true
+  torch_dtype: "bfloat16"  # bf16 for A100, better precision than fp16
+  use_flash_attention: true  # A100 supports FA2
+
+tokenizer:
+  model_max_length: 8192  # Standard 8K context for coding tasks
+  padding_side: "right"
+  truncation_side: "right"
+
+# LoRA Configuration - Optimized for 7B model
+lora:
+  r: 16  # LoRA rank: 16 is sufficient for 7B, saves memory
+  alpha: 32  # alpha = 2*r is standard
+  dropout: 0.05
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+  bias: "none"
+  task_type: "CAUSAL_LM"
+
+# Training Configuration
+training:
+  num_epochs: 3  # 3 epochs is typically sufficient
+  batch_size: 2  # 2 per GPU for A100 80GB
+  gradient_accumulation: 8  # Effective batch = 16 (2 * 8)
+  learning_rate: 1.0e-4  # Standard for LoRA
+  warmup_steps: 100
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  logging_steps: 10
+  eval_steps: 500
+  save_steps: 1000
+  save_total_limit: 3
+  fp16: false
+  bf16: true  # Use bf16 for A100
+  gradient_checkpointing: true  # Enable for memory savings
+  optim: "adamw_torch"  # Standard optimizer
+
+# Data Configuration
+data:
+  train_files:
+    - "/Users/walidsobhi/.openclaw/workspace/stack-2.9/training-data/final/train.jsonl"
+  val_file: "/Users/walidsobhi/.openclaw/workspace/stack-2.9/training-data/final/val.jsonl"
+  test_file: "/Users/walidsobhi/.openclaw/workspace/stack-2.9/training-data/final/test.jsonl"
+  max_length: 8192
+  train_split: 0.9
+  test_split: 0.1
+
+# Output Configuration
+output:
+  lora_dir: "/Users/walidsobhi/.openclaw/workspace/stack-2.9-training/output/stack-2.9-7b-lora"
+  merged_dir: "/Users/walidsobhi/.openclaw/workspace/stack-2.9-training/output/stack-2.9-7b-merged"
+  awq_dir: "/Users/walidsobhi/.openclaw/workspace/stack-2.9-training/output/stack-2.9-7b-awq"
+
+# Quantization - Optional for 7B
+# Enable 4-bit only if running on limited VRAM (< 40GB per GPU)
+quantization:
+  enabled: false  # Disabled for A100 80GB - not needed
+  bits: 4
+  group_size: 128
+
+# Logging Configuration
+logging:
+  report_to: "none"  # Set to "wandb" for Weights & Biases
+  wandb_project: "stack-2.9-training"
+  run_name: null
+
+# Hardware Configuration
+hardware:
+  device: "cuda"
+  num_gpus: 1  # Set to 2, 4, or 8 for multi-GPU
+  use_4bit: false  # Not needed for A100 80GB
+  use_8bit: false  # Optional: enables for memory savings
+  zero_stage: 0  # ZeRO stage (0=disabled, 1,2,3 for multi-GPU)
+
+# Multi-GPU Configuration (use when num_gpus > 1)
+multigpu:
+  zero_stage: 2  # ZeRO-2 recommended for 2-4 GPUs, ZeRO-3 for 8+
+  gradient_bucket_size: 5e8
+  prefetch_bucket_size: 5e8
+  steps_per_print: 10
+
+# Memory Estimates (7B):
+# - Full bf16, batch_size=2: ~18GB VRAM
+# - Full bf16, batch_size=4: ~22GB VRAM  
+# - 4-bit QLoRA, batch_size=1: ~6GB VRAM
+# - 4-bit QLoRA, batch_size=2: ~8GB VRAM
+# A100 80GB = 80GB available (has headroom)
+
+# Merge Configuration (run after training)
+merge:
+  enabled: true
+  output_dir: "/Users/walidsobhi/.openclaw/workspace/stack-2.9-training/output/stack-2.9-7b-merged"

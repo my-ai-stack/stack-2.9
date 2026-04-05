@@ -34,7 +34,7 @@ def main():
     print("Loading base model...")
     model = AutoModelForCausalLM.from_pretrained(
         args.base_model,
-        torch_dtype=torch.float16,
+        torch_dtype=torch.bfloat16,
         device_map="auto",
         trust_remote_code=True
     )
