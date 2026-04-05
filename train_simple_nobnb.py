@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Simple standalone training script for Stack 2.9.
-Uses 4-bit quantization when use_4bit=True, otherwise bfloat16.
+Uses bfloat16 with optional 4-bit quantization via bitsandbytes.
 """
 
 import argparse
@@ -16,7 +16,6 @@ from transformers import (
     TrainingArguments,
     Trainer,
     DataCollatorForLanguageModeling,
-    BitsAndBytesConfig,
 )
 from peft import LoraConfig, get_peft_model, TaskType
 import torch
@@ -32,11 +31,13 @@ def load_model_and_tokenizer(
     trust_remote_code: bool = True,
     use_4bit: bool = False,
 ):
-    """Load base model with optional 4-bit quantization."""
+    """Load base model in bfloat16, with optional 4-bit quantization."""
     tokenizer = AutoTokenizer.from_pretrained(
         model_name, trust_remote_code=trust_remote_code
     )
+
     if use_4bit:
+        from transformers import BitsAndBytesConfig
         bnb_config = BitsAndBytesConfig(
             load_in_4bit=True,
             bnb_4bit_quant_type="nf4",
@@ -56,6 +57,7 @@ def load_model_and_tokenizer(
             trust_remote_code=trust_remote_code,
             device_map={"": torch.device("cuda")},
         )
+
     return model, tokenizer
 
 
@@ -103,17 +105,13 @@ def load_data(
     # Handle train_split logic
     total_samples = len(tokenized_dataset)
     if train_split >= 1.0:
-        # Absolute number of training samples
         n_train = int(train_split)
         if n_train >= total_samples:
-            # Use all data for training, no eval set
             return tokenized_dataset, None
         else:
-            # Split with exact number
             split = tokenized_dataset.train_test_split(train_size=n_train)
             return split["train"], split["test"]
     else:
-        # Fractional split
         split = tokenized_dataset.train_test_split(train_size=train_split)
         return split["train"], split["test"]
 
@@ -126,9 +124,8 @@ def train(config: dict):
     training_config = config["training"]
     output_config = config["output"]
     hardware_config = config.get("hardware", {})
-    quantization_config = config.get("quantization", {})
 
-    use_4bit = hardware_config.get("use_4bit", False) or quantization_config.get("enabled", False)
+    use_4bit = hardware_config.get("use_4bit", False)
 
     # Load model and tokenizer
     print(f"Loading model: {model_config['name']} (4bit={use_4bit})")
@@ -164,8 +161,7 @@ def train(config: dict):
     model = get_peft_model(model, peft_config)
     model.print_trainable_parameters()
 
-    # Enable gradient checkpointing with explicit use_reentrant=False
-    # (required for PyTorch 2.9+ compatibility)
+    # Enable gradient checkpointing with use_reentrant=False (required for PyTorch 2.9+)
     if training_config.get("gradient_checkpointing", True):
         model.gradient_checkpointing_enable(
             gradient_checkpointing_kwargs={"use_reentrant": False}
@@ -177,7 +173,7 @@ def train(config: dict):
                 gradient_checkpointing_kwargs={"use_reentrant": False}
             )
 
-    # Training arguments
+    # Training arguments — bf16 is safe for both full and quantized models
     output_dir = output_config["lora_dir"]
     os.makedirs(output_dir, exist_ok=True)
 
@@ -193,7 +189,7 @@ def train(config: dict):
         logging_steps=training_config.get("logging_steps", 10),
         save_steps=training_config.get("save_steps", 100),
         save_total_limit=training_config.get("save_total_limit", 2),
-        bf16=True,  # always use bf16 (works for both full and quantized)
+        bf16=True,
         fp16=False,
         gradient_checkpointing=training_config.get("gradient_checkpointing", True),
         evaluation_strategy="steps" if eval_dataset else "no",
