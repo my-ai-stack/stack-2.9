@@ -228,8 +228,8 @@ def train(config: dict):
         logging_steps=training_config.get("logging_steps", 10),
         save_steps=training_config.get("save_steps", 100),
         save_total_limit=training_config.get("save_total_limit", 2),
-        bf16=use_bf16,
-        fp16=use_fp16,
+        bf16=False,  # Force disable BF16 — T4 doesn't support it
+        fp16=True,  # Force enable FP16 for T4
         gradient_checkpointing=training_config.get("gradient_checkpointing", True),
         gradient_checkpointing_kwargs={"use_reentrant": False},
         evaluation_strategy="steps" if eval_dataset else "no",
