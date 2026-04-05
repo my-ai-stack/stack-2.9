@@ -70,9 +70,10 @@ def load_model_and_tokenizer(
     else:
         # No quantization - load in fp16 for Kaggle T4/P100 (bf16 not supported)
         # Model dtype MUST match training dtype to avoid GradScaler conflicts
+        load_dtype = torch.float16 if use_fp16 else torch.bfloat16
         model = AutoModelForCausalLM.from_pretrained(
             model_name,
-            torch_dtype=torch.float16,
+            torch_dtype=load_dtype,
             trust_remote_code=trust_remote_code,
             device_map="auto",
             use_cache=False,
@@ -153,11 +154,22 @@ def train(config: dict):
         torch.cuda.reset_peak_memory_stats()
 
     # Determine precision BEFORE loading model
-    # Force FP16 for T4 (BF16 not supported on Turing)
-    use_fp16 = True
-    use_bf16 = False
-    
-    # Load model and tokenizer
+    # GPU BF16 support check — use the proper PyTorch API
+    supports_bf16 = torch.cuda.is_bf16_supported() if torch.cuda.is_available() else False
+    gpu_name = torch.cuda.get_device_name(0) if torch.cuda.is_available() else "N/A"
+    print(f"   GPU: {gpu_name}")
+    print(f"   BF16 supported: {supports_bf16}")
+
+    # Use fp16 for training on Turing/Pascal (T4, P100)
+    # Use bf16 for training on Ampere+ (A100, A10, H100)
+    use_bf16 = supports_bf16
+    use_fp16 = not use_bf16
+
+    if training_config.get("bf16", False) and not supports_bf16:
+        print(f"   ⚠️  bf16 requested but GPU doesn't support it — falling back to fp16")
+    print(f"   Mixed precision: bf16={use_bf16}, fp16={use_fp16}")
+
+    # Load model and tokenizer (MUST use same dtype as training precision)
     print(f"Loading model: {model_config['name']} (4bit={use_4bit}, 8bit={use_8bit})")
     model, tokenizer = load_model_and_tokenizer(
         model_name=model_config["name"],
@@ -199,12 +211,6 @@ def train(config: dict):
     model = get_peft_model(model, peft_config)
     model.print_trainable_parameters()
 
-    # GPU info for logging
-    if torch.cuda.is_available():
-        gpu_name = torch.cuda.get_device_name(0)
-        print(f"   GPU: {gpu_name}")
-    # Precision already forced above: fp16=True, bf16=False
-
     # Training arguments
     output_dir = output_config["lora_dir"]
     os.makedirs(output_dir, exist_ok=True)
@@ -221,8 +227,8 @@ def train(config: dict):
         logging_steps=training_config.get("logging_steps", 10),
         save_steps=training_config.get("save_steps", 100),
         save_total_limit=training_config.get("save_total_limit", 2),
-        bf16=False,  # Force disable BF16 — T4 doesn't support it
-        fp16=True,  # Force enable FP16 for T4
+        bf16=use_bf16,
+        fp16=use_fp16,
         gradient_checkpointing=training_config.get("gradient_checkpointing", True),
         gradient_checkpointing_kwargs={"use_reentrant": False},
         evaluation_strategy="steps" if eval_dataset else "no",
