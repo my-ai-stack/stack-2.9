@@ -54,9 +54,11 @@ def load_model_and_tokenizer(
     else:
         model = AutoModelForCausalLM.from_pretrained(
             model_name,
-            torch_dtype=torch.bfloat16,
+            torch_dtype=torch.float16,
             trust_remote_code=trust_remote_code,
-            device_map={"": torch.device("cuda")},
+            device_map="auto",
+            offload_folder="/tmp/model_offload",
+            offload_state_dict=True,
         )
 
     return model, tokenizer
