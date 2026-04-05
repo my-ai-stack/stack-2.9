@@ -1,0 +1,226 @@
+# T4 QLoRA Configuration
+# Optimized for 16GB VRAM (Google Colab T4, AWS G4dn, etc.)
+# Based on best practices for consumer/small GPU training
+
+# ═══════════════════════════════════════════════════════════════
+# MODEL CONFIGURATION
+# ═══════════════════════════════════════════════════════════════
+
+model_name: "Qwen/Qwen2.5-Coder-7B"
+# For 1.5B model use: "Qwen/Qwen2.5-Coder-1.5B"
+# For 32B model use: "Qwen/Qwen2.5-Coder-32B" (requires extreme optimization)
+
+# ═══════════════════════════════════════════════════════════════
+# QUANTIZATION SETTINGS (Critical for T4)
+# ═══════════════════════════════════════════════════════════════
+
+load_in_4bit: true
+load_in_8bit: false
+
+bnb_4bit_quant_type: "nf4"  # Normal Float 4-bit (better than "fp4")
+bnb_4bit_compute_dtype: "float16"  # T4 doesn't support BF16 natively
+bnb_4bit_use_double_quant: true  # Saves additional memory
+
+# ═══════════════════════════════════════════════════════════════
+# SEQUENCE LENGTH (Memory vs Quality Tradeoff)
+# ═══════════════════════════════════════════════════════════════
+
+# T4 16GB with 7B model - SAFE settings
+max_seq_length: 4096
+
+# T4 16GB with 1.5B model - can go longer
+# max_seq_length: 8192
+
+# T4 16GB with 32B model - MINIMUM settings
+# max_seq_length: 2048
+
+# ═══════════════════════════════════════════════════════════════
+# BATCH SIZE & GRADIENT (T4 Optimized)
+# ═══════════════════════════════════════════════════════════════
+
+# Micro batch size per device (keep at 1 for T4)
+per_device_train_batch_size: 1
+per_device_eval_batch_size: 1
+
+# Effective batch size = per_device * gradient_accumulation * num_gpus
+# For T4 single GPU: effective_batch_size = 1 * 32 * 1 = 32
+gradient_accumulation_steps: 32
+
+# For 1.5B model you can use larger gradient accumulation
+# gradient_accumulation_steps: 16
+
+# ═══════════════════════════════════════════════════════════════
+# GRADIENT CHECKPOINTING (Essential for T4)
+# ═══════════════════════════════════════════════════════════════
+
+gradient_checkpointing: true
+gradient_checkpointing_kwargs:
+  use_reentrant: false  # Recommended for newer PyTorch
+# use_reentrant: true  # Use if above causes issues
+
+# ═══════════════════════════════════════════════════════════════
+# OPTIMIZER SETTINGS (Memory Efficient)
+# ═══════════════════════════════════════════════════════════════
+
+optim: "paged_adamw_32bit"
+# Alternative: "paged_adamw_8bit" (uses less memory but slightly slower)
+
+# For standard AdamW (not paged):
+# optim: "adamw_torch"
+
+# Learning rate schedule
+learning_rate: 1.0e-4
+# For 1.5B model: 2.0e-4 is a good starting point
+
+lr_scheduler_type: "cosine"
+warmup_ratio: 0.05  # 5% of steps for warmup
+
+# Gradient clipping
+max_grad_norm: 0.3
+
+# ═══════════════════════════════════════════════════════════════
+# LoRA CONFIGURATION
+# ═══════════════════════════════════════════════════════════════
+
+lora_config:
+  # Rank and alpha - higher = more capacity, more memory
+  r: 64
+  lora_alpha: 128
+  lora_dropout: 0.05
+
+  # Target modules for Qwen
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    # Include these for full coverage (uses more memory):
+    # - "gate_proj"
+    # - "up_proj"
+    # - "down_proj"
+
+  # Keep bias as "none" for better memory efficiency
+  bias: "none"
+
+  # Task type
+  task_type: "CAUSAL_LM"
+
+# ═══════════════════════════════════════════════════════════════
+# TRAINING HYPERPARAMETERS
+# ═══════════════════════════════════════════════════════════════
+
+num_train_epochs: 3
+max_steps: -1  # Override epochs if set to positive number
+
+# Logging and checkpointing
+logging_steps: 10
+save_steps: 500
+eval_steps: 500
+save_total_limit: 3  # Keep only last 3 checkpoints
+
+# Save strategy
+save_strategy: "steps"  # or "epoch"
+
+# ═══════════════════════════════════════════════════════════════
+# MIXED PRECISION STRATEGY
+# ═══════════════════════════════════════════════════════════════
+
+# T4-friendly mixed precision
+fp16: true
+bf16: false  # T4 doesn't support BF16
+
+# Alternative: Use pure FP16 (slightly more stable, slightly more memory)
+# fp16: true
+# bf16: false
+
+# For A100 (if running on better hardware):
+# fp16: false
+# bf16: true
+
+# ═══════════════════════════════════════════════════════════════
+# DATASET CONFIGURATION
+# ═══════════════════════════════════════════════════════════════
+
+dataset_path: "./data/final/train_combined.jsonl"
+# For different datasets:
+# dataset_path: "./data/synthetic/examples.jsonl"
+# dataset_path: "./data/humaneval/humaneval.jsonl"
+
+validation_split_ratio: 0.1
+
+# Maximum examples to load (useful for quick testing)
+# max_examples: 10000
+
+# Data format
+# Supported: "jsonl", "json", "arrow"
+dataset_format: "jsonl"
+
+# Training data field mapping
+text_field: "text"
+# For chat format:
+# chat_template: "{{ messages }}"
+
+# ═══════════════════════════════════════════════════════════════
+# OUTPUT & HUB CONFIGURATION
+# ═══════════════════════════════════════════════════════════════
+
+output_dir: "./output/t4-qlora-7b"
+run_name: "t4-qlora-7b"
+
+# Push to hub (requires HuggingFace token)
+push_to_hub: false
+# push_to_hub: true
+# hub_model_id: "your-username/stack-2.9-t4"
+# hub_strategy: "every_save"
+
+# Hub token (set via environment variable: HF_TOKEN)
+# hub_token: null
+
+# ═══════════════════════════════════════════════════════════════
+# TRAINING ARGUMENTS (Additional Fine-tuning)
+# ═══════════════════════════════════════════════════════════════
+
+# Remove unused columns to save memory
+remove_unused_columns: false
+
+# Group by length for efficiency (uses more memory for indexing)
+group_by_length: false
+
+# Packing sequences (advanced - can improve efficiency)
+# packing: false
+
+#neat_ft: false
+
+# Use cache (disable to save memory)
+use_cache: false
+
+# ═══════════════════════════════════════════════════════════════
+# MEMORY OPTIMIZATION FLAGS
+# ═══════════════════════════════════════════════════════════════
+
+# These are critical for T4 - don't change unless you know what you're doing
+
+# Enable TF32 on Ampere+ GPUs (not applicable to T4 but harmless)
+# torch_dtype: "float16"
+
+# Empty cache interval (steps)
+empty_step_interval: 100
+
+# ═══════════════════════════════════════════════════════════════
+# LOGGING & MONITORING
+# ═══════════════════════════════════════════════════════════════
+
+report_to:
+  - "tensorboard"
+# report_to: "none"  # Disable if having issues
+
+# Debug flags (disable for normal training)
+debug:
+  underflow_overflow: false
+
+# ═══════════════════════════════════════════════════════════════
+# ENVIRONMENT VARIABLES (Recommended for T4)
+# ═══════════════════════════════════════════════════════════════
+# PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:128
+# TRANSFORMERS_NO_ADVISORY_WARNINGS=true
+# TOKENIZERS_PARALLELISM=false
