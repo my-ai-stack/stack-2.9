@@ -77,14 +77,13 @@ def load_model_and_tokenizer(
             torch_dtype=torch_dtype,
         )
     else:
-        # No quantization - load directly to CUDA for single GPU
-        # For T4/Pascal (sm_60/sm_75): use float16, device_map=None
-        # device_map="auto" can cause meta tensor issues on some setups
+        # No quantization - load with device_map="auto" for memory-efficient single GPU
+        # Works reliably for models up to ~10B parameters
         model = AutoModelForCausalLM.from_pretrained(
             model_name,
             torch_dtype=torch.float16,   # T4 supports fp16
             trust_remote_code=trust_remote_code,
-            device_map=None,             # Load directly to CUDA (7B fits on T4)
+            device_map="auto",           # Let accelerate handle device placement
             use_cache=False,             # Disable kv cache to save memory
         )
 
@@ -210,6 +209,9 @@ def train(config: dict):
     )
     model = get_peft_model(model, peft_config)
     model.print_trainable_parameters()
+
+    # Ensure model is in train mode
+    model.train()
 
     # FIX: Enable gradient checkpointing with use_reentrant=False (required for PyTorch 2.9+)
     # This is done at model level BEFORE TrainingArguments
