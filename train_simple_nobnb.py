@@ -56,9 +56,7 @@ def load_model_and_tokenizer(
             model_name,
             torch_dtype=torch.float16,
             trust_remote_code=trust_remote_code,
-            device_map="auto",
-            offload_folder="/tmp/model_offload",
-            offload_state_dict=True,
+            device_map={"": torch.device("cuda")},
             use_cache=False,
         )
 
