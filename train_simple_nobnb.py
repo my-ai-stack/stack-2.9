@@ -194,21 +194,22 @@ def train(config: dict):
     model = get_peft_model(model, peft_config)
     model.print_trainable_parameters()
 
-    # GPU compute capability check
-    compute_capability = torch.cuda.get_device_capability() if torch.cuda.is_available() else (0, 0)
-    supports_bf16_compute = compute_capability[0] >= 8  # Ampere+ for bf16 math
+    # GPU BF16 support check — use the proper PyTorch API
+    # torch.cuda.is_bf16_supported() returns True only on Ampere/Ada/Hopper+ GPUs
+    # T4 (Turing) returns False, which is correct
+    supports_bf16 = torch.cuda.is_bf16_supported() if torch.cuda.is_available() else False
+    gpu_name = torch.cuda.get_device_name(0) if torch.cuda.is_available() else "N/A"
+    print(f"   GPU: {gpu_name}")
+    print(f"   BF16 supported: {supports_bf16}")
 
     # Model loads in bfloat16 (works on all GPUs as storage dtype)
     # Training uses fp16 on Turing/Pascal (bf16 math not supported on sm_60/sm_75)
     # Training uses bf16 on Ampere+ (native bf16 math support)
-    use_bf16 = supports_bf16_compute  # Only use bf16 for training on Ampere+
+    use_bf16 = supports_bf16  # Only use bf16 for training on Ampere+
     use_fp16 = not use_bf16  # fp16 for T4/Pascal/Turing
 
-    print(f"   GPU compute capability: {compute_capability[0]}.{compute_capability[1]}")
-    print(f"   Mixed precision: bf16={use_bf16}, fp16={use_fp16}")
-
     if training_config.get("bf16", False) and not supports_bf16:
-        print(f"   ⚠️  bf16 requested but GPU (Turing/Pascal) doesn't support it — using fp16 instead")
+        print(f"   ⚠️  bf16 requested but GPU doesn't support it — falling back to fp16")
     print(f"   Mixed precision: bf16={use_bf16}, fp16={use_fp16}")
 
     # Training arguments
