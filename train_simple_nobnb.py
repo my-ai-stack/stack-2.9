@@ -32,6 +32,7 @@ def load_model_and_tokenizer(
     trust_remote_code: bool = True,
     use_4bit: bool = False,
     use_8bit: bool = False,
+    use_fp16: bool = True,
 ):
     """Load base model with explicit GPU placement for single-GPU training."""
     tokenizer = AutoTokenizer.from_pretrained(
@@ -67,13 +68,11 @@ def load_model_and_tokenizer(
             torch_dtype=torch.bfloat16,
         )
     else:
-        # No quantization - load in bfloat16 directly to GPU
-        # Use bfloat16 since it works on all GPU generations (T4 included)
-        # and doesn't conflict with TrainingArguments bf16=True
-        # device_map="auto" works correctly for bfloat16
+        # No quantization - load in fp16 for Kaggle T4/P100 (bf16 not supported)
+        # Model dtype MUST match training dtype to avoid GradScaler conflicts
         model = AutoModelForCausalLM.from_pretrained(
             model_name,
-            torch_dtype=torch.bfloat16,
+            torch_dtype=torch.float16,
             trust_remote_code=trust_remote_code,
             device_map="auto",
             use_cache=False,
@@ -160,6 +159,7 @@ def train(config: dict):
         trust_remote_code=model_config.get("trust_remote_code", True),
         use_4bit=use_4bit,
         use_8bit=use_8bit,
+        use_fp16=use_fp16,
     )
 
     # Print memory stats after model loading
