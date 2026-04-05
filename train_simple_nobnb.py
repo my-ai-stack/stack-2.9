@@ -68,12 +68,11 @@ def load_model_and_tokenizer(
             torch_dtype=torch.bfloat16,
         )
     else:
-        # No quantization - load in fp16 for Kaggle T4/P100 (bf16 not supported)
-        # Model dtype MUST match training dtype to avoid GradScaler conflicts
-        load_dtype = torch.float16 if use_fp16 else torch.bfloat16
+        # No quantization - load in FP32 for AMP compatibility
+        # Trainer with fp16=True will handle casting during training
         model = AutoModelForCausalLM.from_pretrained(
             model_name,
-            torch_dtype=load_dtype,
+            torch_dtype=torch.float32,
             trust_remote_code=trust_remote_code,
             device_map="auto",
             use_cache=False,
