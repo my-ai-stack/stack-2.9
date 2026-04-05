@@ -144,7 +144,8 @@ def train(config: dict):
     use_8bit = hardware_config.get("use_8bit", False)
 
     # Set environment variables for better CUDA memory management
-    os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True,max_split_size_mb:512"
+    # expandable_segments:False fixes a known PyTorch bug (#124807, #128829) with gradient checkpointing
+    os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:False"
 
     # Clear CUDA cache before loading
     if torch.cuda.is_available():
@@ -229,7 +230,7 @@ def train(config: dict):
         report_to="none",
         dataloader_num_workers=0,
         remove_unused_columns=False,
-        optim="paged_adamw_32bit" if (use_4bit or use_8bit) else "adamw_torch",
+        optim="paged_adamw_32bit" if (use_4bit or use_8bit) else "adamw_torch_fused",
     )
 
     data_collator = DataCollatorForLanguageModeling(
