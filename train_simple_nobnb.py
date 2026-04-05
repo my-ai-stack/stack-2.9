@@ -34,7 +34,7 @@ def load_model_and_tokenizer(model_name: str, trust_remote_code: bool = True):
         model_name,
         torch_dtype=torch.float16,
         trust_remote_code=trust_remote_code,
-        device_map="auto"
+        device_map={"": torch.device("cuda")}
     )
     return model, tokenizer
 
@@ -125,6 +125,14 @@ def train(config: dict):
     )
     model = get_peft_model(model, peft_config)
     model.print_trainable_parameters()
+
+    # Enable gradient checkpointing with explicit use_reentrant=False
+    # (required for PyTorch 2.9+ compatibility)
+    if training_config.get("gradient_checkpointing", True):
+        model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
+        # Also set on the underlying model for PEFT
+        if hasattr(model, 'base_model') and hasattr(model.base_model, 'enable_gradient_checkpointing'):
+            model.base_model.enable_gradient_checkpointing(gradient_checkpointing_kwargs={"use_reentrant": False})
 
     # Training arguments
     output_dir = output_config["lora_dir"]
