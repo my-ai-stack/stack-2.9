@@ -59,6 +59,7 @@ def load_model_and_tokenizer(
             device_map="auto",
             offload_folder="/tmp/model_offload",
             offload_state_dict=True,
+            use_cache=False,
         )
 
     return model, tokenizer
@@ -194,7 +195,7 @@ def train(config: dict):
         save_total_limit=training_config.get("save_total_limit", 2),
         bf16=False,
         fp16=True,
-        gradient_checkpointing=training_config.get("gradient_checkpointing", True),
+        gradient_checkpointing=False,
         evaluation_strategy="steps" if eval_dataset else "no",
         eval_steps=training_config.get("eval_steps", 100) if eval_dataset else None,
         report_to="none",
