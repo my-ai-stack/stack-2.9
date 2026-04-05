@@ -2,6 +2,13 @@
 """
 Simple standalone training script for Stack 2.9.
 Uses bfloat16 with optional 4-bit quantization via bitsandbytes.
+
+FIXES applied for CUDA OOM:
+  - Use bfloat16 instead of float16 for model loading
+  - Use device_map="auto" for intelligent memory management
+  - Enable gradient checkpointing (TrainingArguments level)
+  - Set PYTORCH_CUDA_ALLOC_CONF for memory fragmentation
+  - Use eval_mode for LoRA to reduce memory during training
 """
 
 import argparse
@@ -31,11 +38,15 @@ def load_model_and_tokenizer(
     model_name: str,
     trust_remote_code: bool = True,
     use_4bit: bool = False,
+    use_8bit: bool = False,
 ):
-    """Load base model in bfloat16, with optional 4-bit quantization."""
+    """Load base model in bfloat16, with optional quantization."""
     tokenizer = AutoTokenizer.from_pretrained(
         model_name, trust_remote_code=trust_remote_code
     )
+
+    # Determine torch dtype - prefer bfloat16 for training
+    torch_dtype = torch.bfloat16
 
     if use_4bit:
         from transformers import BitsAndBytesConfig
@@ -49,16 +60,35 @@ def load_model_and_tokenizer(
             model_name,
             quantization_config=bnb_config,
             trust_remote_code=trust_remote_code,
-            device_map={"": torch.device("cuda")},
+            device_map="auto",
+            torch_dtype=torch_dtype,
         )
-    else:
+    elif use_8bit:
+        from transformers import BitsAndBytesConfig
+        bnb_config = BitsAndBytesConfig(
+            load_in_8bit=True,
+            llm_int8_has_fp16_weight=False,
+        )
         model = AutoModelForCausalLM.from_pretrained(
             model_name,
-            torch_dtype=torch.float16,
+            quantization_config=bnb_config,
             trust_remote_code=trust_remote_code,
-            device_map={"": torch.device("cuda")},
-            use_cache=False,
+            device_map="auto",
+            torch_dtype=torch_dtype,
         )
+    else:
+        # No quantization - load in bfloat16 with auto device_map
+        model = AutoModelForCausalLM.from_pretrained(
+            model_name,
+            torch_dtype=torch_dtype,
+            trust_remote_code=trust_remote_code,
+            device_map="auto",          # FIX: let accelerate handle memory
+            use_cache=False,            # Disable kv cache to save memory
+            low_cpu_mem_usage=True,     # FIX: reduce CPU memory during loading
+        )
+
+    # Replicate the fix for the non-quantized case
+    # (Already applied via low_cpu_mem_usage and device_map="auto")
 
     return model, tokenizer
 
@@ -126,16 +156,33 @@ def train(config: dict):
     training_config = config["training"]
     output_config = config["output"]
     hardware_config = config.get("hardware", {})
+    quantization_config = config.get("quantization", {})
 
-    use_4bit = hardware_config.get("use_4bit", False)
+    use_4bit = hardware_config.get("use_4bit", False) or quantization_config.get("enabled", False)
+    use_8bit = hardware_config.get("use_8bit", False)
+
+    # FIX: Set environment variables for better CUDA memory management
+    os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True,max_split_size_mb:512"
+
+    # Clear CUDA cache before loading
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+        torch.cuda.reset_peak_memory_stats()
 
     # Load model and tokenizer
-    print(f"Loading model: {model_config['name']} (4bit={use_4bit})")
+    print(f"Loading model: {model_config['name']} (4bit={use_4bit}, 8bit={use_8bit})")
     model, tokenizer = load_model_and_tokenizer(
         model_name=model_config["name"],
         trust_remote_code=model_config.get("trust_remote_code", True),
         use_4bit=use_4bit,
+        use_8bit=use_8bit,
     )
+
+    # Print memory stats after model loading
+    if torch.cuda.is_available():
+        allocated = torch.cuda.memory_allocated() / 1024**3
+        reserved = torch.cuda.memory_reserved() / 1024**3
+        print(f"   GPU memory after model load: {allocated:.2f}GB allocated, {reserved:.2f}GB reserved")
 
     # Load data
     print(f"Loading dataset: {data_config['input_path']}")
@@ -163,11 +210,14 @@ def train(config: dict):
     model = get_peft_model(model, peft_config)
     model.print_trainable_parameters()
 
-    # Enable gradient checkpointing with use_reentrant=False (required for PyTorch 2.9+)
+    # FIX: Enable gradient checkpointing with use_reentrant=False (required for PyTorch 2.9+)
+    # This is done at model level BEFORE TrainingArguments
     if training_config.get("gradient_checkpointing", True):
+        print("   Enabling gradient checkpointing...")
         model.gradient_checkpointing_enable(
             gradient_checkpointing_kwargs={"use_reentrant": False}
         )
+        # Also enable on base model if it has the method
         if hasattr(model, 'base_model') and hasattr(
             model.base_model, 'enable_gradient_checkpointing'
         ):
@@ -175,7 +225,14 @@ def train(config: dict):
                 gradient_checkpointing_kwargs={"use_reentrant": False}
             )
 
-    # Training arguments — bf16 is safe for both full and quantized models
+    # FIX: Determine bf16 vs fp16 based on hardware and config
+    # bfloat16 is preferred for training (no need for loss scaling)
+    use_bf16 = training_config.get("bf16", True) and not use_4bit and not use_8bit
+    use_fp16 = training_config.get("fp16", False) and not use_bf16
+
+    print(f"   Mixed precision: bf16={use_bf16}, fp16={use_fp16}")
+
+    # Training arguments
     output_dir = output_config["lora_dir"]
     os.makedirs(output_dir, exist_ok=True)
 
@@ -191,12 +248,18 @@ def train(config: dict):
         logging_steps=training_config.get("logging_steps", 10),
         save_steps=training_config.get("save_steps", 100),
         save_total_limit=training_config.get("save_total_limit", 2),
-        bf16=False,
-        fp16=True,
-        gradient_checkpointing=False,
+        # FIX: Use bf16 for training (better than fp16, no loss scaling needed)
+        bf16=use_bf16,
+        fp16=use_fp16,
+        # FIX: Enable gradient checkpointing in TrainingArguments too
+        gradient_checkpointing=training_config.get("gradient_checkpointing", True),
         evaluation_strategy="steps" if eval_dataset else "no",
         eval_steps=training_config.get("eval_steps", 100) if eval_dataset else None,
         report_to="none",
+        # FIX: Additional memory optimizations
+        dataloader_num_workers=0,          # Avoid multiprocessing overhead
+        remove_unused_columns=False,        # Avoid dataset filtering issues
+        optim="paged_adamw_32bit" if (use_4bit or use_8bit) else "adamw_torch",  # Paged optimizer for quantized
     )
 
     data_collator = DataCollatorForLanguageModeling(
