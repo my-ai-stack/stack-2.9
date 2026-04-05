@@ -77,14 +77,15 @@ def load_model_and_tokenizer(
             torch_dtype=torch_dtype,
         )
     else:
-        # No quantization - load in bfloat16 with auto device_map
+        # No quantization - load directly to CUDA for single GPU
+        # For T4/Pascal (sm_60/sm_75): use float16, device_map=None
+        # device_map="auto" can cause meta tensor issues on some setups
         model = AutoModelForCausalLM.from_pretrained(
             model_name,
-            torch_dtype=torch_dtype,
+            torch_dtype=torch.float16,   # T4 supports fp16
             trust_remote_code=trust_remote_code,
-            device_map="auto",          # FIX: let accelerate handle memory
-            use_cache=False,            # Disable kv cache to save memory
-            low_cpu_mem_usage=True,     # FIX: reduce CPU memory during loading
+            device_map=None,             # Load directly to CUDA (7B fits on T4)
+            use_cache=False,             # Disable kv cache to save memory
         )
 
     # Replicate the fix for the non-quantized case
