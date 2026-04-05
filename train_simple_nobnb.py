@@ -9,6 +9,8 @@ import os
 import sys
 from pathlib import Path
 
+import numpy as np  # Ensure numpy is available (Kaggle pip installs can break it)
+
 import yaml
 from datasets import load_dataset
 from transformers import (
