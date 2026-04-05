@@ -226,10 +226,17 @@ def train(config: dict):
             )
 
     # FIX: Determine bf16 vs fp16 based on hardware and config
-    # bfloat16 is preferred for training (no need for loss scaling)
-    use_bf16 = training_config.get("bf16", True) and not use_4bit and not use_8bit
-    use_fp16 = training_config.get("fp16", False) and not use_bf16
+    # bfloat16 requires Ampere+ GPU (A100, A10, H100, etc.) — not supported on T4/P100 (Turing/Pascal)
+    # fp16 is supported on all NVIDIA GPUs including T4
+    bf16_requested = training_config.get("bf16", False) and not use_4bit and not use_8bit
 
+    # Check if GPU actually supports bfloat16 (Ampere generation or newer)
+    supports_bf16 = torch.cuda.is_available() and torch.cuda.get_device_capability()[0] >= 8  # Ampere = 8.0+
+    use_bf16 = bf16_requested and supports_bf16
+    use_fp16 = not use_bf16  # fp16 works on all NVIDIA GPUs including T4 and P100
+
+    if bf16_requested and not supports_bf16:
+        print(f"   ⚠️  bf16 requested but GPU (Turing/Pascal) doesn't support it, falling back to fp16")
     print(f"   Mixed precision: bf16={use_bf16}, fp16={use_fp16}")
 
     # Training arguments
