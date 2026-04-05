@@ -2,13 +2,6 @@
 """
 Simple standalone training script for Stack 2.9.
 Uses bfloat16 with optional 4-bit quantization via bitsandbytes.
-
-FIXES applied for CUDA OOM:
-  - Use bfloat16 instead of float16 for model loading
-  - Use device_map="auto" for intelligent memory management
-  - Enable gradient checkpointing (TrainingArguments level)
-  - Set PYTORCH_CUDA_ALLOC_CONF for memory fragmentation
-  - Use eval_mode for LoRA to reduce memory during training
 """
 
 import argparse
@@ -40,13 +33,10 @@ def load_model_and_tokenizer(
     use_4bit: bool = False,
     use_8bit: bool = False,
 ):
-    """Load base model in bfloat16, with optional quantization."""
+    """Load base model with explicit GPU placement for single-GPU training."""
     tokenizer = AutoTokenizer.from_pretrained(
         model_name, trust_remote_code=trust_remote_code
     )
-
-    # Determine torch dtype - prefer bfloat16 for training
-    torch_dtype = torch.bfloat16
 
     if use_4bit:
         from transformers import BitsAndBytesConfig
@@ -61,7 +51,7 @@ def load_model_and_tokenizer(
             quantization_config=bnb_config,
             trust_remote_code=trust_remote_code,
             device_map="auto",
-            torch_dtype=torch_dtype,
+            torch_dtype=torch.bfloat16,
         )
     elif use_8bit:
         from transformers import BitsAndBytesConfig
@@ -74,21 +64,19 @@ def load_model_and_tokenizer(
             quantization_config=bnb_config,
             trust_remote_code=trust_remote_code,
             device_map="auto",
-            torch_dtype=torch_dtype,
+            torch_dtype=torch.bfloat16,
         )
     else:
-        # No quantization - load with device_map="auto" for memory-efficient single GPU
-        # Works reliably for models up to ~10B parameters
+        # No quantization - load in float16 directly to GPU
+        # Use {"": "cuda"} to force ALL layers onto GPU (required for trainer compatibility)
+        # Use low_cpu_mem_usage to avoid RAM spikes during loading
         model = AutoModelForCausalLM.from_pretrained(
             model_name,
-            torch_dtype=torch.float16,   # T4 supports fp16
+            torch_dtype=torch.float16,
             trust_remote_code=trust_remote_code,
-            device_map="auto",           # Let accelerate handle device placement
-            use_cache=False,             # Disable kv cache to save memory
+            device_map={"": torch.device("cuda")},  # Force all to GPU
+            use_cache=False,
         )
-
-    # Replicate the fix for the non-quantized case
-    # (Already applied via low_cpu_mem_usage and device_map="auto")
 
     return model, tokenizer
 
@@ -99,13 +87,7 @@ def load_data(
     max_length: int = 2048,
     train_split: float = 0.9,
 ):
-    """Load and tokenize dataset.
-
-    Args:
-        train_split: If < 1.0, fraction for training (e.g., 0.9 = 90% train, 10% eval).
-                     If >= 1.0, treated as absolute number of training samples.
-                     If train_split equals dataset size, returns all for training (no eval).
-    """
+    """Load and tokenize dataset."""
     raw_dataset = load_dataset("json", data_files=data_path, split="train")
 
     def tokenize_function(examples):
@@ -161,7 +143,7 @@ def train(config: dict):
     use_4bit = hardware_config.get("use_4bit", False) or quantization_config.get("enabled", False)
     use_8bit = hardware_config.get("use_8bit", False)
 
-    # FIX: Set environment variables for better CUDA memory management
+    # Set environment variables for better CUDA memory management
     os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True,max_split_size_mb:512"
 
     # Clear CUDA cache before loading
@@ -210,36 +192,16 @@ def train(config: dict):
     model = get_peft_model(model, peft_config)
     model.print_trainable_parameters()
 
-    # Ensure model is in train mode
-    model.train()
+    # Determine bf16 vs fp16 based on GPU compute capability
+    # bf16 requires Ampere+ (compute capability >= 8.0)
+    # fp16 works on all NVIDIA GPUs including T4 (Turing/sm_75)
+    compute_capability = torch.cuda.get_device_capability() if torch.cuda.is_available() else (0, 0)
+    supports_bf16 = compute_capability[0] >= 8  # Ampere or newer
+    use_bf16 = training_config.get("bf16", False) and supports_bf16
+    use_fp16 = not use_bf16  # Use fp16 for Turing (T4) and older
 
-    # FIX: Enable gradient checkpointing with use_reentrant=False (required for PyTorch 2.9+)
-    # This is done at model level BEFORE TrainingArguments
-    if training_config.get("gradient_checkpointing", True):
-        print("   Enabling gradient checkpointing...")
-        model.gradient_checkpointing_enable(
-            gradient_checkpointing_kwargs={"use_reentrant": False}
-        )
-        # Also enable on base model if it has the method
-        if hasattr(model, 'base_model') and hasattr(
-            model.base_model, 'enable_gradient_checkpointing'
-        ):
-            model.base_model.enable_gradient_checkpointing(
-                gradient_checkpointing_kwargs={"use_reentrant": False}
-            )
-
-    # FIX: Determine bf16 vs fp16 based on hardware and config
-    # bfloat16 requires Ampere+ GPU (A100, A10, H100, etc.) — not supported on T4/P100 (Turing/Pascal)
-    # fp16 is supported on all NVIDIA GPUs including T4
-    bf16_requested = training_config.get("bf16", False) and not use_4bit and not use_8bit
-
-    # Check if GPU actually supports bfloat16 (Ampere generation or newer)
-    supports_bf16 = torch.cuda.is_available() and torch.cuda.get_device_capability()[0] >= 8  # Ampere = 8.0+
-    use_bf16 = bf16_requested and supports_bf16
-    use_fp16 = not use_bf16  # fp16 works on all NVIDIA GPUs including T4 and P100
-
-    if bf16_requested and not supports_bf16:
-        print(f"   ⚠️  bf16 requested but GPU (Turing/Pascal) doesn't support it, falling back to fp16")
+    if training_config.get("bf16", False) and not supports_bf16:
+        print(f"   ⚠️  bf16 requested but GPU (Turing/Pascal) doesn't support it — using fp16 instead")
     print(f"   Mixed precision: bf16={use_bf16}, fp16={use_fp16}")
 
     # Training arguments
@@ -258,18 +220,16 @@ def train(config: dict):
         logging_steps=training_config.get("logging_steps", 10),
         save_steps=training_config.get("save_steps", 100),
         save_total_limit=training_config.get("save_total_limit", 2),
-        # FIX: Use bf16 for training (better than fp16, no loss scaling needed)
         bf16=use_bf16,
         fp16=use_fp16,
-        # FIX: Enable gradient checkpointing in TrainingArguments too
         gradient_checkpointing=training_config.get("gradient_checkpointing", True),
+        gradient_checkpointing_kwargs={"use_reentrant": False},
         evaluation_strategy="steps" if eval_dataset else "no",
         eval_steps=training_config.get("eval_steps", 100) if eval_dataset else None,
         report_to="none",
-        # FIX: Additional memory optimizations
-        dataloader_num_workers=0,          # Avoid multiprocessing overhead
-        remove_unused_columns=False,        # Avoid dataset filtering issues
-        optim="paged_adamw_32bit" if (use_4bit or use_8bit) else "adamw_torch",  # Paged optimizer for quantized
+        dataloader_num_workers=0,
+        remove_unused_columns=False,
+        optim="paged_adamw_32bit" if (use_4bit or use_8bit) else "adamw_torch",
     )
 
     data_collator = DataCollatorForLanguageModeling(
