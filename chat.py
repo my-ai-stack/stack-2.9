@@ -9,7 +9,7 @@ SYSTEM_PROMPT = """You are Stack 2.9, an expert AI coding assistant.
 - Be concise and practical
 - If asked to search the internet, use the search: command"""
 
-MODEL_NAME = "my-ai-stack/stack-2-9-finetuned"
+MODEL_NAME = "/Users/walidsobhi/stack-2-9-final-model"
 
 print(f"Loading {MODEL_NAME} from HuggingFace...")
 model = AutoModelForCausalLM.from_pretrained(
