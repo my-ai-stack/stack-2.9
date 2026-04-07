@@ -75,4 +75,6 @@ logs/
 
 # Temporary
 tmp/
-temp/
+temp/training-data/**/*.jsonl
+training-data-expanded/**/*.jsonl
+*.jsonl
