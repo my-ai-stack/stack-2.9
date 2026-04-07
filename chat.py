@@ -30,14 +30,24 @@ print(f"Settings: max_tokens={MAX_TOKENS}, temperature={TEMPERATURE}, top_p={TOP
 print("Commands: search:<query> - search the web, quit/exit - stop\n")
 
 def web_search(query, count=5):
-    """Search the web using DuckDuckGo JSON API"""
+    """Search the web using DuckDuckGo API"""
     try:
-        url = f"https://duckduckgo.com/?q={query}&format=json&no_redirect=1"
+        import urllib.parse
+        encoded_q = urllib.parse.quote(query)
+        url = f"https://api.duckduckgo.com/?q={encoded_q}&format=json&no_redirect=1"
         headers = {"User-Agent": "Mozilla/5.0 (compatible; Stack29Bot/1.0)"}
         resp = requests.get(url, headers=headers, timeout=10)
-        if resp.status_code == 200:
-            return {"success": True, "results": [{"query": query, "source": "duckduckgo"}]}
-        return {"success": False, "error": f"HTTP {resp.status_code}"}
+        data = resp.json()
+        
+        results = []
+        if "RelatedTopics" in data:
+            for item in data["RelatedTopics"][:count]:
+                if "Text" in item:
+                    results.append(item["Text"][:200])
+        
+        if results:
+            return {"success": True, "results": results, "query": query}
+        return {"success": False, "error": "No results found"}
     except Exception as e:
         return {"success": False, "error": str(e)}
 
@@ -56,8 +66,9 @@ while True:
             print("🔍 Searching...")
             result = web_search(query)
             if result["success"]:
-                print(f"✅ Found results for: {query}")
-                print(f"   (Web search results would appear here)")
+                print(f"✅ Results for '{result['query']}':\n")
+                for i, r in enumerate(result["results"], 1):
+                    print(f"  {i}. {r}")
             else:
                 print(f"❌ Search failed: {result['error']}")
             continue
