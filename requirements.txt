@@ -3,6 +3,10 @@
 # Core
 stack-cli>=2.9.0
 
+# Gradio UI
+gradio>=4.12.0
+huggingface_hub>=0.20.0
+
 # Training & ML
 torch>=2.0.0
 transformers>=4.35.0

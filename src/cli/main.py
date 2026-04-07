@@ -12,8 +12,8 @@ from typing import Optional
 
 # Add parent directories to path
 sys.path.insert(0, str(Path(__file__).parent))
-sys.path.insert(0, str(Path(__file__).parent.parent / "stack-2.9-eval"))
-sys.path.insert(0, str(Path(__file__).parent.parent / "stack-2.9-training"))
+sys.path.insert(0, str(Path(__file__).parent.parent / "stack" / "eval"))
+sys.path.insert(0, str(Path(__file__).parent.parent / "stack" / "training"))
 
 from model_client import create_model_client, ChatMessage
 from pattern_miner import PatternMiner

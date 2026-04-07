@@ -410,7 +410,7 @@ def run_test(model, tokenizer, test_config: Dict) -> Dict:
     start_time = time.time()
     
     # Generate completion
-    completions = generate_completion(model, tokenizer, prompt, max_tokens=max_tokens)
+    completions = generate_completion(model, tokenizer, prompt, max_new_tokens=max_tokens)
     elapsed = time.time() - start_time
     
     # Extract and check code
