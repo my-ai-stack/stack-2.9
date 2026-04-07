@@ -1,6 +1,7 @@
 import torch
 import requests
 from transformers import AutoModelForCausalLM, AutoTokenizer
+from ddgs import DDGS
 
 SYSTEM_PROMPT = """You are Stack 2.9, an expert AI coding assistant.
 - Answer questions naturally and helpfully
@@ -30,20 +31,14 @@ print(f"Settings: max_tokens={MAX_TOKENS}, temperature={TEMPERATURE}, top_p={TOP
 print("Commands: search:<query> - search the web, quit/exit - stop\n")
 
 def web_search(query, count=5):
-    """Search the web using DuckDuckGo API"""
+    """Search the web using DuckDuckGo (no API key needed)"""
     try:
-        import urllib.parse
-        encoded_q = urllib.parse.quote(query)
-        url = f"https://api.duckduckgo.com/?q={encoded_q}&format=json&no_redirect=1"
-        headers = {"User-Agent": "Mozilla/5.0 (compatible; Stack29Bot/1.0)"}
-        resp = requests.get(url, headers=headers, timeout=10)
-        data = resp.json()
-        
         results = []
-        if "RelatedTopics" in data:
-            for item in data["RelatedTopics"][:count]:
-                if "Text" in item:
-                    results.append(item["Text"][:200])
+        with DDGS() as ddgs:
+            for r in ddgs.text(query, max_results=count):
+                results.append(f"{r['body'][:200]}")
+                if len(results) >= count:
+                    break
         
         if results:
             return {"success": True, "results": results, "query": query}
