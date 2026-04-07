@@ -1,6 +1,12 @@
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+SYSTEM_PROMPT = """You are Stack 2.9, an expert AI coding assistant.
+- Answer questions naturally and helpfully
+- When the user asks for code, write clean complete code
+- When the user asks a question, answer in plain language
+- Be concise and practical"""
+
 print("Loading your fine-tuned Stack 2.9 model...")
 model = AutoModelForCausalLM.from_pretrained(
     '/Users/walidsobhi/stack-2-9-final-model',
@@ -11,8 +17,8 @@ tokenizer = AutoTokenizer.from_pretrained('/Users/walidsobhi/stack-2-9-final-mod
 print("✅ Ready!\n")
 
 # Generation settings
-MAX_TOKENS = 150
-TEMPERATURE = 0.3
+MAX_TOKENS = 200
+TEMPERATURE = 0.4
 TOP_P = 0.9
 REP_PENALTY = 1.2
 
@@ -27,7 +33,9 @@ while True:
         if not prompt.strip():
             continue
 
-        inputs = tokenizer(prompt, return_tensors='pt').to(model.device)
+        # Prepend system prompt
+        full_prompt = f"{SYSTEM_PROMPT}\n\nUser: {prompt}\nAssistant:"
+        inputs = tokenizer(full_prompt, return_tensors='pt').to(model.device)
         outputs = model.generate(
             **inputs,
             max_new_tokens=MAX_TOKENS,
@@ -38,12 +46,17 @@ while True:
             pad_token_id=tokenizer.eos_token_id
         )
 
-        # Extract only the new tokens (skip the prompt)
+        # Decode full response
         full_response = tokenizer.decode(outputs[0], skip_special_tokens=True)
-        response = full_response[len(prompt):].strip()
+
+        # Extract only the assistant's response (after "Assistant:")
+        if "Assistant:" in full_response:
+            response = full_response.split("Assistant:")[-1].strip()
+        else:
+            response = full_response[len(full_prompt):].strip()
 
         # Stop at common stop points
-        for stop in ['\n\n\n', 'You:', 'AI:', 'User:', 'Assistant:']:
+        for stop in ['\n\n\n', 'User:', 'You:']:
             if stop in response:
                 response = response.split(stop)[0].strip()
 
