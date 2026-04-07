@@ -7,13 +7,15 @@ SYSTEM_PROMPT = """You are Stack 2.9, an expert AI coding assistant.
 - When the user asks a question, answer in plain language
 - Be concise and practical"""
 
-print("Loading your fine-tuned Stack 2.9 model...")
+MODEL_NAME = "my-ai-stack/stack-2-9-finetuned"
+
+print(f"Loading {MODEL_NAME} from HuggingFace...")
 model = AutoModelForCausalLM.from_pretrained(
-    '/Users/walidsobhi/stack-2-9-final-model',
+    MODEL_NAME,
     torch_dtype=torch.float16,
-    device_map='auto'
+    device_map="auto"
 )
-tokenizer = AutoTokenizer.from_pretrained('/Users/walidsobhi/stack-2-9-final-model')
+tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 print("✅ Ready!\n")
 
 # Generation settings
