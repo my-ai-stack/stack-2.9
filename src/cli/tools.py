@@ -92,7 +92,8 @@ def tool_search_files(
 ) -> Dict[str, Any]:
     """Recursively search for files matching a pattern."""
     try:
-        base_path = Path(path)
+        # Expand ~ to home directory
+        base_path = Path(os.path.expanduser(path))
         if not base_path.exists():
             return {"success": False, "error": f"Path not found: {path}"}
         
@@ -121,7 +122,8 @@ def tool_search_files(
 def tool_grep(path: str, pattern: str, context: int = 0) -> Dict[str, Any]:
     """Search for pattern in file(s)."""
     try:
-        base_path = Path(path)
+        # Expand ~ to home directory
+        base_path = Path(os.path.expanduser(path))
         results = []
         
         if base_path.is_file():

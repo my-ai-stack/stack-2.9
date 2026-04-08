@@ -31,6 +31,7 @@ class QueryIntent(Enum):
     TASK = "task"
     QUESTION = "question"
     GENERAL = "general"
+    GENERAL_HELP = "general_help"
 
 
 @dataclass
@@ -80,6 +81,7 @@ class QueryUnderstanding:
         QueryIntent.FILE_SEARCH: [
             r"find\s+(?:files?\s+)?(?:named\s+)?(.+)",
             r"search\s+for\s+(?:files?\s+)?(.+)",
+            r"grep\s+for\s+(.+)",
             r"where\s+is\s+(.+)",
             r"locate\s+(.+)",
         ],
@@ -88,23 +90,32 @@ class QueryUnderstanding:
             r"(commit|push|pull|branch)\s+(?:to\s+)?(?:the\s+)?(?:repo|repository)?",
         ],
         QueryIntent.CODE_EXECUTION: [
-            r"run\s+(?:the\s+)?(?:command\s+)?(.+)",
-            r"execute\s+(.+)",
-            r"start\s+(?:the\s+)?(?:server\s+)?(.+)",
-            r"test\s+(?:the\s+)?(.+)",
-            r"lint\s+(.+)",
-            r"format\s+(.+)",
+            r"^run\s+(?:the\s+)?(?:command\s+)?(.+)",
+            r"^execute\s+(.+)",
+            r"^start\s+(?:the\s+)?(?:server\s+)?(.+)",
+            r"^test\s+(?:the\s+)?(.+)",
+            r"^lint\s+(.+)",
+            r"^format\s+(.+)",
         ],
         QueryIntent.WEB_SEARCH: [
-            r"search\s+(?:the\s+)?web\s+for\s+(.+)",
-            r"google\s+(.+)",
-            r"look\s+up\s+(.+)",
-            r"find\s+information\s+about\s+(.+)",
+            r"^search\s+(?:the\s+)?web\s+for\s+(.+)",
+            r"^google\s+(.+)",
+            r"^look\s+up\s+(.+)",
+            r"^find\s+information\s+about\s+(.+)",
+            r"latest\s+ai\s+news",
+            r"what('s|\s+is)\s+new\s+in\s+ai",
         ],
         QueryIntent.MEMORY: [
             r"(remember|recall|what do you remember)\s+(.+)",
             r"(save|store)\s+(?:to\s+)?memory\s+(.+)",
             r"what('s| is)\s+in\s+(?:the\s+)?memory",
+        ],
+        QueryIntent.GENERAL_HELP: [
+            r"list\s+(?:all\s+)?tools?",
+            r"what\s+tools\s+(?:do\s+you\s+have|can\s+you\s+do)",
+            r"help\s+me",
+            r"what\s+can\s+you\s+do",
+            r"how\s+to\s+use\s+you",
         ],
         QueryIntent.TASK: [
             r"(create|add|new)\s+task\s+(.+)",
@@ -182,6 +193,7 @@ class ToolSelector:
         QueryIntent.WEB_SEARCH: ["web_search", "fetch"],
         QueryIntent.MEMORY: ["memory_recall", "memory_save", "memory_list"],
         QueryIntent.TASK: ["create_task", "list_tasks", "update_task"],
+        QueryIntent.GENERAL_HELP: [],
     }
     
     def select(self, intent: str, context: Dict[str, Any]) -> List[str]:
@@ -198,6 +210,7 @@ class ToolSelector:
             "memory": QueryIntent.MEMORY,
             "task": QueryIntent.TASK,
             "general": QueryIntent.GENERAL,
+            "general_help": QueryIntent.GENERAL_HELP,
         }
         
         tools = []
@@ -260,12 +273,47 @@ class ToolSelector:
                 r"search\s+(?:the\s+)?web\s+for\s+(.+)",
                 r"google\s+(.+)",
                 r"look\s+up\s+(.+)",
+                r"latest\s+ai\s+news",
+                r"what('s|\s+is)\s+new\s+in\s+ai",
             ]
             for pattern in patterns:
                 match = re.search(pattern, query, re.IGNORECASE)
                 if match:
-                    params["query"] = match.group(1).strip()
+                    # Only extract group(1) if it exists
+                    if match.groups():
+                        params["query"] = match.group(1).strip()
+                    else:
+                        # For patterns without capture groups, use full match
+                        params["query"] = match.group(0).strip()
                     break
+        
+        elif tool_name in ("grep", "search"):
+            # Extract pattern to search for - capture full phrase
+            # Strategy: split by " in " and take second part as path
+            parts = query.split(' in ')
+            if len(parts) >= 2:
+                # Last part is the path
+                path_part = ' in '.join(parts[1:])
+                # Clean up path
+                if path_part.strip() in ['project', 'this project']:
+                    path_part = '/Users/walidsobhi/stack-2.9/src'
+                elif path_part.strip() == 'src':
+                    path_part = '/Users/walidsobhi/stack-2.9/src'
+                elif path_part.startswith('~') or path_part.startswith('/') or path_part.startswith('./'):
+                    pass  # Keep as-is
+                else:
+                    path_part = '/Users/walidsobhi/stack-2.9/' + path_part.strip()
+                params["path"] = path_part
+                # First part is the pattern (remove grep/for/search)
+                pattern_part = parts[0]
+                for prefix in ['grep for', 'search for', 'find for', 'grep', 'search', 'find']:
+                    if pattern_part.strip().lower().startswith(prefix):
+                        pattern_part = pattern_part.strip()[len(prefix):].strip()
+                        break
+                params["pattern"] = pattern_part
+            else:
+                # Default path is workspace root
+                params["path"] = "/Users/walidsobhi/stack-2.9/src"
         
         return params
 
@@ -273,8 +321,25 @@ class ToolSelector:
 class ResponseGenerator:
     """Generates natural language responses."""
     
+    GREETING_VARIATIONS = [
+        "Sure! I can help with that.",
+        "Got it! Let me assist with that.",
+        "No problem! Here's what I found:",
+        "Alright! Here you go:",
+        "Sure thing! Let me show you:",
+    ]
+    
+    HELP_RESPONSES = [
+        "I support these operations:",
+        "Here are some things I can do:",
+        "Here's my toolkit:",
+        "I can help with the following:",
+    ]
+    
     def __init__(self):
         self.context_manager = create_context_manager()
+        self.last_intent = None
+        self.last_query = None
     
     def generate(
         self,
@@ -283,14 +348,47 @@ class ResponseGenerator:
         context: Dict[str, Any]
     ) -> str:
         """Generate response from tool results."""
+        import random
+        
+        # Track intent for conversation flow
+        previous_intent = self.last_intent
+        self.last_intent = intent
+        
         if not tool_results:
-            return "I couldn't find any results for your query."
+            # Handle queries that don't need tools
+            if intent == "question":
+                return ("I can help with reading/writing files, running commands, "
+                        "git operations, web search, and more. "
+                        "Try asking me something like 'read the file README.md' "
+                        "or 'check git status'.")
+            elif intent == "general_help":
+                greeting = random.choice(self.HELP_RESPONSES)
+                return (f"{greeting}\n" 
+                        "- Read/write/edit files\n"
+                        "- Run commands and code\n"
+                        "- Git operations (status, commit, push, pull)\n"
+                        "- Code search with grep\n"
+                        "- Web search\n"
+                        "- Manage tasks\n\n"
+                        "Examples:\n"
+                        "- 'read the file /path/to/file'\n"
+                        "- 'check git status'\n"
+                        "- 'grep for def main in ~/project/src'\n"
+                        "- 'run the command ls'\n"
+                        "- 'what is 2 + 2'")
+            elif intent == "general":
+                # Don't repeat the same greeting
+                if previous_intent == "general":
+                    return "What would you like me to help you with?"
+                return "What can I help you with?"
+            return None
         
         responses = []
+        greeting = random.choice(self.GREETING_VARIATIONS) if tool_results else None
         
         for call in tool_results:
             if call.result is None:
-                responses.append(f"I tried to use {call.tool_name} but got no result.")
+                responses.append(f"Hmm, {call.tool_name} didn't return anything.")
                 continue
             
             if call.result.get("success"):
@@ -304,6 +402,16 @@ class ResponseGenerator:
                             content = content[:500] + "..."
                         responses.append(f"Here's the content:\n```\n{content}\n```")
                 
+                elif call.tool_name == "search":
+                    # Skip search tool if it has no matches - grep will show results
+                    if "matches" in result and result["matches"]:
+                        matches = result["matches"]
+                        resp = f"Found {len(matches)} matches:\n"
+                        for m in matches[:10]:
+                            resp += f"- {m.get('file', '?')}:{m.get('line', '?')} - {m.get('content', '')}\n"
+                        responses.append(resp)
+                    # else: skip - grep will show results
+                
                 elif call.tool_name == "grep":
                     if "matches" in result:
                         matches = result["matches"]
@@ -313,7 +421,7 @@ class ResponseGenerator:
                                 resp += f"- {m.get('file', '?')}:{m.get('line', '?')} - {m.get('content', '')}\n"
                             responses.append(resp)
                         else:
-                            responses.append("No matches found.")
+                            responses.append("Didn't find any matches for that.")
                 
                 elif call.tool_name in ["git_status", "git_log"]:
                     if "files" in result:

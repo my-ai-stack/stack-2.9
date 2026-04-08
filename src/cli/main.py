@@ -107,9 +107,6 @@ class Stack29CLI:
                     response = self.agent.process(user_input)
                     print(response.content)
 
-                    if response.tool_calls:
-                        print(f"\n{self.YELLOW}[Tools called: {', '.join(tc.tool_name for tc in response.tool_calls)}]{self.END}")
-
                 except Exception as e:
                     print(f"{self.RED}Error: {e}{self.END}")
 

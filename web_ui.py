@@ -3,8 +3,9 @@ Stack 2.9 - Web UI Chat
 Simple web interface using Streamlit
 """
 import streamlit as st
-from typing import List, Dict
 import os
+import requests
+import json
 
 # Configure page
 st.set_page_config(
@@ -12,10 +13,6 @@ st.set_page_config(
     page_icon="💻",
     layout="wide"
 )
-
-# Model configuration
-MODEL_NAME = os.environ.get("MODEL_NAME", "minimax-m2.5:cloud")
-PROVIDER = os.environ.get("MODEL_PROVIDER", "ollama")
 
 # Title
 st.title("💻 Stack 2.9")
@@ -27,7 +24,7 @@ with st.sidebar:
 
     model = st.selectbox(
         "Model",
-        ["minimax-m2.5:cloud", "qwen2.5-coder:1.5b", "llama3"],
+        ["minimax-m2.5:cloud", "qwen2.5-coder:1.5b"],
         index=0
     )
 
@@ -64,11 +61,10 @@ if prompt := st.chat_input("Type your message..."):
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
             try:
-                import requests
-
-                # Call Ollama API
+                import json
+                # Use local Ollama - your minimax is registered there
                 response = requests.post(
-                    f"http://localhost:11434/api/chat",
+                    "http://localhost:11434/api/chat",
                     json={
                         "model": model,
                         "messages": [
@@ -78,17 +74,32 @@ if prompt := st.chat_input("Type your message..."):
                         "temperature": temperature,
                         "max_tokens": max_tokens
                     },
-                    timeout=120
+                    timeout=120,
+                    stream=False
                 )
 
                 if response.status_code == 200:
-                    result = response.json()
-                    assistant_msg = result["message"]["content"]
+                    text = response.text.strip()
+                    # Try to parse each line until we get content
+                    assistant_msg = ""
+                    for line in text.split('\n'):
+                        if line.strip():
+                            try:
+                                result = json.loads(line)
+                                content = result.get("message", {}).get("content", "")
+                                if content:
+                                    assistant_msg = content
+                                    break
+                            except:
+                                continue
+
+                    if not assistant_msg:
+                        assistant_msg = text
                 else:
-                    assistant_msg = f"Error: {response.status_code}"
+                    assistant_msg = f"Error: {response.status_code}\n{response.text[:200]}"
 
             except Exception as e:
-                assistant_msg = f"Error: {str(e)}"
+                assistant_msg = f"Connection Error: {str(e)}\n\nMake sure Ollama is running with: ollama serve"
 
         st.markdown(assistant_msg)
         st.session_state.messages.append({"role": "assistant", "content": assistant_msg})
