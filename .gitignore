@@ -78,3 +78,7 @@ tmp/
 temp/training-data/**/*.jsonl
 training-data-expanded/**/*.jsonl
 *.jsonl
+
+# Archived files
+src/archived/
+src/cli/
