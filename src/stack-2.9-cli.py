@@ -25,12 +25,23 @@ from pattern_miner import PatternMiner
 from data_quality import DataQualityAnalyzer
 
 
+HISTORY_DIR = Path.home() / ".stack-2.9"
+HISTORY_FILE = HISTORY_DIR / "chat_history.json"
+
+
 @dataclass
 class ChatMessage:
     """Chat message for display."""
     role: str
     content: str
     timestamp: str = ""
+
+    def to_dict(self) -> dict:
+        return {"role": self.role, "content": self.content, "timestamp": self.timestamp}
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "ChatMessage":
+        return cls(role=d["role"], content=d["content"], timestamp=d.get("timestamp", ""))
 
 
 class Stack29TUI:
@@ -42,6 +53,30 @@ class Stack29TUI:
         self.model = os.environ.get("MODEL_NAME", "")
         self.chat_history: List[ChatMessage] = []
         self.pattern_miner = PatternMiner()
+        self._ensure_history_dir()
+        self.load_history()
+
+    def _ensure_history_dir(self):
+        HISTORY_DIR.mkdir(parents=True, exist_ok=True)
+
+    def load_history(self):
+        """Load chat history from disk if available."""
+        if HISTORY_FILE.exists():
+            try:
+                with open(HISTORY_FILE, "r") as f:
+                    data = json.load(f)
+                self.chat_history = [ChatMessage.from_dict(m) for m in data]
+                print(f"✓ Loaded {len(self.chat_history)} messages from history")
+            except Exception as e:
+                print(f"Warning: Could not load history: {e}")
+
+    def save_history(self):
+        """Save chat history to disk."""
+        try:
+            with open(HISTORY_FILE, "w") as f:
+                json.dump([m.to_dict() for m in self.chat_history], f, indent=2)
+        except Exception as e:
+            print(f"Warning: Could not save history: {e}")
 
     def clear_screen(self):
         """Clear terminal screen."""
@@ -152,9 +187,13 @@ class Stack29TUI:
             if not user_input:
                 continue
             if user_input.lower() in ["exit", "quit"]:
+                self.save_history()
                 break
             if user_input.lower() == "clear":
                 messages = [system_msg]
+                self.chat_history = []
+                if HISTORY_FILE.exists():
+                    HISTORY_FILE.unlink()
                 self.print_header()
                 print("\n💬 Chat Mode (cleared)")
                 print("-" * 40)
@@ -162,6 +201,7 @@ class Stack29TUI:
 
             # Add user message
             messages.append(ChatMessage(role="user", content=user_input))
+            self.chat_history.append(ChatMessage(role="user", content=user_input))
 
             # Generate response
             try:
@@ -174,7 +214,10 @@ class Stack29TUI:
                 print(result.text)
 
                 # Add assistant response
-                messages.append(ChatMessage(role="assistant", content=result.text))
+                assistant_msg = ChatMessage(role="assistant", content=result.text)
+                messages.append(assistant_msg)
+                self.chat_history.append(assistant_msg)
+                self.save_history()
 
             except Exception as e:
                 print(f"Error: {e}")
