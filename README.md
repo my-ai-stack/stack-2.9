@@ -1,17 +1,4 @@
----
-language:
-- en
-license: apache-2.0
-tags:
-- code-generation
-- python
-- qwen
-- fine-tuned
-- stack-overflow
-- coding-assistant
-- text-generation
-model_name: Stack 2.9
----
+
 
 <p align="center">
   <a href="https://github.com/my-ai-stack/stack-2.9">
