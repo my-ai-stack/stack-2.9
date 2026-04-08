@@ -176,26 +176,6 @@ class Stack29TUI:
                 # Add assistant response
                 messages.append(ChatMessage(role="assistant", content=result.text))
 
-                # Store feedback option
-                print("\n[Options: s=store success, f=store failure, c=continue] ", end="")
-                feedback = self.get_input()
-                if feedback.lower() == "s":
-                    # Store as successful pattern
-                    self.pattern_miner.store_feedback(
-                        problem_type="chat",
-                        solution=result.text,
-                        success=True
-                    )
-                    print("✓ Stored as successful pattern")
-                elif feedback.lower() == "f":
-                    self.pattern_miner.store_feedback(
-                        problem_type="chat",
-                        solution=user_input,
-                        success=False,
-                        error_message=result.text
-                    )
-                    print("✓ Stored as feedback for learning")
-
             except Exception as e:
                 print(f"Error: {e}")
 
