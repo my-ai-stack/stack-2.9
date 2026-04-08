@@ -681,30 +681,38 @@ def tool_web_search(
     freshness: Optional[str] = None,
     language: Optional[str] = None
 ) -> Dict[str, Any]:
-    """Search the web using Brave Search API."""
+    """Search the web using DuckDuckGo."""
     try:
-        # Try to use brave search CLI if available, otherwise use placeholder
-        result = subprocess.run(
-            ["brave-search", query, "--count", str(count)],
-            capture_output=True,
-            text=True,
-            timeout=30
-        )
-        
-        if result.returncode == 0:
-            return {"success": True, "results": json.loads(result.stdout)}
-        
-        # Fallback: simulate search (in real implementation, use API)
+        import urllib.request
+        import urllib.parse
+        import re
+        from html import unescape
+
+        # DuckDuckGo Lite
+        encoded_query = urllib.parse.quote(query)
+        url = f"https://lite.duckduckgo.com/lite/?q={encoded_query}"
+
+        req = urllib.request.Request(url, headers={
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
+        })
+        with urllib.request.urlopen(req, timeout=30) as response:
+            html = response.read().decode('utf-8')
+
+        results = []
+        # Find links - look for anchor tags with titles
+        all_links = re.findall(r'<a[^>]*href="(https?://[^"]+)"[^>]*>([^<]+)</a>', html)
+
+        for url, title in all_links[:count]:
+            title = unescape(title).strip()
+            if title and len(title) > 3:
+                results.append({"title": title, "url": url})
+
         return {
             "success": True,
             "query": query,
-            "results": [
-                {"title": f"Result for: {query}", "url": f"https://example.com/{i}"}
-                for i in range(count)
-            ]
+            "results": results[:count],
+            "count": len(results)
         }
-    except FileNotFoundError:
-        return {"success": False, "error": "brave-search CLI not found"}
     except Exception as e:
         return {"success": False, "error": str(e)}
 

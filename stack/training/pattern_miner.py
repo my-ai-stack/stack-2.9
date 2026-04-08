@@ -51,7 +51,7 @@ class PatternMiner:
 
     # Pattern type keywords
     PATTERN_TYPES = {
-        "recursion": [r"def\s+\w+\s*\([^)]*\):\s*.*\1\(", r"return\s+.*\1\("],
+        "recursion": [r"def\s+(\w+)\s*\([^)]*\):\s*.*\1\(", r"return\s+(\w+)\s*\([^)]*\)\s*\1\("],
         "iteration": [r"for\s+", r"while\s+"],
         "list_comprehension": [r"\[.*for.*in.*\]"],
         "dictionary": [r"\{\w+:", r"dict\(", r"defaultdict\("],

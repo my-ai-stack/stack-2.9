@@ -27,6 +27,7 @@ class Stack29CLI:
         self.provider = provider or os.environ.get("MODEL_PROVIDER", "ollama")
         self.model = model or os.environ.get("MODEL_NAME", "")
         self.client = None
+        self.agent = None
         self.miner = PatternMiner()
         self.chat_history = []
 
@@ -71,7 +72,7 @@ class Stack29CLI:
             self.client = None
 
     def chat_mode(self):
-        """Interactive chat mode"""
+        """Interactive chat mode using agent with tool calling"""
         if not self.client:
             print(f"{self.RED}No model connected!{self.END}")
             return
@@ -79,12 +80,11 @@ class Stack29CLI:
         print(f"\n{self.BLUE}=== Chat Mode ==={self.END}")
         print("Type 'exit' to return to menu, 'clear' to clear history\n")
 
-        # System prompt
-        system_msg = ChatMessage(
-            role="system",
-            content="You are Stack 2.9, a helpful AI coding assistant. You help with programming, debugging, and software development."
-        )
-        self.chat_history = [system_msg]
+        # Initialize agent if not done
+        if not hasattr(self, 'agent') or self.agent is None:
+            from cli.agent import StackAgent
+            self.agent = StackAgent(workspace='/Users/walidsobhi/stack-2.9')
+            print(f"{self.GREEN}✓{self.END} Agent initialized")
 
         while True:
             try:
@@ -97,35 +97,21 @@ class Stack29CLI:
                     break
 
                 if user_input.lower() == 'clear':
-                    self.chat_history = [system_msg]
                     print("Chat cleared.\n")
                     continue
 
-                # Add user message
-                self.chat_history.append(ChatMessage(role="user", content=user_input))
-
-                # Generate response
+                # Process through agent (handles tool calling)
                 print(f"{self.BLUE}Stack 2.9:{self.END} ", end="", flush=True)
 
                 try:
-                    result = self.client.chat(
-                        messages=self.chat_history,
-                        temperature=0.7,
-                        max_tokens=2048
-                    )
+                    response = self.agent.process(user_input)
+                    print(response.content)
 
-                    response = result.text
-                    print(response)
+                    if response.tool_calls:
+                        print(f"\n{self.YELLOW}[Tools called: {', '.join(tc.tool_name for tc in response.tool_calls)}]{self.END}")
 
-                    # Add assistant message
-                    self.chat_history.append(ChatMessage(role="assistant", content=response))
-
-                    # Store in pattern miner for self-evolution
-                    self.miner.store_feedback(
-                        problem_type="chat",
-                        solution=response,
-                        success=True
-                    )
+                except Exception as e:
+                    print(f"{self.RED}Error: {e}{self.END}")
 
                 except Exception as e:
                     print(f"{self.RED}Error: {e}{self.END}")

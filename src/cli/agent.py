@@ -186,18 +186,48 @@ class ToolSelector:
     
     def select(self, intent: str, context: Dict[str, Any]) -> List[str]:
         """Select tools for given intent."""
+        # Map string to QueryIntent enum
+        INTENT_MAP = {
+            "file_read": QueryIntent.FILE_READ,
+            "file_write": QueryIntent.FILE_WRITE,
+            "file_edit": QueryIntent.FILE_EDIT,
+            "file_search": QueryIntent.FILE_SEARCH,
+            "git_operation": QueryIntent.GIT_OPERATION,
+            "code_execution": QueryIntent.CODE_EXECUTION,
+            "web_search": QueryIntent.WEB_SEARCH,
+            "memory": QueryIntent.MEMORY,
+            "task": QueryIntent.TASK,
+            "general": QueryIntent.GENERAL,
+        }
+        
         tools = []
+        intent_enum = INTENT_MAP.get(intent)
+        if intent_enum:
+            tools = list(self.INTENT_TOOLS.get(intent_enum, []))
         
-        try:
-            intent_enum = QueryIntent(intent)
-            tools = self.INTENT_TOOLS.get(intent_enum, [])
-        except ValueError:
-            tools = []
+        # For git operations, filter based on query keywords
+        if intent == "git_operation" and context.get("query"):
+            query = context["query"].lower()
+            git_keyword_tools = {
+                "status": ["git_status"],
+                "commit": ["git_commit"],
+                "push": ["git_push"],
+                "pull": ["git_pull"],
+                "branch": ["git_branch"],
+                "log": ["git_log"],
+                "diff": ["git_diff"],
+            }
+            filtered = []
+            for kw, tool_list in git_keyword_tools.items():
+                if kw in query:
+                    filtered.extend(tool_list)
+            # Default to git_status if no specific keyword found but query mentions git
+            if not filtered and "git" in query:
+                filtered = ["git_status"]
+            if filtered:
+                tools = filtered
         
-        # Add general tools
-        tools.extend(["run", "context_load", "project_scan"])
-        
-        return list(set(tools))
+        return tools
     
     def get_tool_parameters(self, tool_name: str, query: str, context: Dict[str, Any]) -> Dict[str, Any]:
         """Extract parameters for a tool from query and context."""
@@ -402,8 +432,8 @@ class StackAgent:
         intent = parsed["intent"]
         confidence = parsed["confidence"]
         
-        # Step 2: Select tools
-        selected_tools = self.tool_selector.select(intent, context)
+        # Step 2: Select tools (pass query in context for smart filtering)
+        selected_tools = self.tool_selector.select(intent, {"query": query, **context})
         tool_params = {}
         
         for tool_name in selected_tools:

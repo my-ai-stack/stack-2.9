@@ -1,106 +1,96 @@
 ---
-title: Stack 2.9
+title: Stack 2.9 - Code Assistant
 language: en
 license: apache-2.0
 library_name: transformers
 pipeline_tag: text-generation
 tags:
-- code
-- assistant
-- tool-use
+- code-generation
+- python
+- qwen
 - fine-tuned
+- stack-overflow
+- coding-assistant
+- qwen2
+- text-generation
+- transformers
+- safetensors
+model-name: Stack 2.9
+base_model: Qwen/Qwen2.5-Coder-1.5B
 ---
 
 # Model Card: Stack 2.9
 
-## Model Details
+## Model Overview
 
 - **Model Type**: Large Language Model (LLM) for coding assistant tasks
-- **Base Model**: Qwen2.5-7B (or similar foundation model)
-- **Fine-tuning Approach**: LoRA + continued pretraining
+- **Base Model**: Qwen/Qwen2.5-Coder-1.5B
+- **Parameters**: 1.5B
+- **Fine-tuning Approach**: LoRA (Rank 8)
+- **Context Length**: 32,768 tokens
 - **Version**: 2.9
 - **Release Date**: 2026-04
+- **License**: Apache 2.0
+
+## Capabilities
+
+- Code Generation (Python, SQL, JavaScript, TypeScript)
+- Code Completion
+- Debugging and error analysis
+- Code explanation and documentation
+- Programming Q&A
 
 ## Intended Use
-
-Stack 2.9 is designed as a coding assistant capable of:
-- Reading, writing, and editing code files
-- Executing shell commands
-- Searching and grepping codebases
-- Managing tasks and teams
-- Web search and information retrieval
 
 ### Primary Use Cases
 - Developer assistance
 - Code review and debugging
 - Automated coding tasks
-- Tool-augmented reasoning
+- Algorithm implementation
 
 ### Out of Scope
 - Non-coding general conversation
 - Multi-modal tasks
 - Dangerous or harmful content generation
 
-## Training Data
+## Training Details
 
-- **Source**: Synthetic tool-use examples + real-world code interactions
-- **Volume**: ~50K-100K examples (after augmentation)
-- **Format**: JSONL with message arrays following OpenAI format
+- **Method**: LoRA (Low-Rank Adaptation)
+- **LoRA Rank**: 8
+- **LoRA Alpha**: 16
+- **Target Modules**: All linear layers (q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj)
+- **Epochs**: ~0.8
+- **Final Loss**: 0.0205
+- **Data Source**: Stack Overflow Q&A (Python-heavy)
 
-### Data Composition
-| Category | Percentage |
-|----------|------------|
-| File Operations | 35% |
-| Shell Commands | 25% |
-| Code Search | 20% |
-| Web Search | 10% |
-| Task Management | 10% |
+## Hardware Requirements
 
-## Evaluation
-
-### Benchmarks
-- HumanEval (code generation)
-- MBPP (Python programming)
-- Custom tool-use evaluation
-
-### Results
-- Tool selection accuracy: >90%
-- Code execution success: >85%
-- Response coherence: >88%
+| Configuration | GPU | VRAM |
+|---------------|-----|------|
+| 1.5B (FP16) | RTX 3060+ | ~4GB |
+| 1.5B (8-bit) | RTX 3060+ | ~2GB |
+| 1.5B (4-bit) | Any modern GPU | ~1GB |
 
 ## Limitations
 
-- May struggle with highly niche or new frameworks
-- Tool output interpretation can be imperfect
-- Context window limitations on large files
-
-## Ethical Considerations
-
-- No harmful code generation
-- No exfiltration of private data
-- Safe tool usage patterns
+- Smaller than state-of-the-art models (7B, 32B)
+- Primarily Python-focused training
+- May occasionally generate incorrect code
+- No tool-calling capabilities
 
 ## Citation
 
 ```bibtex
-@software{stack29,
-  title = {Stack 2.9},
-  author = {OpenClaw Team},
+@misc{my-ai-stack/stack-2-9-finetuned,
+  author = {Walid Sobhi},
+  title = {Stack 2.9: Fine-tuned Qwen2.5-Coder-1.5B on Stack Overflow Data},
   year = {2026},
-  url = {https://github.com/openclaw/stack-2.9}
+  publisher = {HuggingFace},
+  url = {https://huggingface.co/my-ai-stack/Stack-2-9-finetuned}
 }
 ```
 
-## Usage Example
+## Links
 
-```python
-from transformers import AutoModelForCausalLM, AutoTokenizer
-
-tokenizer = AutoTokenizer.from_pretrained("openclaw/stack-2.9")
-model = AutoModelForCausalLM.from_pretrained("openclaw/stack-2.9")
-
-messages = [{"role": "user", "content": "Write a hello world in Python"}]
-inputs = tokenizer.apply_chat_template(messages, return_tensors="pt")
-outputs = model.generate(inputs, max_new_tokens=100)
-print(tokenizer.decode(outputs[0]))
-```
+- **GitHub**: [my-ai-stack/stack-2.9](https://github.com/my-ai-stack/stack-2.9)
+- **Demo Space**: [my-ai-stack/stack-2-9-demo](https://huggingface.co/spaces/my-ai-stack/stack-2-9-demo)

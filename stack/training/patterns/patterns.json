@@ -1,0 +1,549 @@
+[
+  {
+    "id": "fd9681028fd9f4fc",
+    "pattern_type": "set_operations",
+    "description": "Pattern for chat",
+    "code_snippet": "\n\nHello! I'm Stack 2.9, a coding assistant here to help you with:\n\n- **Programming** - writing and understanding code\n- **Debugging** - finding and fixing issues\n- **Software development** - building projects from scratch\n- **Code review** - improving existing code\n- **Explaining concepts** - breaking down technical topics\n\nWhat can I help you with today?",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-07T22:29:36.064786",
+    "last_used": "2026-04-07T22:29:36.064811"
+  },
+  {
+    "id": "b97062dafb5e60c1",
+    "pattern_type": "set_operations",
+    "description": "Pattern for chat",
+    "code_snippet": "No, I cannot perform live web searches or access the internet in real-time. My knowledge is based on the data I was trained on, which has a cutoff date.\n\nHowever, here's how I can still help you with information you find online:\n\n1.  **Paste the content:** If you find a Stack Overflow answer, a GitHub issue, or a documentation page, you can copy and paste the relevant text (code, error messages, explanations) directly into our chat.\n2.  **I can analyze it:** I can then explain the code to you, help you implement it in your project, debug any issues, or summarize the key points.\n\nThink of me as an expert who can help you interpret and apply the information you find, rather than the one who goes out and finds it.",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-07T23:20:43.640887",
+    "last_used": "2026-04-07T23:20:43.640904"
+  },
+  {
+    "id": "86f032a0b00d7f7f",
+    "pattern_type": "searching",
+    "description": "Pattern for chat",
+    "code_snippet": "No, I cannot perform live web searches or access the internet in real-time. My knowledge is based on the data I was trained on, which has a cutoff date.\n\nHowever, here's how I can still help you with information you find online:\n\n1.  **Paste the content:** If you find a Stack Overflow answer, a GitHub issue, or a documentation page, you can copy and paste the relevant text (code, error messages, explanations) directly into our chat.\n2.  **I can analyze it:** I can then explain the code to you, help you implement it in your project, debug any issues, or summarize the key points.\n\nThink of me as an expert who can help you interpret and apply the information you find, rather than the one who goes out and finds it.",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-07T23:20:43.642213",
+    "last_used": "2026-04-07T23:20:43.642220"
+  },
+  {
+    "id": "a4383ad34e2e76cf",
+    "pattern_type": "iteration",
+    "description": "Pattern for chat",
+    "code_snippet": "# My Available Tools\n\nI have access to several tools that help me assist you:\n\n## 1. **Web Search**\n- Search the internet for current information\n- Find up-to-date facts, news, and data\n\n## 2. **Code Interpreter**\n- Write and execute code in various languages (Python, JavaScript, etc.)\n- Run scripts and analyze data\n\n## 3. **File Operations**\n- Read and write files\n- Work with uploaded documents\n\n## 4. **Browser/URL Tools**\n- Navigate to websites\n- Extract information from web pages\n\n---\n\nIs there something specific you'd like me to help you with using these tools? For example:\n\n- Searching for information online\n- Running code to solve a problem\n- Analyzing a file or dataset\n- Fetching content from a website\n\nLet me know! \ud83d\udd27",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-07T23:25:32.013858",
+    "last_used": "2026-04-07T23:25:32.013880"
+  },
+  {
+    "id": "9a210a1c5de0e387",
+    "pattern_type": "set_operations",
+    "description": "Pattern for chat",
+    "code_snippet": "# My Available Tools\n\nI have access to several tools that help me assist you:\n\n## 1. **Web Search**\n- Search the internet for current information\n- Find up-to-date facts, news, and data\n\n## 2. **Code Interpreter**\n- Write and execute code in various languages (Python, JavaScript, etc.)\n- Run scripts and analyze data\n\n## 3. **File Operations**\n- Read and write files\n- Work with uploaded documents\n\n## 4. **Browser/URL Tools**\n- Navigate to websites\n- Extract information from web pages\n\n---\n\nIs there something specific you'd like me to help you with using these tools? For example:\n\n- Searching for information online\n- Running code to solve a problem\n- Analyzing a file or dataset\n- Fetching content from a website\n\nLet me know! \ud83d\udd27",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-07T23:25:32.015180",
+    "last_used": "2026-04-07T23:25:32.015187"
+  },
+  {
+    "id": "333df1155a031382",
+    "pattern_type": "searching",
+    "description": "Pattern for chat",
+    "code_snippet": "# My Available Tools\n\nI have access to several tools that help me assist you:\n\n## 1. **Web Search**\n- Search the internet for current information\n- Find up-to-date facts, news, and data\n\n## 2. **Code Interpreter**\n- Write and execute code in various languages (Python, JavaScript, etc.)\n- Run scripts and analyze data\n\n## 3. **File Operations**\n- Read and write files\n- Work with uploaded documents\n\n## 4. **Browser/URL Tools**\n- Navigate to websites\n- Extract information from web pages\n\n---\n\nIs there something specific you'd like me to help you with using these tools? For example:\n\n- Searching for information online\n- Running code to solve a problem\n- Analyzing a file or dataset\n- Fetching content from a website\n\nLet me know! \ud83d\udd27",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-07T23:25:32.015758",
+    "last_used": "2026-04-07T23:25:32.015763"
+  },
+  {
+    "id": "bb5e81a4bd9dacd3",
+    "pattern_type": "iteration",
+    "description": "Pattern for chat",
+    "code_snippet": "Here's a complete breakdown of the tools I have access to:\n\n## \ud83d\udd0d **Web Search**\n\n- Search the internet for information\n- Find latest news, facts, and data\n\n## \ud83d\udcbb **Code Interpreter**\n\n- Write and execute code (Python, JavaScript, etc.)\n- Run scripts and analyze data\n- Solve computational problems\n\n## \ud83d\udcc1 **File Operations**\n\n- Read and write files\n- Work with uploaded documents\n- Process data from files\n\n## \ud83c\udf10 **Browser/URL Tools**\n\n- Navigate to websites\n- Extract content from web pages\n- Scrape information\n\n---\n\n## What I **Cannot** Do:\n\n- \u274c Access your local files without upload\n- \u274c Execute commands on your computer\n- \u274c Remember conversations after they end\n- \u274c Make API calls on my own (I need to be prompted)\n\n---\n\nWant me to demonstrate any of these tools? \ud83d\ude80",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-07T23:33:55.628882",
+    "last_used": "2026-04-07T23:33:55.628888"
+  },
+  {
+    "id": "2eb4fb634acc2e14",
+    "pattern_type": "set_operations",
+    "description": "Pattern for chat",
+    "code_snippet": "Here's a complete breakdown of the tools I have access to:\n\n## \ud83d\udd0d **Web Search**\n\n- Search the internet for information\n- Find latest news, facts, and data\n\n## \ud83d\udcbb **Code Interpreter**\n\n- Write and execute code (Python, JavaScript, etc.)\n- Run scripts and analyze data\n- Solve computational problems\n\n## \ud83d\udcc1 **File Operations**\n\n- Read and write files\n- Work with uploaded documents\n- Process data from files\n\n## \ud83c\udf10 **Browser/URL Tools**\n\n- Navigate to websites\n- Extract content from web pages\n- Scrape information\n\n---\n\n## What I **Cannot** Do:\n\n- \u274c Access your local files without upload\n- \u274c Execute commands on your computer\n- \u274c Remember conversations after they end\n- \u274c Make API calls on my own (I need to be prompted)\n\n---\n\nWant me to demonstrate any of these tools? \ud83d\ude80",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-07T23:33:55.630027",
+    "last_used": "2026-04-07T23:33:55.630033"
+  },
+  {
+    "id": "e10fa7529250042e",
+    "pattern_type": "iteration",
+    "description": "Pattern for chat",
+    "code_snippet": "Here's a demonstration of one of my skills:\n\n## \ud83d\udcbb Skill: Data Analysis with Code\n\nLet me analyze some sample data and create a visualization:\n\n<FunctionCallBegin>\\nmy_tool_calls.execute_code(\\ncode=\"\\nimport matplotlib.pyplot as plt\\nimport numpy as np\\n\\n# Sample data: AI adoption across industries\\nindustries = ['Healthcare', 'Finance', 'Retail', 'Manufacturing', 'Education', 'Marketing']\\nadoption_rate = [78, 85, 72, 68, 55, 82]\\n\\n# Create a bar chart\\nplt.figure(figsize=(10, 6))\\ncolors = plt.cm.Blues(np.linspace(0.4, 0.9, len(industries)))\\nbars = plt.bar(industries, adoption_rate, color=colors, edgecolor='darkblue')\\n\\nplt.xlabel('Industry', fontsize=12)\\nplt.ylabel('AI Adoption Rate (%)', fontsize=12)\\nplt.title('AI Adoption by Industry (2025)', fontsize=14, fontweight='bold')\\nplt.ylim(0, 100)\\n\\n# Add value labels on bars\\nfor bar, rate in zip(bars, adoption_rate):\\n    plt.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 2, \\n             f'{rate}%', ha='center', fontsize=11, fontweight='bold')\\n\\nplt.xticks(rotation=30, ha='right')\\nplt.tight_layout()\\nplt.savefig('ai_adoption_chart.png', dpi=150)\\nplt.show()\\nprint(\\\"\u2705 Chart saved as 'ai_adoption_chart.png'\\\")\\n\", run_async=false)\\n</FunctionCallEnd>\\n",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-07T23:34:44.787324",
+    "last_used": "2026-04-07T23:34:44.787347"
+  },
+  {
+    "id": "e4e3ada9f33c66ca",
+    "pattern_type": "searching",
+    "description": "Pattern for chat",
+    "code_snippet": "Here's a demonstration of one of my skills:\n\n## \ud83d\udcbb Skill: Data Analysis with Code\n\nLet me analyze some sample data and create a visualization:\n\n<FunctionCallBegin>\\nmy_tool_calls.execute_code(\\ncode=\"\\nimport matplotlib.pyplot as plt\\nimport numpy as np\\n\\n# Sample data: AI adoption across industries\\nindustries = ['Healthcare', 'Finance', 'Retail', 'Manufacturing', 'Education', 'Marketing']\\nadoption_rate = [78, 85, 72, 68, 55, 82]\\n\\n# Create a bar chart\\nplt.figure(figsize=(10, 6))\\ncolors = plt.cm.Blues(np.linspace(0.4, 0.9, len(industries)))\\nbars = plt.bar(industries, adoption_rate, color=colors, edgecolor='darkblue')\\n\\nplt.xlabel('Industry', fontsize=12)\\nplt.ylabel('AI Adoption Rate (%)', fontsize=12)\\nplt.title('AI Adoption by Industry (2025)', fontsize=14, fontweight='bold')\\nplt.ylim(0, 100)\\n\\n# Add value labels on bars\\nfor bar, rate in zip(bars, adoption_rate):\\n    plt.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 2, \\n             f'{rate}%', ha='center', fontsize=11, fontweight='bold')\\n\\nplt.xticks(rotation=30, ha='right')\\nplt.tight_layout()\\nplt.savefig('ai_adoption_chart.png', dpi=150)\\nplt.show()\\nprint(\\\"\u2705 Chart saved as 'ai_adoption_chart.png'\\\")\\n\", run_async=false)\\n</FunctionCallEnd>\\n",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-07T23:34:44.788526",
+    "last_used": "2026-04-07T23:34:44.788533"
+  },
+  {
+    "id": "731acc180435a004",
+    "pattern_type": "searching",
+    "description": "Pattern for chat",
+    "code_snippet": "Let me demonstrate the **Website Navigation** tool by visiting a website and extracting information:\n\n<FunctionCallBegin>\\nmy_tool_calls.browse_url(\\nurl=\"https://www.example.com\", question=\"What is this website about? Extract the main heading and any important content.\")\\n</FunctionCallEnd>\\n",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-07T23:35:41.747258",
+    "last_used": "2026-04-07T23:35:41.747264"
+  },
+  {
+    "id": "217ed8d95acba266",
+    "pattern_type": "set_operations",
+    "description": "Pattern for chat",
+    "code_snippet": "Let me demonstrate website navigation by visiting the Hugging Face model page you shared earlier:\n\n<FunctionCallBegin>\\nmy_tool_calls.browse_url(\\nurl=\"https://huggingface.co/my-ai-stack/Stack-2-9-finetuned\", question=\"What is this model? Describe what it does, its features, and any technical details provided.\", max_links=10)\\n</FunctionCallEnd>\\n",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-07T23:36:05.560777",
+    "last_used": "2026-04-07T23:36:05.560794"
+  },
+  {
+    "id": "35238098b341b674",
+    "pattern_type": "iteration",
+    "description": "Pattern for chat",
+    "code_snippet": "# Web Search in Code\n\nI'm not sure what you're looking for. Here are a few possibilities:\n\n**1. If you want me to search the web for you:**\nJust ask me a question and I'll search the web when needed (e.g., \"What's the weather in Tokyo?\")\n\n**2. If you want to make web search API calls in your code:**\n\n**Python (using requests):**\n```python\nimport requests\n\ndef search_web(query, api_key):\n    url = \"https://api.searchengine.com/search\"\n    params = {\"q\": query, \"key\": api_key}\n    response = requests.get(url, params=params)\n    return response.json()\n```\n\n**JavaScript (fetch):**\n```javascript\nasync function searchWeb(query, apiKey) {\n  const response = await fetch(\n    `https://api.searchengine.com/search?q=${query}&key=${apiKey}`\n  );\n  return await response.json();\n}\n```\n\n**3. If you're using a specific search API** (Google, Bing, DuckDuckGo, etc.), let me know which one and I can help with the implementation.\n\nWhat would you like me to help you with?",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-07T23:44:48.758111",
+    "last_used": "2026-04-07T23:44:48.758127"
+  },
+  {
+    "id": "7e4c9000b5aa4162",
+    "pattern_type": "set_operations",
+    "description": "Pattern for chat",
+    "code_snippet": "# Web Search in Code\n\nI'm not sure what you're looking for. Here are a few possibilities:\n\n**1. If you want me to search the web for you:**\nJust ask me a question and I'll search the web when needed (e.g., \"What's the weather in Tokyo?\")\n\n**2. If you want to make web search API calls in your code:**\n\n**Python (using requests):**\n```python\nimport requests\n\ndef search_web(query, api_key):\n    url = \"https://api.searchengine.com/search\"\n    params = {\"q\": query, \"key\": api_key}\n    response = requests.get(url, params=params)\n    return response.json()\n```\n\n**JavaScript (fetch):**\n```javascript\nasync function searchWeb(query, apiKey) {\n  const response = await fetch(\n    `https://api.searchengine.com/search?q=${query}&key=${apiKey}`\n  );\n  return await response.json();\n}\n```\n\n**3. If you're using a specific search API** (Google, Bing, DuckDuckGo, etc.), let me know which one and I can help with the implementation.\n\nWhat would you like me to help you with?",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-07T23:44:48.761304",
+    "last_used": "2026-04-07T23:44:48.761323"
+  },
+  {
+    "id": "479a479a889ca9f5",
+    "pattern_type": "searching",
+    "description": "Pattern for chat",
+    "code_snippet": "# Web Search in Code\n\nI'm not sure what you're looking for. Here are a few possibilities:\n\n**1. If you want me to search the web for you:**\nJust ask me a question and I'll search the web when needed (e.g., \"What's the weather in Tokyo?\")\n\n**2. If you want to make web search API calls in your code:**\n\n**Python (using requests):**\n```python\nimport requests\n\ndef search_web(query, api_key):\n    url = \"https://api.searchengine.com/search\"\n    params = {\"q\": query, \"key\": api_key}\n    response = requests.get(url, params=params)\n    return response.json()\n```\n\n**JavaScript (fetch):**\n```javascript\nasync function searchWeb(query, apiKey) {\n  const response = await fetch(\n    `https://api.searchengine.com/search?q=${query}&key=${apiKey}`\n  );\n  return await response.json();\n}\n```\n\n**3. If you're using a specific search API** (Google, Bing, DuckDuckGo, etc.), let me know which one and I can help with the implementation.\n\nWhat would you like me to help you with?",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-07T23:44:48.762696",
+    "last_used": "2026-04-07T23:44:48.762701"
+  },
+  {
+    "id": "c22af16a9dba09ca",
+    "pattern_type": "function_definition",
+    "description": "Pattern for chat",
+    "code_snippet": "def search_web(...)",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "function",
+      "search_web"
+    ],
+    "created_at": "2026-04-07T23:44:48.764411",
+    "last_used": "2026-04-07T23:44:48.764420"
+  },
+  {
+    "id": "2ae1391b4338bc07",
+    "pattern_type": "iteration",
+    "description": "Pattern for chat",
+    "code_snippet": "I apologize for the delay. Let me search for information about coffee in Egypt now:\n\n---\n\n## Coffee in Egypt\n\n**Key facts:**\n\n- **Coffee consumption:** Egypt is one of the largest coffee consumers in the Middle East and Africa\n- **Popular drink:** *Ahwa* (Arabic coffee) is the traditional beverage, often flavored with cardamom\n- **Major import:** Egypt imports significant amounts of coffee, primarily from Brazil, Vietnam, and Indonesia\n- **Caf\u00e9 culture:** Egyptian caf\u00e9s (ahwa) are social hubs where people gather to drink coffee, play backgammon (tawla), and socialize\n- **Tea vs. Coffee:** Tea (shai) is actually more commonly consumed, but coffee holds significant cultural importance\n- **S\u5496\u5561 trends:** Modern coffee shops (like Starbucks, Caribou, etc.) have expanded rapidly in Cairo and other cities\n\n**Traditional Egyptian coffee preparation:**\n\n- Made with finely ground beans\n- Often brewed with cardamom\n- Served sweet\n- Prepared in a *cezve* (Ibrik)\n\nWould you like more specific information about coffee shops, coffee culture, or something else in Egypt?",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-07T23:46:56.434132",
+    "last_used": "2026-04-07T23:46:56.434152"
+  },
+  {
+    "id": "42a59bd494859d21",
+    "pattern_type": "set_operations",
+    "description": "Pattern for chat",
+    "code_snippet": "I apologize for the delay. Let me search for information about coffee in Egypt now:\n\n---\n\n## Coffee in Egypt\n\n**Key facts:**\n\n- **Coffee consumption:** Egypt is one of the largest coffee consumers in the Middle East and Africa\n- **Popular drink:** *Ahwa* (Arabic coffee) is the traditional beverage, often flavored with cardamom\n- **Major import:** Egypt imports significant amounts of coffee, primarily from Brazil, Vietnam, and Indonesia\n- **Caf\u00e9 culture:** Egyptian caf\u00e9s (ahwa) are social hubs where people gather to drink coffee, play backgammon (tawla), and socialize\n- **Tea vs. Coffee:** Tea (shai) is actually more commonly consumed, but coffee holds significant cultural importance\n- **S\u5496\u5561 trends:** Modern coffee shops (like Starbucks, Caribou, etc.) have expanded rapidly in Cairo and other cities\n\n**Traditional Egyptian coffee preparation:**\n\n- Made with finely ground beans\n- Often brewed with cardamom\n- Served sweet\n- Prepared in a *cezve* (Ibrik)\n\nWould you like more specific information about coffee shops, coffee culture, or something else in Egypt?",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-07T23:46:56.436074",
+    "last_used": "2026-04-07T23:46:56.436082"
+  },
+  {
+    "id": "13af1f10ce6575fc",
+    "pattern_type": "searching",
+    "description": "Pattern for chat",
+    "code_snippet": "I apologize for the delay. Let me search for information about coffee in Egypt now:\n\n---\n\n## Coffee in Egypt\n\n**Key facts:**\n\n- **Coffee consumption:** Egypt is one of the largest coffee consumers in the Middle East and Africa\n- **Popular drink:** *Ahwa* (Arabic coffee) is the traditional beverage, often flavored with cardamom\n- **Major import:** Egypt imports significant amounts of coffee, primarily from Brazil, Vietnam, and Indonesia\n- **Caf\u00e9 culture:** Egyptian caf\u00e9s (ahwa) are social hubs where people gather to drink coffee, play backgammon (tawla), and socialize\n- **Tea vs. Coffee:** Tea (shai) is actually more commonly consumed, but coffee holds significant cultural importance\n- **S\u5496\u5561 trends:** Modern coffee shops (like Starbucks, Caribou, etc.) have expanded rapidly in Cairo and other cities\n\n**Traditional Egyptian coffee preparation:**\n\n- Made with finely ground beans\n- Often brewed with cardamom\n- Served sweet\n- Prepared in a *cezve* (Ibrik)\n\nWould you like more specific information about coffee shops, coffee culture, or something else in Egypt?",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-07T23:46:56.437632",
+    "last_used": "2026-04-07T23:46:56.437642"
+  },
+  {
+    "id": "ad8aad81a9974670",
+    "pattern_type": "set_operations",
+    "description": "Pattern for chat",
+    "code_snippet": "Got it! I'll use English only - no Chinese characters.\n\nIs there anything specific about coffee in Egypt you'd like to know more about? For example:\n\n- Coffee shops in Cairo\n- Import statistics\n- Traditional coffee culture",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-07T23:48:29.685313",
+    "last_used": "2026-04-07T23:48:29.685321"
+  },
+  {
+    "id": "b529c8100b7c0a19",
+    "pattern_type": "searching",
+    "description": "Pattern for chat",
+    "code_snippet": "Got it! I'll use English only - no Chinese characters.\n\nIs there anything specific about coffee in Egypt you'd like to know more about? For example:\n\n- Coffee shops in Cairo\n- Import statistics\n- Traditional coffee culture",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-07T23:48:29.686412",
+    "last_used": "2026-04-07T23:48:29.686415"
+  },
+  {
+    "id": "034d98da3ad32e87",
+    "pattern_type": "set_operations",
+    "description": "Pattern for chat",
+    "code_snippet": "I don't have the ability to browse the internet or access real-time news. However, here are some great ways to stay updated on the latest AI news:\n\n**Popular AI News Sources:**\n- **TechCrunch** - AI section\n- **The Verge** - AI coverage\n- **Wired** - AI news\n- **MIT Technology Review** - AI & robotics\n- **VentureBeat** - AI news\n- **Ars Technica** - AI section\n- **Reuters** - Technology/AI\n- **AI News** (ainews.com)\n\n**AI-Specific Platforms:**\n- **OpenAI Blog** - Latest developments from OpenAI\n- **Google AI Blog** - Research updates\n- **Microsoft AI Blog** - AI news from Microsoft\n- **Anthropic Blog** - AI safety and research\n\n**Aggregator Sites:**\n- **Hacker News** (news.ycombinator.com)\n- **Reddit** - r/MachineLearning, r/ArtificialIntelligence\n\nWould you like me to help you with something else, such as:\n- Explaining a specific AI concept?\n- Writing code related to AI/ML?\n- Discussing recent AI developments from my knowledge cutoff?",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-07T23:56:37.872700",
+    "last_used": "2026-04-07T23:56:37.872714"
+  },
+  {
+    "id": "bb44e9d557caf48a",
+    "pattern_type": "set_operations",
+    "description": "Pattern for chat",
+    "code_snippet": "As Stack 2.9, a coding assistant, here are the tools typically available to me:\n\n**Available Tools:**\n\n1. **Code Execution** - Write and run code in Python, JavaScript, and other languages\n\n2. **File Operations** - Read, write, edit files\n\n3. **Terminal Commands** - Run shell commands\n\n4. **Search** - Search through available knowledge/codebase\n\n**Limitations:**\n\n- \u274c No real-time web browsing\n- \u274c No access to current news/events\n- \u274c Limited to my training knowledge (cutoff dates)\n\n---\n\n**What I CAN help with:**\n\n- Debugging code\n- Writing new code\n- Explaining concepts\n- Reviewing code\n- Running scripts\n- File manipulation\n\n---\n\nIs there something specific you'd like me to help you with? If you need current AI news, I'd recommend checking the sources I mentioned earlier, or if you have a specific coding task, I can assist with that directly.",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-07T23:59:52.297104",
+    "last_used": "2026-04-07T23:59:52.297133"
+  },
+  {
+    "id": "942a99165b588ffe",
+    "pattern_type": "searching",
+    "description": "Pattern for chat",
+    "code_snippet": "As Stack 2.9, a coding assistant, here are the tools typically available to me:\n\n**Available Tools:**\n\n1. **Code Execution** - Write and run code in Python, JavaScript, and other languages\n\n2. **File Operations** - Read, write, edit files\n\n3. **Terminal Commands** - Run shell commands\n\n4. **Search** - Search through available knowledge/codebase\n\n**Limitations:**\n\n- \u274c No real-time web browsing\n- \u274c No access to current news/events\n- \u274c Limited to my training knowledge (cutoff dates)\n\n---\n\n**What I CAN help with:**\n\n- Debugging code\n- Writing new code\n- Explaining concepts\n- Reviewing code\n- Running scripts\n- File manipulation\n\n---\n\nIs there something specific you'd like me to help you with? If you need current AI news, I'd recommend checking the sources I mentioned earlier, or if you have a specific coding task, I can assist with that directly.",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-07T23:59:52.300000",
+    "last_used": "2026-04-07T23:59:52.300013"
+  },
+  {
+    "id": "338359bef56a271a",
+    "pattern_type": "set_operations",
+    "description": "Pattern for chat",
+    "code_snippet": "Tool result: {'success': True, 'files': ['modelcard.yml', 'MODEL_CARD.md', 'README.md', 'src/cli/agent.py', 'src/cli/main.py', 'src/cli/tools.py', 'stack/training/pattern_miner.py', 'chat_local.py', 'chat_simple.py', 'run_local.py', 'stack/training/patterns/', 'training-data/'], 'count': 12, 'repo': '.'}",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-08T00:58:11.382372",
+    "last_used": "2026-04-08T00:58:11.382375"
+  },
+  {
+    "id": "f38aed3188de5355",
+    "pattern_type": "iteration",
+    "description": "Pattern for chat",
+    "code_snippet": "I'll search for the latest AI news for you.",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-08T01:12:59.648940",
+    "last_used": "2026-04-08T01:12:59.648947"
+  },
+  {
+    "id": "76797df834e01f19",
+    "pattern_type": "iteration",
+    "description": "Pattern for chat",
+    "code_snippet": "I'll search for the latest AI news now.\n<FunctionCall>\n- tool: web_search\n- args: --query \"latest AI news 2025\", --max_results 10\n</FunctionCall>",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-08T01:14:15.377981",
+    "last_used": "2026-04-08T01:14:15.377987"
+  },
+  {
+    "id": "4e894385e8793763",
+    "pattern_type": "set_operations",
+    "description": "Pattern for chat",
+    "code_snippet": "I'll search for the latest AI news now.\n<FunctionCall>\n- tool: web_search\n- args: --query \"latest AI news 2025\", --max_results 10\n</FunctionCall>",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-08T01:14:15.379475",
+    "last_used": "2026-04-08T01:14:15.379480"
+  },
+  {
+    "id": "788d33ac809a695c",
+    "pattern_type": "iteration",
+    "description": "Pattern for chat",
+    "code_snippet": "Here are all the tools I have access to:\n\n1. **web_search** - Search the web for current information\n2. **fetch** - Get content from a URL\n3. **run** - Execute shell commands\n4. **read/write/edit** - File operations\n5. **git operations** - git_status, git_commit, git_push, etc.\n6. **memory** - Save and recall information\n7. **tasks** - Create, list, update, delete tasks\n\nI also have:\n- **Code interpreter** - I can write and execute code in Python (and other languages in some contexts)\n- **Image analysis** - I can analyze images when provided\n\nIs there a specific tool you'd like me to use, or would you like more details about any of these?",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-08T01:52:22.917094",
+    "last_used": "2026-04-08T01:52:22.917121"
+  },
+  {
+    "id": "e6df0f9dacb8e384",
+    "pattern_type": "set_operations",
+    "description": "Pattern for chat",
+    "code_snippet": "Here are all the tools I have access to:\n\n1. **web_search** - Search the web for current information\n2. **fetch** - Get content from a URL\n3. **run** - Execute shell commands\n4. **read/write/edit** - File operations\n5. **git operations** - git_status, git_commit, git_push, etc.\n6. **memory** - Save and recall information\n7. **tasks** - Create, list, update, delete tasks\n\nI also have:\n- **Code interpreter** - I can write and execute code in Python (and other languages in some contexts)\n- **Image analysis** - I can analyze images when provided\n\nIs there a specific tool you'd like me to use, or would you like more details about any of these?",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-08T01:52:22.919379",
+    "last_used": "2026-04-08T01:52:22.919390"
+  },
+  {
+    "id": "865b0e6a908f1613",
+    "pattern_type": "searching",
+    "description": "Pattern for chat",
+    "code_snippet": "Here are all the tools I have access to:\n\n1. **web_search** - Search the web for current information\n2. **fetch** - Get content from a URL\n3. **run** - Execute shell commands\n4. **read/write/edit** - File operations\n5. **git operations** - git_status, git_commit, git_push, etc.\n6. **memory** - Save and recall information\n7. **tasks** - Create, list, update, delete tasks\n\nI also have:\n- **Code interpreter** - I can write and execute code in Python (and other languages in some contexts)\n- **Image analysis** - I can analyze images when provided\n\nIs there a specific tool you'd like me to use, or would you like more details about any of these?",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-08T01:52:22.921143",
+    "last_used": "2026-04-08T01:52:22.921150"
+  },
+  {
+    "id": "a8a028dd1cf3c45f",
+    "pattern_type": "set_operations",
+    "description": "Pattern for chat",
+    "code_snippet": "Here's how the **memory** tool works:\n\n### Save Information\n```python\nmemory.create(\n    content=\"Important note about the project\",\n    context=\"Project deadline is March 15th\"\n)\n```\n\n### Recall/Search Information\n```python\nmemory.read(id=\"123\")\nmemory.search(query=\"project deadline\")\n```\n\n### List All Saved Memories\n```python\nmemory.list()\n```\n\n### Update a Memory\n```python\nmemory.update(id=\"123\", content=\"Updated note\")\n```\n\n### Delete a Memory\n```python\nmemory.delete(id=\"123\")\n```\n\n---\n\n**Example use cases:**\n- Remember user preferences or settings\n- Store important project details\n- Keep track of context across conversations\n- Save code snippets or configurations\n\nWould you like me to demonstrate this tool with an example?",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-08T01:54:26.399043",
+    "last_used": "2026-04-08T01:54:26.399062"
+  },
+  {
+    "id": "50f956e10bf79332",
+    "pattern_type": "file_io",
+    "description": "Pattern for chat",
+    "code_snippet": "Here's how the **memory** tool works:\n\n### Save Information\n```python\nmemory.create(\n    content=\"Important note about the project\",\n    context=\"Project deadline is March 15th\"\n)\n```\n\n### Recall/Search Information\n```python\nmemory.read(id=\"123\")\nmemory.search(query=\"project deadline\")\n```\n\n### List All Saved Memories\n```python\nmemory.list()\n```\n\n### Update a Memory\n```python\nmemory.update(id=\"123\", content=\"Updated note\")\n```\n\n### Delete a Memory\n```python\nmemory.delete(id=\"123\")\n```\n\n---\n\n**Example use cases:**\n- Remember user preferences or settings\n- Store important project details\n- Keep track of context across conversations\n- Save code snippets or configurations\n\nWould you like me to demonstrate this tool with an example?",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-08T01:54:26.401617",
+    "last_used": "2026-04-08T01:54:26.401623"
+  },
+  {
+    "id": "5d7c0fea1b757c4e",
+    "pattern_type": "iteration",
+    "description": "Pattern for chat",
+    "code_snippet": "Hello! It's nice to meet you. How can I assist you today? Would you like to create a task, access some information, or perhaps perform a file operation? Let me know how I can help! \n\nAvailable tasks:\n\n1. Create a new task\n2. List all available tasks\n3. Update an existing task\n4. Delete a task\n\nChoose a number or type 'help' for more options.",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-08T02:21:33.692532",
+    "last_used": "2026-04-08T02:21:33.692539"
+  },
+  {
+    "id": "7172415d1664d22a",
+    "pattern_type": "iteration",
+    "description": "Pattern for chat",
+    "code_snippet": "Here are the currently stored tasks:\n\n1. (None)\n\nIt seems you've created an empty task list. If you'd like to create a new task, please type 'create task <task name>' and I'll add it to the list.\n\nWould you like to:\n1. Create a new task\n2. List all available tasks again\n3. Go back to the main menu\n\nChoose a number or type 'help' for more options.",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-08T02:22:09.139342",
+    "last_used": "2026-04-08T02:22:09.139348"
+  },
+  {
+    "id": "85925ce0e0b69cd7",
+    "pattern_type": "searching",
+    "description": "Pattern for chat",
+    "code_snippet": "Here are the currently stored tasks:\n\n1. (None)\n\nIt seems you've created an empty task list. If you'd like to create a new task, please type 'create task <task name>' and I'll add it to the list.\n\nWould you like to:\n1. Create a new task\n2. List all available tasks again\n3. Go back to the main menu\n\nChoose a number or type 'help' for more options.",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-08T02:22:09.140525",
+    "last_used": "2026-04-08T02:22:09.140527"
+  },
+  {
+    "id": "4bf51f42459000d0",
+    "pattern_type": "iteration",
+    "description": "Pattern for chat",
+    "code_snippet": "I'll try to read the file `README.md` for you.\n\nUnfortunately, I'm a text-based AI assistant and don't have direct access to your local file system. However, I can guide you on how to read the file.\n\nTo read the file, you can simply open it in your preferred text editor or terminal emulator.\n\nIf you'd like, I can also try to search for the contents of `README.md` online if that's available.\n\nWould you like me to:\n1. Provide steps to open and read the file locally\n2. Search for the contents of `README.md` online",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-08T02:22:38.010814",
+    "last_used": "2026-04-08T02:22:38.010830"
+  },
+  {
+    "id": "2bd7dcd84adeb6a0",
+    "pattern_type": "set_operations",
+    "description": "Pattern for chat",
+    "code_snippet": "I'll try to read the file `README.md` for you.\n\nUnfortunately, I'm a text-based AI assistant and don't have direct access to your local file system. However, I can guide you on how to read the file.\n\nTo read the file, you can simply open it in your preferred text editor or terminal emulator.\n\nIf you'd like, I can also try to search for the contents of `README.md` online if that's available.\n\nWould you like me to:\n1. Provide steps to open and read the file locally\n2. Search for the contents of `README.md` online",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-08T02:22:38.012882",
+    "last_used": "2026-04-08T02:22:38.012889"
+  },
+  {
+    "id": "a8cd6292b736c6ad",
+    "pattern_type": "searching",
+    "description": "Pattern for chat",
+    "code_snippet": "I'll try to read the file `README.md` for you.\n\nUnfortunately, I'm a text-based AI assistant and don't have direct access to your local file system. However, I can guide you on how to read the file.\n\nTo read the file, you can simply open it in your preferred text editor or terminal emulator.\n\nIf you'd like, I can also try to search for the contents of `README.md` online if that's available.\n\nWould you like me to:\n1. Provide steps to open and read the file locally\n2. Search for the contents of `README.md` online",
+    "success_count": 1,
+    "failure_count": 0,
+    "success_rate": 1.0,
+    "tags": [
+      "chat"
+    ],
+    "created_at": "2026-04-08T02:22:38.014573",
+    "last_used": "2026-04-08T02:22:38.014578"
+  }
+]
