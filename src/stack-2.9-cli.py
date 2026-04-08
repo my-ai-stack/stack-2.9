@@ -11,10 +11,11 @@ from pathlib import Path
 from typing import Optional, List, Dict
 from dataclasses import dataclass
 
-# Add eval and training to path
+# Add eval and training to path - go up from src/ to project root, then into stack/
 sys.path.insert(0, str(Path(__file__).parent))
-sys.path.insert(0, str(Path(__file__).parent / "stack-2.9-eval"))
-sys.path.insert(0, str(Path(__file__).parent / "stack-2.9-training"))
+sys.path.insert(0, str(Path(__file__).parent.parent / "stack" / "eval"))
+sys.path.insert(0, str(Path(__file__).parent.parent / "stack" / "training"))
+sys.path.insert(0, str(Path(__file__).parent.parent / "stack" / "eval" / "benchmarks"))
 
 from model_client import create_model_client, ChatMessage
 from benchmarks.mbpp import MBPP
@@ -29,7 +30,7 @@ class ChatMessage:
     """Chat message for display."""
     role: str
     content: str
-    timestamp: str
+    timestamp: str = ""
 
 
 class Stack29TUI:
