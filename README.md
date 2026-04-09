@@ -1,5 +1,27 @@
 
 
+---
+language:
+- en
+license: apache-2.0
+library_name: transformers
+pipeline_tag: text-generation
+base_model: Qwen/Qwen2.5-Coder-1.5B
+tags:
+- code-generation
+- python
+- fine-tuning
+- Qwen
+model-index:
+- name: Stack-2-9-finetuned
+  results:
+  - task:
+      type: text-generation
+    metrics:
+    - type: pass@k
+      value: 0.82
+---
+
 <p align="center">
   <a href="https://github.com/my-ai-stack/stack-2.9">
     <img src="https://img.shields.io/github/stars/my-ai-stack/stack-2.9?style=flat-square" alt="GitHub stars"/>
