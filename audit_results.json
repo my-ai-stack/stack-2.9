@@ -1,0 +1,1093 @@
+{
+  "timestamp": "2026-04-09T19:39:39.247896",
+  "total_tools": 69,
+  "passed": 5,
+  "failed": 64,
+  "tools": [
+    {
+      "tool_name": "agent_spawn",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 0.0009522499967715703,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.703111"
+    },
+    {
+      "tool_name": "agent_status",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 2.300000051036477e-05,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.705308"
+    },
+    {
+      "tool_name": "agent_list",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 3.374996595084667e-06,
+      "error": "AgentListTool.execute() takes 1 positional argument but 2 were given",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.705343"
+    },
+    {
+      "tool_name": "ask_question",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 1.4166005712468177e-05,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.705357"
+    },
+    {
+      "tool_name": "get_pending_questions",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 2.2500025806948543e-06,
+      "error": "GetPendingQuestionsTool.execute() takes 1 positional argument but 2 were given",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.705379"
+    },
+    {
+      "tool_name": "answer_question",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 2.124994352925569e-06,
+      "error": "AnswerQuestionTool.execute() missing 1 required positional argument: 'answer'",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.705389"
+    },
+    {
+      "tool_name": "brief",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 1.0833995474968106e-05,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.705399"
+    },
+    {
+      "tool_name": "brief_summary",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 1.0333002137485892e-05,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.705416"
+    },
+    {
+      "tool_name": "Config",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 3.749999450519681e-06,
+      "error": "Unknown operation: None",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.705434"
+    },
+    {
+      "tool_name": "file_edit_insert",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 1.958003849722445e-06,
+      "error": "FileEditInsertTool.execute() missing 1 required positional argument: 'content'",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.705445"
+    },
+    {
+      "tool_name": "file_edit_delete",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 2.5291999918408692e-05,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.705454"
+    },
+    {
+      "tool_name": "file_edit_replace",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 2.3339962353929877e-06,
+      "error": "FileEditReplaceTool.execute() missing 2 required positional arguments: 'pattern' and 'replacement'",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.705486"
+    },
+    {
+      "tool_name": "file_edit",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 1.6250050975941122e-06,
+      "error": "FileEditTool.execute() missing 1 required positional argument: 'operation'",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.705496"
+    },
+    {
+      "tool_name": "file_read",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 9.333001798950136e-06,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.705504"
+    },
+    {
+      "tool_name": "file_exists",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 8.957998943515122e-06,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.705520"
+    },
+    {
+      "tool_name": "file_write",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 2.6670022634789348e-06,
+      "error": "FileWriteTool.execute() missing 1 required positional argument: 'content'",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.705536"
+    },
+    {
+      "tool_name": "file_delete",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 8.916998922359198e-06,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.705545"
+    },
+    {
+      "tool_name": "glob",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 1.0292002116329968e-05,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.705561"
+    },
+    {
+      "tool_name": "glob_list",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 9.791998309083283e-06,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.705578"
+    },
+    {
+      "tool_name": "grep",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 1.7909987946040928e-06,
+      "error": "GrepTool.execute() missing 1 required positional argument: 'path'",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.705594"
+    },
+    {
+      "tool_name": "grep_count",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 1.3750031939707696e-06,
+      "error": "GrepCountTool.execute() missing 1 required positional argument: 'path'",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.705603"
+    },
+    {
+      "tool_name": "mcp_call",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 1.4999968698248267e-06,
+      "error": "MCPTool.execute() missing 1 required positional argument: 'tool_name'",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.705611"
+    },
+    {
+      "tool_name": "mcp_list_servers",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 1.7080019460991025e-06,
+      "error": "MCPServerListTool.execute() takes 1 positional argument but 2 were given",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.705619"
+    },
+    {
+      "tool_name": "mcp_add_server",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 1.5420009731315076e-06,
+      "error": "MCPServerAddTool.execute() missing 1 required positional argument: 'command'",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.705627"
+    },
+    {
+      "tool_name": "read_mcp_resource",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 1.7500060494057834e-06,
+      "error": "ReadMcpResourceTool.execute() missing 1 required positional argument: 'resource_uri'",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.705635"
+    },
+    {
+      "tool_name": "message_send",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 1.4999968698248267e-06,
+      "error": "MessageSendTool.execute() missing 1 required positional argument: 'content'",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.705644"
+    },
+    {
+      "tool_name": "message_list",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 9.458002750761807e-06,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.705652"
+    },
+    {
+      "tool_name": "message_channel",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 8.791997970547527e-06,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.705668"
+    },
+    {
+      "tool_name": "message_template",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 9.290997695643455e-06,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.705695"
+    },
+    {
+      "tool_name": "EnterPlanMode",
+      "load_success": true,
+      "execution_success": true,
+      "response_time": 0.0015690829968662001,
+      "error": "",
+      "data": {
+        "message": "Entered plan mode. Explore the codebase read-only and design your implementation approach.",
+        "plan_text": "",
+        "context": "",
+        "entered_at": "2026-04-09T17:39:32.705964+00:00"
+      },
+      "timestamp": "2026-04-09T19:39:32.705711"
+    },
+    {
+      "tool_name": "ExitPlanMode",
+      "load_success": true,
+      "execution_success": true,
+      "response_time": 0.0003088749945163727,
+      "error": "",
+      "data": {
+        "message": "Exited plan mode. Ready to proceed.",
+        "plan_text": "",
+        "confirmed": true,
+        "exited_at": "2026-04-09T17:39:32.707341+00:00"
+      },
+      "timestamp": "2026-04-09T19:39:32.707292"
+    },
+    {
+      "tool_name": "remote_add",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 2.415996277704835e-06,
+      "error": "RemoteAddTool.execute() missing 1 required positional argument: 'url'",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.707611"
+    },
+    {
+      "tool_name": "remote_list",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 2.124994352925569e-06,
+      "error": "RemoteListTool.execute() takes 1 positional argument but 2 were given",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.707622"
+    },
+    {
+      "tool_name": "remote_trigger",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 1.5420009731315076e-06,
+      "error": "RemoteTriggerTool.execute() missing 1 required positional argument: 'action'",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.707632"
+    },
+    {
+      "tool_name": "remote_remove",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 1.670899655437097e-05,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.707641"
+    },
+    {
+      "tool_name": "CronCreate",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 4.082998202648014e-06,
+      "error": "Invalid cron expression: Expected 5 fields, got 0",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.707665"
+    },
+    {
+      "tool_name": "CronList",
+      "load_success": true,
+      "execution_success": true,
+      "response_time": 0.00027791699540102854,
+      "error": "",
+      "data": {
+        "jobs": [],
+        "total": 0
+      },
+      "timestamp": "2026-04-09T19:39:32.707677"
+    },
+    {
+      "tool_name": "CronDelete",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 1.4589968486689031e-06,
+      "error": "Error: id is required",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.707963"
+    },
+    {
+      "tool_name": "skill_list",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 1.2249998690094799e-05,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.707972"
+    },
+    {
+      "tool_name": "skill_execute",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 9.957999282050878e-06,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.707992"
+    },
+    {
+      "tool_name": "skill_info",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 9.791998309083283e-06,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.708008"
+    },
+    {
+      "tool_name": "skill_chain",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 9.165996743831784e-06,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.708025"
+    },
+    {
+      "tool_name": "skill_search",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 9.290997695643455e-06,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.708041"
+    },
+    {
+      "tool_name": "sleep",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 1.1249998351559043e-05,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.708057"
+    },
+    {
+      "tool_name": "wait_for",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 1.962499663932249e-05,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.708076"
+    },
+    {
+      "tool_name": "synthetic_output",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 2.0830048015341163e-06,
+      "error": "SyntheticOutputTool.execute() missing 1 required positional argument: 'content'",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.708102"
+    },
+    {
+      "tool_name": "structure_data",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 9.292001777794212e-06,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.708112"
+    },
+    {
+      "tool_name": "TaskCreate",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 1.2499949662014842e-06,
+      "error": "Error: subject is required",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.708128"
+    },
+    {
+      "tool_name": "TaskList",
+      "load_success": true,
+      "execution_success": true,
+      "response_time": 0.000200708003831096,
+      "error": "",
+      "data": {
+        "tasks": [
+          {
+            "id": "9d03b654",
+            "subject": "Test task",
+            "status": "pending",
+            "priority": "medium",
+            "tags": [],
+            "created_at": "2026-04-09T14:01:17.414719+00:00"
+          },
+          {
+            "id": "b8481a6f",
+            "subject": "Test task",
+            "status": "pending",
+            "priority": "medium",
+            "tags": [],
+            "created_at": "2026-04-09T14:01:42.697266+00:00"
+          },
+          {
+            "id": "72d5a5e9",
+            "subject": "Test task",
+            "status": "pending",
+            "priority": "medium",
+            "tags": [],
+            "created_at": "2026-04-09T14:04:23.970246+00:00"
+          },
+          {
+            "id": "6f80c043",
+            "subject": "Test task",
+            "status": "pending",
+            "priority": "medium",
+            "tags": [],
+            "created_at": "2026-04-09T14:04:47.025132+00:00"
+          },
+          {
+            "id": "4c9976bd",
+            "subject": "Test task",
+            "status": "pending",
+            "priority": "medium",
+            "tags": [],
+            "created_at": "2026-04-09T14:08:42.369611+00:00"
+          },
+          {
+            "id": "a0883efe",
+            "subject": "Test",
+            "status": "pending",
+            "priority": "medium",
+            "tags": [],
+            "created_at": "2026-04-09T14:09:40.319278+00:00"
+          },
+          {
+            "id": "fcdc7655",
+            "subject": "Test",
+            "status": "pending",
+            "priority": "medium",
+            "tags": [],
+            "created_at": "2026-04-09T14:10:02.638019+00:00"
+          },
+          {
+            "id": "58822bf8",
+            "subject": "Test",
+            "status": "pending",
+            "priority": "medium",
+            "tags": [],
+            "created_at": "2026-04-09T14:10:42.815505+00:00"
+          },
+          {
+            "id": "6f569705",
+            "subject": "Test",
+            "status": "pending",
+            "priority": "medium",
+            "tags": [],
+            "created_at": "2026-04-09T14:11:11.092777+00:00"
+          },
+          {
+            "id": "4b6ebce7",
+            "subject": "Test",
+            "status": "pending",
+            "priority": "medium",
+            "tags": [],
+            "created_at": "2026-04-09T14:11:36.125577+00:00"
+          },
+          {
+            "id": "f38ee9a3",
+            "subject": "Test",
+            "status": "pending",
+            "priority": "medium",
+            "tags": [],
+            "created_at": "2026-04-09T14:12:34.756438+00:00"
+          },
+          {
+            "id": "76f297e9",
+            "subject": "Test",
+            "status": "pending",
+            "priority": "medium",
+            "tags": [],
+            "created_at": "2026-04-09T14:13:16.661552+00:00"
+          },
+          {
+            "id": "bc735c85",
+            "subject": "Test task",
+            "status": "pending",
+            "priority": "medium",
+            "tags": [],
+            "created_at": "2026-04-09T14:13:44.904743+00:00"
+          },
+          {
+            "id": "23f75706",
+            "subject": "Audit test",
+            "status": "pending",
+            "priority": "medium",
+            "tags": [],
+            "created_at": "2026-04-09T16:13:02.202480+00:00"
+          }
+        ],
+        "total": 14
+      },
+      "timestamp": "2026-04-09T19:39:32.708136"
+    },
+    {
+      "tool_name": "TaskUpdate",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 1.4170000213198364e-06,
+      "error": "Error: id is required",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.708345"
+    },
+    {
+      "tool_name": "TaskDelete",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 1.2919990695081651e-06,
+      "error": "Error: id is required",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.708354"
+    },
+    {
+      "tool_name": "team_delete",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 1.0916002793237567e-05,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.708362"
+    },
+    {
+      "tool_name": "team_leave",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 2.124994352925569e-06,
+      "error": "TeamLeaveTool.execute() missing 1 required positional argument: 'agent_name'",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.708380"
+    },
+    {
+      "tool_name": "team_create",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 2.0839943317696452e-06,
+      "error": "TeamCreateTool.execute() missing 1 required positional argument: 'agents'",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.708390"
+    },
+    {
+      "tool_name": "team_disband",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 9.667004633229226e-06,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.708399"
+    },
+    {
+      "tool_name": "team_list",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 1.7500060494057834e-06,
+      "error": "TeamListTool.execute() takes 1 positional argument but 2 were given",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.708415"
+    },
+    {
+      "tool_name": "team_status",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 9.125003998633474e-06,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.708424"
+    },
+    {
+      "tool_name": "team_assign",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 1.8329956219531596e-06,
+      "error": "TeamAssignTaskTool.execute() missing 1 required positional argument: 'task'",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.708441"
+    },
+    {
+      "tool_name": "TodoWrite",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 0.00019041700579691678,
+      "error": "Unknown operation: None",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.708450"
+    },
+    {
+      "tool_name": "tool_search",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 1.1292002454865724e-05,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.708649"
+    },
+    {
+      "tool_name": "tool_list_all",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 9.12499672267586e-06,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.708667"
+    },
+    {
+      "tool_name": "tool_info",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 9.082999895326793e-06,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.708684"
+    },
+    {
+      "tool_name": "tool_capabilities",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 1.7909987946040928e-06,
+      "error": "ToolCapabilitiesTool.execute() takes 1 positional argument but 2 were given",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.708700"
+    },
+    {
+      "tool_name": "web_fetch",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 2.2291998902801424e-05,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.708708"
+    },
+    {
+      "tool_name": "web_fetch_meta",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 9.249997674487531e-06,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:32.708738"
+    },
+    {
+      "tool_name": "WebSearch",
+      "load_success": true,
+      "execution_success": true,
+      "response_time": 6.530023749997781,
+      "error": "",
+      "data": {
+        "query": "Python testing",
+        "results": [
+          {
+            "title": "tox (Python testing wrapper)",
+            "url": "https://grokipedia.com/page/tox_python_testing_wrapper",
+            "snippet": "tox is a command-line tool for Python that automates and standardizes testing by managing virtual environments and executing tests across multiple configurations, such as different Python versions, implementations, or dependencies. Developed by Holg\u2026"
+          },
+          {
+            "title": "PythonTesting: The Right Way toTestYour Code | Evytor Daily",
+            "url": "https://evytor.vercel.app/blogs/testing-your-python-code-the-right-way",
+            "snippet": "TestingyourPythoncode is essential for building robust, reliable, and maintainable applications. This guide provides a comprehensive overview ofPythontestingbest practices..."
+          },
+          {
+            "title": "RunPythonCode Online - FreePythonCompiler & Interpreter",
+            "url": "https://python.codeutility.io/",
+            "snippet": "RunPythonCode Online. A fast, browser-based CLI totestPythonscripts without setup, perfect for learning and quick debugging."
+          },
+          {
+            "title": "PythonQuiz",
+            "url": "https://www.w3schools.com/python/python_quiz.asp",
+            "snippet": "Thetestis not official, it's just a nice way to see how much you know, or don't know, aboutPython. Count Your Score. You will get 1 point for each correct answer."
+          },
+          {
+            "title": "unittest \u2014 Unittestingframework \u2014Python3.14.4 documentation",
+            "url": "https://docs.python.org/3/library/unittest.html",
+            "snippet": "python-m unittesttests/test_something.py. This allows you to use the shell filename completion to specify thetestmodule. The file specified must still be importable as a module."
+          },
+          {
+            "title": "Pytest Tutorial - UnitTestinginPythonusing Pytest... - GeeksforGeeks",
+            "url": "https://www.geeksforgeeks.org/python/pytest-tutorial-testing-python-application-using-pytest/",
+            "snippet": "Another functiontest_reverse_test()teststhis function using assert, verifying that reverse_text(\"python\") returns \"nohtyp\". If the condition is true thetestpasses..."
+          },
+          {
+            "title": "OnlinePythonCompiler",
+            "url": "https://www.online-python.com/online_python_compiler",
+            "snippet": "OnlinePythonIDE is a web-based tool powered by ACE code editor. This tool can be used to learn, build, run,testyourpythonscript."
+          },
+          {
+            "title": "AutomatedTestinginPythonwith pytest, tox, and GitHub... - YouTube",
+            "url": "https://www.youtube.com/watch?v=DhUpxWjOhME",
+            "snippet": "Take yourPythonproject to the next level of professionalism.AutomatedtestinginPythonis an important way to take yourPythonproject to the next level o..."
+          },
+          {
+            "title": "Easy Patterns forTestablePythonCode | by Just a ML guy | Medium",
+            "url": "https://medium.com/@justamlguy/easy-patterns-for-testable-python-code-6e103cc68616",
+            "snippet": "Patches dynamically overwrite real functions or objects at runtime, for example with mocks. These are powerful tools inPython. They enable you totestthe otherwise untestable code."
+          },
+          {
+            "title": "PythonOnlineTest& Quiz",
+            "url": "https://www.codechef.com/skill-test/basic-python",
+            "snippet": "Take thePythonOnlineTest& Quiz assessment to evaluate practical skills effectively using a set of well-designed, high-quality questions."
+          }
+        ],
+        "duration_seconds": 0.0,
+        "source": "duckduckgo"
+      },
+      "timestamp": "2026-04-09T19:39:32.708755"
+    },
+    {
+      "tool_name": "enter_worktree",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 0.00015958300355123356,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:39.238786"
+    },
+    {
+      "tool_name": "exit_worktree",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 2.300000051036477e-05,
+      "error": "'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:39.238997"
+    },
+    {
+      "tool_name": "list_worktrees",
+      "load_success": true,
+      "execution_success": false,
+      "response_time": 7.791000825818628e-06,
+      "error": "ListWorktreesTool.execute() takes 1 positional argument but 2 were given",
+      "data": null,
+      "timestamp": "2026-04-09T19:39:39.239029"
+    }
+  ],
+  "skills": {
+    "skills_file": "/Users/walidsobhi/.stack-2.9/skills.json",
+    "skills_file_exists": false,
+    "skill_dirs": [
+      "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills",
+      "/Users/walidsobhi/.openclaw/workspace/skills"
+    ],
+    "skill_dirs_exist": [
+      true,
+      false
+    ],
+    "discovered_skills": [
+      {
+        "name": "nano-pdf",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/nano-pdf",
+        "description": "---"
+      },
+      {
+        "name": "himalaya",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/himalaya",
+        "description": "---"
+      },
+      {
+        "name": "bear-notes",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/bear-notes",
+        "description": "---"
+      },
+      {
+        "name": "peekaboo",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/peekaboo",
+        "description": "---"
+      },
+      {
+        "name": "model-usage",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/model-usage",
+        "description": "---"
+      },
+      {
+        "name": "blogwatcher",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/blogwatcher",
+        "description": "---"
+      },
+      {
+        "name": "discord",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/discord",
+        "description": "---"
+      },
+      {
+        "name": "coding-agent",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/coding-agent",
+        "description": "---"
+      },
+      {
+        "name": "openhue",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/openhue",
+        "description": "---"
+      },
+      {
+        "name": "gemini",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/gemini",
+        "description": "---"
+      },
+      {
+        "name": "gifgrep",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/gifgrep",
+        "description": "---"
+      },
+      {
+        "name": "session-logs",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/session-logs",
+        "description": "---"
+      },
+      {
+        "name": "node-connect",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/node-connect",
+        "description": "---"
+      },
+      {
+        "name": "ordercli",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/ordercli",
+        "description": "---"
+      },
+      {
+        "name": "openai-whisper",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/openai-whisper",
+        "description": "---"
+      },
+      {
+        "name": "spotify-player",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/spotify-player",
+        "description": "---"
+      },
+      {
+        "name": "healthcheck",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/healthcheck",
+        "description": "---"
+      },
+      {
+        "name": "oracle",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/oracle",
+        "description": "---"
+      },
+      {
+        "name": "xurl",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/xurl",
+        "description": "---"
+      },
+      {
+        "name": "summarize",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/summarize",
+        "description": "---"
+      },
+      {
+        "name": "clawhub",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/clawhub",
+        "description": "---"
+      },
+      {
+        "name": "bluebubbles",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/bluebubbles",
+        "description": "---"
+      },
+      {
+        "name": "sherpa-onnx-tts",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/sherpa-onnx-tts",
+        "description": "---"
+      },
+      {
+        "name": "video-frames",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/video-frames",
+        "description": "---"
+      },
+      {
+        "name": "eightctl",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/eightctl",
+        "description": "---"
+      },
+      {
+        "name": "gog",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/gog",
+        "description": "---"
+      },
+      {
+        "name": "canvas",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/canvas",
+        "description": "# Canvas Skill"
+      },
+      {
+        "name": "notion",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/notion",
+        "description": "---"
+      },
+      {
+        "name": "goplaces",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/goplaces",
+        "description": "---"
+      },
+      {
+        "name": "apple-reminders",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/apple-reminders",
+        "description": "---"
+      },
+      {
+        "name": "imsg",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/imsg",
+        "description": "---"
+      },
+      {
+        "name": "skill-creator",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/skill-creator",
+        "description": "---"
+      },
+      {
+        "name": "camsnap",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/camsnap",
+        "description": "---"
+      },
+      {
+        "name": "github",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/github",
+        "description": "---"
+      },
+      {
+        "name": "taskflow-inbox-triage",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/taskflow-inbox-triage",
+        "description": "name: taskflow-inbox-triage"
+      },
+      {
+        "name": "things-mac",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/things-mac",
+        "description": "---"
+      },
+      {
+        "name": "blucli",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/blucli",
+        "description": "---"
+      },
+      {
+        "name": "sonoscli",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/sonoscli",
+        "description": "---"
+      },
+      {
+        "name": "mcporter",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/mcporter",
+        "description": "---"
+      },
+      {
+        "name": "tmux",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/tmux",
+        "description": "---"
+      },
+      {
+        "name": "sag",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/sag",
+        "description": "---"
+      },
+      {
+        "name": "slack",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/slack",
+        "description": "---"
+      },
+      {
+        "name": "weather",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/weather",
+        "description": "---"
+      },
+      {
+        "name": "obsidian",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/obsidian",
+        "description": "---"
+      },
+      {
+        "name": "trello",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/trello",
+        "description": "---"
+      },
+      {
+        "name": "wacli",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/wacli",
+        "description": "---"
+      },
+      {
+        "name": "songsee",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/songsee",
+        "description": "---"
+      },
+      {
+        "name": "apple-notes",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/apple-notes",
+        "description": "---"
+      },
+      {
+        "name": "taskflow",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/taskflow",
+        "description": "name: taskflow"
+      },
+      {
+        "name": "openai-whisper-api",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/openai-whisper-api",
+        "description": "---"
+      },
+      {
+        "name": "gh-issues",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/gh-issues",
+        "description": "---"
+      },
+      {
+        "name": "1password",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/1password",
+        "description": "---"
+      },
+      {
+        "name": "voice-call",
+        "path": "/Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills/voice-call",
+        "description": "---"
+      }
+    ]
+  }
+}

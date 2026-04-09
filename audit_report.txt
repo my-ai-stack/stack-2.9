@@ -1,0 +1,577 @@
+
+================================================================================
+                    STACK 2.9 COMPREHENSIVE AUDIT REPORT
+================================================================================
+
+Generated: 2026-04-09T19:39:39.247556
+
+--------------------------------------------------------------------------------
+                              TOOLS SUMMARY
+--------------------------------------------------------------------------------
+
+Total Tools Tested:     69
+Passed:                5
+Failed:                64
+Pass Rate:              7.2%
+
+--------------------------------------------------------------------------------
+                           RESPONSE TIME STATISTICS
+--------------------------------------------------------------------------------
+
+Average Response Time:  0.0947s
+Minimum Response Time: 0.0000s
+Maximum Response Time: 6.5300s
+
+--------------------------------------------------------------------------------
+                           DETAILED RESULTS
+--------------------------------------------------------------------------------
+
+
+Tool: Config
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          Unknown operation: None
+
+
+Tool: CronCreate
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          Invalid cron expression: Expected 5 fields, got 0
+
+
+Tool: CronDelete
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          Error: id is required
+
+
+Tool: CronList
+  Status:          PASS
+  Load Success:    True
+  Response Time:   0.0003s
+
+
+Tool: EnterPlanMode
+  Status:          PASS
+  Load Success:    True
+  Response Time:   0.0016s
+
+
+Tool: ExitPlanMode
+  Status:          PASS
+  Load Success:    True
+  Response Time:   0.0003s
+
+
+Tool: TaskCreate
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          Error: subject is required
+
+
+Tool: TaskDelete
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          Error: id is required
+
+
+Tool: TaskList
+  Status:          PASS
+  Load Success:    True
+  Response Time:   0.0002s
+
+
+Tool: TaskUpdate
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          Error: id is required
+
+
+Tool: TodoWrite
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0002s
+  Error:          Unknown operation: None
+
+
+Tool: WebSearch
+  Status:          PASS
+  Load Success:    True
+  Response Time:   6.5300s
+
+
+Tool: agent_list
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          AgentListTool.execute() takes 1 positional argument but 2 were given
+
+
+Tool: agent_spawn
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0010s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: agent_status
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: answer_question
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          AnswerQuestionTool.execute() missing 1 required positional argument: 'answer'
+
+
+Tool: ask_question
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: brief
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: brief_summary
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: enter_worktree
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0002s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: exit_worktree
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: file_delete
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: file_edit
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          FileEditTool.execute() missing 1 required positional argument: 'operation'
+
+
+Tool: file_edit_delete
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: file_edit_insert
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          FileEditInsertTool.execute() missing 1 required positional argument: 'content'
+
+
+Tool: file_edit_replace
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          FileEditReplaceTool.execute() missing 2 required positional arguments: 'pattern' and 'replacement'
+
+
+Tool: file_exists
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: file_read
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: file_write
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          FileWriteTool.execute() missing 1 required positional argument: 'content'
+
+
+Tool: get_pending_questions
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          GetPendingQuestionsTool.execute() takes 1 positional argument but 2 were given
+
+
+Tool: glob
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: glob_list
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: grep
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          GrepTool.execute() missing 1 required positional argument: 'path'
+
+
+Tool: grep_count
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          GrepCountTool.execute() missing 1 required positional argument: 'path'
+
+
+Tool: list_worktrees
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          ListWorktreesTool.execute() takes 1 positional argument but 2 were given
+
+
+Tool: mcp_add_server
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          MCPServerAddTool.execute() missing 1 required positional argument: 'command'
+
+
+Tool: mcp_call
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          MCPTool.execute() missing 1 required positional argument: 'tool_name'
+
+
+Tool: mcp_list_servers
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          MCPServerListTool.execute() takes 1 positional argument but 2 were given
+
+
+Tool: message_channel
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: message_list
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: message_send
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          MessageSendTool.execute() missing 1 required positional argument: 'content'
+
+
+Tool: message_template
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: read_mcp_resource
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          ReadMcpResourceTool.execute() missing 1 required positional argument: 'resource_uri'
+
+
+Tool: remote_add
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          RemoteAddTool.execute() missing 1 required positional argument: 'url'
+
+
+Tool: remote_list
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          RemoteListTool.execute() takes 1 positional argument but 2 were given
+
+
+Tool: remote_remove
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: remote_trigger
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          RemoteTriggerTool.execute() missing 1 required positional argument: 'action'
+
+
+Tool: skill_chain
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: skill_execute
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: skill_info
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: skill_list
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: skill_search
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: sleep
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: structure_data
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: synthetic_output
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          SyntheticOutputTool.execute() missing 1 required positional argument: 'content'
+
+
+Tool: team_assign
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          TeamAssignTaskTool.execute() missing 1 required positional argument: 'task'
+
+
+Tool: team_create
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          TeamCreateTool.execute() missing 1 required positional argument: 'agents'
+
+
+Tool: team_delete
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: team_disband
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: team_leave
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          TeamLeaveTool.execute() missing 1 required positional argument: 'agent_name'
+
+
+Tool: team_list
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          TeamListTool.execute() takes 1 positional argument but 2 were given
+
+
+Tool: team_status
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: tool_capabilities
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          ToolCapabilitiesTool.execute() takes 1 positional argument but 2 were given
+
+
+Tool: tool_info
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: tool_list_all
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: tool_search
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: wait_for
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: web_fetch
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+Tool: web_fetch_meta
+  Status:          FAIL
+  Load Success:    True
+  Response Time:   0.0000s
+  Error:          'coroutine' object has no attribute 'duration_seconds' and no __dict__ for setting new attributes
+
+
+--------------------------------------------------------------------------------
+                             SKILLS SUMMARY
+--------------------------------------------------------------------------------
+
+Skills File:       /Users/walidsobhi/.stack-2.9/skills.json
+Skills File Exists: False
+
+Skill Directories:
+  [EXISTS] /Users/walidsobhi/.npm-global/lib/node_modules/openclaw/skills
+  [MISSING] /Users/walidsobhi/.openclaw/workspace/skills
+
+Discovered Skills: 53
+  - nano-pdf: ---
+  - himalaya: ---
+  - bear-notes: ---
+  - peekaboo: ---
+  - model-usage: ---
+  - blogwatcher: ---
+  - discord: ---
+  - coding-agent: ---
+  - openhue: ---
+  - gemini: ---
+  - gifgrep: ---
+  - session-logs: ---
+  - node-connect: ---
+  - ordercli: ---
+  - openai-whisper: ---
+  - spotify-player: ---
+  - healthcheck: ---
+  - oracle: ---
+  - xurl: ---
+  - summarize: ---
+  - clawhub: ---
+  - bluebubbles: ---
+  - sherpa-onnx-tts: ---
+  - video-frames: ---
+  - eightctl: ---
+  - gog: ---
+  - canvas: # Canvas Skill
+  - notion: ---
+  - goplaces: ---
+  - apple-reminders: ---
+  - imsg: ---
+  - skill-creator: ---
+  - camsnap: ---
+  - github: ---
+  - taskflow-inbox-triage: name: taskflow-inbox-triage
+  - things-mac: ---
+  - blucli: ---
+  - sonoscli: ---
+  - mcporter: ---
+  - tmux: ---
+  - sag: ---
+  - slack: ---
+  - weather: ---
+  - obsidian: ---
+  - trello: ---
+  - wacli: ---
+  - songsee: ---
+  - apple-notes: ---
+  - taskflow: name: taskflow
+  - openai-whisper-api: ---
+  - gh-issues: ---
+  - 1password: ---
+  - voice-call: ---
+
+
+================================================================================
+                           END OF AUDIT REPORT
+================================================================================
