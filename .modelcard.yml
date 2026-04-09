@@ -1,6 +1,6 @@
 ---
-title: Stack 2.9 - Code Assistant
-language: en
+language:
+- en
 license: apache-2.0
 library_name: transformers
 pipeline_tag: text-generation
@@ -8,89 +8,15 @@ tags:
 - code-generation
 - python
 - qwen
+- qwen2
 - fine-tuned
 - stack-overflow
 - coding-assistant
-- qwen2
 - text-generation
 - transformers
 - safetensors
-model-name: Stack 2.9
+- lora
+- code-assistant
+model_name: Stack 2.9
 base_model: Qwen/Qwen2.5-Coder-1.5B
 ---
-
-# Model Card: Stack 2.9
-
-## Model Overview
-
-- **Model Type**: Large Language Model (LLM) for coding assistant tasks
-- **Base Model**: Qwen/Qwen2.5-Coder-1.5B
-- **Parameters**: 1.5B
-- **Fine-tuning Approach**: LoRA (Rank 8)
-- **Context Length**: 32,768 tokens
-- **Version**: 2.9
-- **Release Date**: 2026-04
-- **License**: Apache 2.0
-
-## Capabilities
-
-- Code Generation (Python, SQL, JavaScript, TypeScript)
-- Code Completion
-- Debugging and error analysis
-- Code explanation and documentation
-- Programming Q&A
-
-## Intended Use
-
-### Primary Use Cases
-- Developer assistance
-- Code review and debugging
-- Automated coding tasks
-- Algorithm implementation
-
-### Out of Scope
-- Non-coding general conversation
-- Multi-modal tasks
-- Dangerous or harmful content generation
-
-## Training Details
-
-- **Method**: LoRA (Low-Rank Adaptation)
-- **LoRA Rank**: 8
-- **LoRA Alpha**: 16
-- **Target Modules**: All linear layers (q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj)
-- **Epochs**: ~0.8
-- **Final Loss**: 0.0205
-- **Data Source**: Stack Overflow Q&A (Python-heavy)
-
-## Hardware Requirements
-
-| Configuration | GPU | VRAM |
-|---------------|-----|------|
-| 1.5B (FP16) | RTX 3060+ | ~4GB |
-| 1.5B (8-bit) | RTX 3060+ | ~2GB |
-| 1.5B (4-bit) | Any modern GPU | ~1GB |
-
-## Limitations
-
-- Smaller than state-of-the-art models (7B, 32B)
-- Primarily Python-focused training
-- May occasionally generate incorrect code
-- No tool-calling capabilities
-
-## Citation
-
-```bibtex
-@misc{my-ai-stack/stack-2-9-finetuned,
-  author = {Walid Sobhi},
-  title = {Stack 2.9: Fine-tuned Qwen2.5-Coder-1.5B on Stack Overflow Data},
-  year = {2026},
-  publisher = {HuggingFace},
-  url = {https://huggingface.co/my-ai-stack/Stack-2-9-finetuned}
-}
-```
-
-## Links
-
-- **GitHub**: [my-ai-stack/stack-2.9](https://github.com/my-ai-stack/stack-2.9)
-- **Demo Space**: [my-ai-stack/stack-2-9-demo](https://huggingface.co/spaces/my-ai-stack/stack-2-9-demo)
