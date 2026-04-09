@@ -80,7 +80,8 @@ class BaseTool(ABC, Generic[TInput, TOutput]):
     def call(self, input_data: dict[str, Any]) -> ToolResult[TOutput]:
         """High-level call wrapper: validate → execute → timing.
         
-        Handles both sync and async execute methods.
+        Handles both sync and async execute methods, and both
+        execute(input_data: dict) and execute(path: str, ...) signatures.
         """
         valid, error = self.validate_input(input_data)
         if not valid:
@@ -88,21 +89,20 @@ class BaseTool(ABC, Generic[TInput, TOutput]):
 
         start = time.perf_counter()
         try:
-            result = self.execute(input_data)
+            # Determine if execute takes a dict or named parameters
+            sig = inspect.signature(self.execute)
+            params = list(sig.parameters.keys())
+            
+            # If first param is 'input_data' (and only one param), pass dict directly
+            # Otherwise unpack as kwargs
+            if params == ['input_data']:
+                result = self.execute(input_data)
+            else:
+                result = self.execute(**input_data)
+            
             # Handle async execute methods
             if inspect.iscoroutine(result):
-                try:
-                    loop = asyncio.get_event_loop()
-                    if loop.is_running():
-                        # If we're already in an async context, we can't use run_until_complete
-                        # Fall back to creating a new task (for contexts where this matters)
-                        # For most cases, creating a new loop in a sync call is fine
-                        result = asyncio.run(result)
-                    else:
-                        result = loop.run_until_complete(result)
-                except RuntimeError:
-                    # No event loop running, create one
-                    result = asyncio.run(result)
+                result = asyncio.run(result)
             result.duration_seconds = time.perf_counter() - start
             return result
         except Exception as exc:

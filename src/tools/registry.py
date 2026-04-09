@@ -33,6 +33,26 @@ class ToolRegistry:
         """List all registered tool names."""
         return list(self._tools.keys())
 
+    def list_tools(self) -> dict[str, dict[str, Any]]:
+        """List all registered tools with their info.
+        
+        Returns a dict mapping tool name to info dict with keys:
+        - name: str
+        - description: str
+        - input_schema: dict
+        """
+        result = {}
+        for name, tool in self._tools.items():
+            schema = tool.input_schema
+            if callable(schema):
+                schema = schema()
+            result[name] = {
+                "name": tool.name,
+                "description": tool.description,
+                "input_schema": schema,
+            }
+        return result
+
     def call(self, name: str, input_data: dict[str, Any]) -> Any:
         """Convenience: get tool and call it in one step."""
         tool = self.get(name)
