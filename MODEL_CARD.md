@@ -1,25 +1,3 @@
----
-language:
-- en
-license: apache-2.0
-tags:
-- code-generation
-- code-assistant
-- python
-- qwen
-- qwen2
-- fine-tuned
-- stack-overflow
-- text-generation
-- transformers
-- safetensors
-- lora
-- coding-assistant
-pipeline_tag: text-generation
-model_name: Stack 2.9
-base_model: Qwen/Qwen2.5-Coder-1.5B
----
-
 <p align="center">
   <a href="https://github.com/my-ai-stack/stack-2.9">
     <img src="https://img.shields.io/badge/GitHub-View%20Repo-blue?style=flat-square&logo=github" alt="GitHub">
