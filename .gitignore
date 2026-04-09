@@ -82,3 +82,6 @@ training-data-expanded/**/*.jsonl
 # Archived files
 src/archived/
 src/cli/
+
+# macOS
+.DS_Store

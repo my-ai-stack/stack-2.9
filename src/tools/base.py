@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import asyncio
+import inspect
 import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
@@ -76,7 +78,10 @@ class BaseTool(ABC, Generic[TInput, TOutput]):
         ...
 
     def call(self, input_data: dict[str, Any]) -> ToolResult[TOutput]:
-        """High-level call wrapper: validate → execute → timing."""
+        """High-level call wrapper: validate → execute → timing.
+        
+        Handles both sync and async execute methods.
+        """
         valid, error = self.validate_input(input_data)
         if not valid:
             return ToolResult(success=False, error=error or "Validation failed")
@@ -84,6 +89,20 @@ class BaseTool(ABC, Generic[TInput, TOutput]):
         start = time.perf_counter()
         try:
             result = self.execute(input_data)
+            # Handle async execute methods
+            if inspect.iscoroutine(result):
+                try:
+                    loop = asyncio.get_event_loop()
+                    if loop.is_running():
+                        # If we're already in an async context, we can't use run_until_complete
+                        # Fall back to creating a new task (for contexts where this matters)
+                        # For most cases, creating a new loop in a sync call is fine
+                        result = asyncio.run(result)
+                    else:
+                        result = loop.run_until_complete(result)
+                except RuntimeError:
+                    # No event loop running, create one
+                    result = asyncio.run(result)
             result.duration_seconds = time.perf_counter() - start
             return result
         except Exception as exc:

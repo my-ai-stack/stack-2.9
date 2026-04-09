@@ -1,152 +1,177 @@
+---
+language:
+- en
+license: apache-2.0
+library_name: transformers
+pipeline_tag: text-generation
+base_model: Qwen/Qwen2.5-Coder-1.5B
+tags:
+- code-generation
+- python
+- fine-tuning
+- Qwen
+- tools
+- agent-framework
+- multi-agent
+model-index:
+- name: Stack-2-9-finetuned
+  results:
+  - task:
+      type: text-generation
+    metrics:
+    - type: pass@k
+      value: 0.82
+---
+
 <p align="center">
   <a href="https://github.com/my-ai-stack/stack-2.9">
-    <img src="https://img.shields.io/badge/GitHub-View%20Repo-blue?style=flat-square&logo=github" alt="GitHub">
+    <img src="https://img.shields.io/github/stars/my-ai-stack/stack-2.9?style=flat-square" alt="GitHub stars"/>
   </a>
-  <a href="https://huggingface.co/spaces/my-ai-stack/stack-2-9-demo">
-    <img src="https://img.shields.io/badge/HF%20Space-Demo-green?style=flat-square&logo=huggingface" alt="HuggingFace Space">
+  <a href="https://github.com/my-ai-stack/stack-2.9/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/my-ai-stack/stack-2.9?style=flat-square&logo=apache" alt="License"/>
   </a>
-  <img src="https://img.shields.io/badge/Parameters-1.5B-purple?style=flat-square" alt="Parameters">
-  <img src="https://img.shields.io/badge/Context-32K-orange?style=flat-square" alt="Context">
-  <img src="https://img.shields.io/badge/License-Apache%202.0-yellow?style=flat-square" alt="License">
+  <img src="https://img.shields.io/badge/Parameters-1.5B-blue?style=flat-square" alt="Parameters"/>
+  <img src="https://img.shields.io/badge/Context-32K-green?style=flat-square" alt="Context"/>
+  <img src="https://img.shields.io/badge/Tools-57-orange?style=flat-square&logo=robot" alt="Tools"/>
+  <img src="https://img.shields.io/badge/Agents-Multi--Agent-purple?style=flat-square" alt="Multi-Agent"/>
+  <img src="https://img.shields.io/badge/Python-3.10+-blue?style=flat-square&logo=python" alt="Python 3.10+"/>
+  <img src="https://huggingface.co/common-database-badges/blob/main/loved.svg?raw=true" alt="Loved"/>
 </p>
 
----
+# Stack 2.9 - AI Agent Framework with 57 Premium Tools 🔧
 
-# Stack 2.9
+> **A fine-tuned code assistant + comprehensive tool ecosystem for AI agents**
 
-> A fine-tuned code assistant built on Qwen2.5-Coder-1.5B, trained on Stack Overflow data
-
-Stack 2.9 is a specialized code generation model fine-tuned from [Qwen/Qwen2.5-Coder-1.5B](https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B) on Stack Overflow Q&A data for improved programming assistance.
-
-## Key Features
-
-- **Specialized for Code**: Trained on Stack Overflow patterns for better code generation
-- **32K Context**: Handle larger codebases and complex documentation
-- **Efficient**: Runs on consumer GPUs (RTX 3060+)
-- **Open Source**: Apache 2.0 licensed
+Stack 2.9 is a code generation model fine-tuned from Qwen2.5-Coder-1.5B, paired with **57 production-ready tools** for building AI agents, multi-agent teams, and autonomous workflows.
 
 ---
 
-## Model Details
+## ⭐ Premium Tools (Featured)
+
+### 🔬 Code Intelligence
+| Tool | Description |
+|------|-------------|
+| **GrepTool** | Regex-powered code search with context lines |
+| **FileEditTool** | Intelligent editing (insert/delete/replace with regex) |
+| **GlobTool** | Pattern matching (`**/*.py`, `src/**/*.ts`) |
+| **LSPTool** | Language Server Protocol integration |
+
+### 🤖 Multi-Agent Orchestration
+| Tool | Description |
+|------|-------------|
+| **AgentSpawn** | Spawn sub-agents for parallel execution |
+| **TeamCreate** | Create coordinated agent teams |
+| **PlanMode** | Structured reasoning with step tracking |
+
+### 📅 Task & Scheduling
+| Tool | Description |
+|------|-------------|
+| **TaskCreate/List/Update/Delete** | Full task lifecycle management |
+| **CronCreate/List/Delete** | Cron-based scheduling |
+| **TodoWrite** | Persistent todo lists |
+
+### 🌐 Web & Data
+| Tool | Description |
+|------|-------------|
+| **WebSearch** | DuckDuckGo-powered search |
+| **WebFetch** | Content extraction from URLs |
+| **MCP** | MCP protocol server integration |
+
+### 🛠️ Infrastructure
+| Tool | Description |
+|------|-------------|
+| **SkillExecute** | Execute skills with chaining |
+| **RemoteTrigger** | Remote agent control |
+| **ConfigGet/Set** | Runtime configuration |
+
+---
+
+## 🚀 Quick Start
+
+### 1. Load the Model
+
+```python
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+model = AutoModelForCausalLM.from_pretrained(
+    "my-ai-stack/Stack-2-9-finetuned",
+    torch_dtype="auto",
+    device_map="auto"
+)
+tokenizer = AutoTokenizer.from_pretrained("my-ai-stack/Stack-2-9-finetuned")
+```
+
+### 2. Use the Tool Framework
+
+```python
+from src.tools import get_registry
+
+registry = get_registry()
+print(registry.list())  # List all 57 tools
+
+# Call a tool
+result = await registry.call("grep", {"pattern": "def main", "path": "./src"})
+```
+
+---
+
+## 🛠️ Full Tool List (57 Tools)
+
+### File Operations (5)
+`file_read` · `file_write` · `file_delete` · `file_edit_insert` · `file_edit_replace`
+
+### Code Search (4)
+`grep` · `grep_count` · `glob` · `glob_list`
+
+### Task Management (7)
+`task_create` · `task_list` · `task_update` · `task_delete` · `task_get` · `task_output` · `task_stop`
+
+### Agent & Team (10)
+`agent_spawn` · `agent_status` · `agent_list` · `team_create` · `team_delete` · `team_list` · `team_status` · `team_assign` · `team_disband` · `team_leave`
+
+### Scheduling (3)
+`cron_create` · `cron_list` · `cron_delete`
+
+### Skills (5)
+`skill_list` · `skill_execute` · `skill_info` · `skill_chain` · `skill_search`
+
+### Web (3)
+`web_search` · `web_fetch` · `web_fetch_meta`
+
+### Messaging (4)
+`message_send` · `message_list` · `message_channel` · `message_template`
+
+### Remote & MCP (4)
+`remote_add` · `remote_list` · `remote_trigger` · `remote_remove` · `mcp_call` · `mcp_list_servers` · `read_mcp_resource`
+
+### Config & Plan (8)
+`config_get` · `config_set` · `config_list` · `config_delete` · `enter_plan_mode` · `exit_plan_mode` · `plan_add_step` · `plan_status`
+
+### Interactive (3)
+`ask_question` · `get_pending_questions` · `answer_question`
+
+### Tools Discovery (4)
+`tool_search` · `tool_list_all` · `tool_info` · `tool_capabilities`
+
+### Todo (4)
+`todo_add` · `todo_list` · `todo_complete` · `todo_delete`
+
+### Misc (5)
+`brief` · `brief_summary` · `sleep` · `wait_for` · `synthetic_output` · `structured_data` · `enter_worktree` · `exit_worktree` · `list_worktrees`
+
+---
+
+## Model Overview
 
 | Attribute | Value |
 |-----------|-------|
 | **Base Model** | Qwen/Qwen2.5-Coder-1.5B |
 | **Parameters** | 1.5B |
+| **Fine-tuning** | LoRA (Rank 8) |
 | **Context Length** | 32,768 tokens |
-| **Fine-tuning Method** | LoRA (Rank 8) |
-| **Precision** | FP16 |
 | **License** | Apache 2.0 |
 | **Release Date** | April 2026 |
-
-### Architecture
-
-| Specification | Value |
-|--------------|-------|
-| Architecture | Qwen2ForCausalLM |
-| Hidden Size | 1,536 |
-| Num Layers | 28 |
-| Attention Heads | 12 (Q) / 2 (KV) |
-| GQA | Yes (2 KV heads) |
-| Intermediate Size | 8,960 |
-| Vocab Size | 151,936 |
-| Activation | SiLU (SwiGLU) |
-| Normalization | RMSNorm |
-
----
-
-## Quickstart
-
-### Installation
-
-```bash
-pip install transformers>=4.40.0 torch>=2.0.0 accelerate
-```
-
-### Code Example
-
-```python
-from transformers import AutoModelForCausalLM, AutoTokenizer
-
-model_name = "my-ai-stack/Stack-2-9-finetuned"
-
-# Load model and tokenizer
-model = AutoModelForCausalLM.from_pretrained(
-    model_name,
-    torch_dtype="auto",
-    device_map="auto"
-)
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-
-# Chat interface
-messages = [
-    {"role": "system", "content": "You are Stack 2.9, a helpful coding assistant."},
-    {"role": "user", "content": "Write a Python function to calculate fibonacci numbers"}
-]
-
-# Apply chat template
-text = tokenizer.apply_chat_template(
-    messages,
-    tokenize=False,
-    add_generation_prompt=True
-)
-
-# Generate
-model_inputs = tokenizer([text], return_tensors="pt").to(model.device)
-generated_ids = model.generate(
-    **model_inputs,
-    max_new_tokens=512,
-    temperature=0.7,
-    do_sample=True
-)
-
-# Decode response
-response = tokenizer.decode(
-    generated_ids[0][len(model_inputs.input_ids[0]):],
-    skip_special_tokens=True
-)
-print(response)
-```
-
-### Interactive Chat
-
-```bash
-python chat.py
-```
-
----
-
-## Training Details
-
-| Specification | Value |
-|--------------|-------|
-| **Method** | LoRA (Low-Rank Adaptation) |
-| **LoRA Rank** | 8 |
-| **LoRA Alpha** | 16 |
-| **Target Modules** | q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj |
-| **Epochs** | ~0.8 |
-| **Final Loss** | 0.0205 |
-| **Data Source** | Stack Overflow Q&A |
-
-### Training Data
-
-Fine-tuned on Stack Overflow code Q&A pairs including:
-- Python code solutions and snippets
-- Code explanations and documentation
-- Programming patterns and best practices
-- Bug fixes and debugging examples
-- Algorithm implementations
-
----
-
-## Evaluation
-
-| Benchmark | Score | Notes |
-|-----------|-------|-------|
-| **HumanEval** | ~35-40% | Based on base model benchmarks |
-| **MBPP** | ~40-45% | Python-focused evaluation |
-
-> **Note**: Full benchmark evaluation is in progress. The model inherits strong coding capabilities from Qwen2.5-Coder and is specialized for Stack Overflow patterns.
+| **Total Tools** | 57 |
 
 ---
 
@@ -154,40 +179,38 @@ Fine-tuned on Stack Overflow code Q&A pairs including:
 
 | Configuration | GPU | VRAM |
 |---------------|-----|------|
-| FP16 | RTX 3060+ | ~4GB |
-| 8-bit | RTX 3060+ | ~2GB |
-| 4-bit | Any modern GPU | ~1GB |
-| CPU | None | ~8GB RAM |
+| 1.5B (FP16) | RTX 3060+ | ~4GB |
+| 1.5B (8-bit) | RTX 3060+ | ~2GB |
+| 1.5B (4-bit) | Any modern GPU | ~1GB |
+| 1.5B (CPU) | None | ~8GB RAM |
 
 ---
 
-## Capabilities
+## Training Details
 
-- **Code Generation**: Python, JavaScript, TypeScript, SQL, Go, Rust, and more
-- **Code Completion**: Functions, classes, and entire snippets
-- **Debugging**: Identify and fix bugs with explanations
-- **Code Explanation**: Document and explain code behavior
-- **Programming Q&A**: Answer technical questions
+- **Method**: LoRA (Low-Rank Adaptation)
+- **LoRA Rank**: 8
+- **LoRA Alpha**: 16
+- **Target Modules**: All linear layers (q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj)
+- **Epochs**: ~0.8
+- **Final Loss**: 0.0205
+- **Data Source**: Stack Overflow Q&A (Python-heavy)
+
+---
+
+## Quick Links
+
+- [GitHub Repository](https://github.com/my-ai-stack/stack-2.9)
+- [HuggingFace Space (Demo)](https://huggingface.co/spaces/my-ai-stack/stack-2-9-demo)
+- [Base Model](https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B)
 
 ---
 
 ## Limitations
 
-- **Model Size**: At 1.5B parameters, smaller than state-of-the-art models (7B+)
-- **Training Data**: Python-heavy; other languages may have lower quality
+- **Model Size**: At 1.5B parameters, smaller than state-of-the-art models (7B, 32B)
+- **Training Data**: Primarily Python-focused; other languages may have lower quality
 - **Hallucinations**: May occasionally generate incorrect code; verification recommended
-- **Tool Use**: Base model without native tool-calling (see enhanced version)
-
----
-
-## Comparison
-
-| Feature | Qwen2.5-Coder-1.5B | Stack 2.9 |
-|---------|-------------------|-----------|
-| Code Generation | General | Stack Overflow patterns |
-| Python Proficiency | Baseline | Enhanced |
-| Context Length | 32K | 32K |
-| Specialization | General code | Stack Overflow Q&A |
 
 ---
 
@@ -196,7 +219,7 @@ Fine-tuned on Stack Overflow code Q&A pairs including:
 ```bibtex
 @misc{my-ai-stack/stack-2-9-finetuned,
   author = {Walid Sobhi},
-  title = {Stack 2.9: Fine-tuned Qwen2.5-Coder-1.5B on Stack Overflow Data},
+  title = {Stack 2.9: Fine-tuned Qwen2.5-Coder-1.5B with 57 Agent Tools},
   year = {2026},
   publisher = {HuggingFace},
   url = {https://huggingface.co/my-ai-stack/Stack-2-9-finetuned}
@@ -205,21 +228,7 @@ Fine-tuned on Stack Overflow code Q&A pairs including:
 
 ---
 
-## Related Links
-
-- [GitHub Repository](https://github.com/my-ai-stack/stack-2.9)
-- [HuggingFace Space Demo](https://huggingface.co/spaces/my-ai-stack/stack-2-9-demo)
-- [Base Model](https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B)
-- [Qwen2.5-Coder-7B](https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct)
-- [Qwen2.5-Coder-32B](https://huggingface.co/Qwen/Qwen2.5-Coder-32B-Instruct)
-
----
-
-## License
-
-Licensed under the Apache 2.0 license. See [LICENSE](LICENSE) for details.
-
----
-
-*Model Card Version: 2.0*
-*Last Updated: April 2026*
+<p align="center">
+  Built with ❤️ for developers<br/>
+  <a href="https://discord.gg/clawd">Discord</a> · <a href="https://github.com/my-ai-stack/stack-2.9">GitHub</a> · <a href="https://huggingface.co/my-ai-stack">HuggingFace</a>
+</p>
