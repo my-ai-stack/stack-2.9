@@ -1208,5 +1208,25 @@
     "execution_time": 0.0,
     "timestamp": "2026-04-08T17:40:56.111571",
     "model_version": null
+  },
+  {
+    "id": "034235bc464e647a",
+    "problem_type": "humaneval",
+    "solution": "accuracy=0.95",
+    "success": true,
+    "error_message": null,
+    "execution_time": 0.0,
+    "timestamp": "2026-04-09T21:51:36.160807",
+    "model_version": null
+  },
+  {
+    "id": "671cde37e210031e",
+    "problem_type": "gsm8k",
+    "solution": "accuracy=0.55",
+    "success": true,
+    "error_message": null,
+    "execution_time": 0.0,
+    "timestamp": "2026-04-09T21:54:33.700093",
+    "model_version": null
   }
 ]

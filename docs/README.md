@@ -112,6 +112,30 @@ result = await registry.call("grep", {"pattern": "def main", "path": "./src"})
 
 ---
 
+## 🔌 OpenClaw Integration
+
+Stack 2.9 ships as an **MCP server**, exposing all 69 tools to [OpenClaw](https://github.com/openclaw) for seamless integration.
+
+### Register the MCP Server
+
+If not already configured, add it to OpenClaw:
+
+```bash
+openclaw mcp set Stack2.9 '{"command":"python3","args":["src/mcp_server.py"],"cwd":"~/stack-2.9"}'
+```
+
+### Start the MCP Server
+
+```bash
+cd ~/stack-2.9 && PYTHONPATH=. python3 src/mcp_server.py
+```
+
+### Use from OpenClaw
+
+Once registered, OpenClaw can directly call any tool: `file_read`, `grep`, `task_create`, `web_search`, `mcp_call`, and 65 more — no local GPU needed for the model.
+
+---
+
 ## 🛠️ Full Tool List (57 Tools)
 
 ### File Operations (5)

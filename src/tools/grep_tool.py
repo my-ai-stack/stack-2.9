@@ -29,8 +29,15 @@ class GrepTool(BaseTool):
         "required": ["pattern", "path"]
     }
 
-    async def execute(self, pattern: str, path: str, recursive: bool = True, case_sensitive: bool = True, context_lines: int = 0, file_pattern: Optional[str] = None, max_results: int = 1000) -> ToolResult:
+    def execute(self, input_data: dict) -> ToolResult:
         """Search for pattern in files."""
+        pattern = input_data.get('pattern')
+        path = input_data.get('path')
+        recursive = input_data.get('recursive', True)
+        case_sensitive = input_data.get('case_sensitive', True)
+        context_lines = input_data.get('context_lines', 0)
+        file_pattern = input_data.get('file_pattern')
+        max_results = input_data.get('max_results', 1000)
         search_path = Path(path)
         if not search_path.exists():
             return ToolResult(success=False, error=f"Path not found: {path}")
@@ -135,16 +142,9 @@ class GrepCountTool(BaseTool):
         "required": ["pattern", "path"]
     }
 
-    async def execute(self, pattern: str, path: str, recursive: bool = True, case_sensitive: bool = True, file_pattern: Optional[str] = None) -> ToolResult:
+    def execute(self, input_data: dict) -> ToolResult:
         """Count pattern matches."""
-        grep_result = await GrepTool().execute(
-            pattern=pattern,
-            path=path,
-            recursive=recursive,
-            case_sensitive=case_sensitive,
-            file_pattern=file_pattern,
-            max_results=100000
-        )
+        grep_result = GrepTool().execute(input_data)
 
         counts = {}
         for match in grep_result.data.get("matches", []):
@@ -152,8 +152,8 @@ class GrepCountTool(BaseTool):
             counts[file_path] = counts.get(file_path, 0) + 1
 
         return ToolResult(success=True, data={
-            "pattern": pattern,
-            "total_matches": len(matches) if (matches := grep_result.data.get("matches", [])) else 0,
+            "pattern": input_data.get('pattern'),
+            "total_matches": len(grep_result.data.get("matches", [])),
             "by_file": counts
         })
 
