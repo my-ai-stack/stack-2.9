@@ -69,7 +69,7 @@ def _register_tool(mcp: FastMCP, tool: BaseTool) -> None:
     async def handler(arguments: dict[str, Any]) -> dict[str, Any]:
         return _call_tool_sync(tool, arguments)
 
-    mcp.add_tool(tool_name, tool.description, handler, schema)
+    mcp.add_tool(handler, name=tool_name, description=tool.description)
 
 
 def _register_all_tools(mcp: FastMCP) -> int:
