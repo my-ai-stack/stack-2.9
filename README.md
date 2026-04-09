@@ -24,18 +24,15 @@ model-index:
 ---
 
 <p align="center">
-  <a href="https://github.com/my-ai-stack/stack-2.9">
-    <img src="https://img.shields.io/github/stars/my-ai-stack/stack-2.9?style=flat-square" alt="GitHub stars"/>
-  </a>
-  <a href="https://github.com/my-ai-stack/stack-2.9/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/my-ai-stack/stack-2.9?style=flat-square&logo=apache" alt="License"/>
-  </a>
   <img src="https://img.shields.io/badge/Parameters-1.5B-blue?style=flat-square" alt="Parameters"/>
   <img src="https://img.shields.io/badge/Context-32K-green?style=flat-square" alt="Context"/>
   <img src="https://img.shields.io/badge/Tools-57-orange?style=flat-square&logo=robot" alt="Tools"/>
   <img src="https://img.shields.io/badge/Agents-Multi--Agent-purple?style=flat-square" alt="Multi-Agent"/>
+  <img src="https://img.shields.io/badge/License-Apache--2.0-green?style=flat-square&logo=apache" alt="License"/>
   <img src="https://img.shields.io/badge/Python-3.10+-blue?style=flat-square&logo=python" alt="Python 3.10+"/>
-  <img src="https://huggingface.co/common-database-badges/blob/main/loved.svg?raw=true" alt="Loved"/>
+  <a href="https://github.com/my-ai-stack/stack-2.9">
+    <img src="https://img.shields.io/github/stars/my-ai-stack/stack-2.9?style=flat-square" alt="GitHub stars"/>
+  </a>
 </p>
 
 # Stack 2.9 - AI Agent Framework with 57 Premium Tools 🔧
@@ -141,7 +138,7 @@ result = await registry.call("grep", {"pattern": "def main", "path": "./src"})
 ### Messaging (4)
 `message_send` · `message_list` · `message_channel` · `message_template`
 
-### Remote & MCP (4)
+### Remote & MCP (7)
 `remote_add` · `remote_list` · `remote_trigger` · `remote_remove` · `mcp_call` · `mcp_list_servers` · `read_mcp_resource`
 
 ### Config & Plan (8)
@@ -156,7 +153,7 @@ result = await registry.call("grep", {"pattern": "def main", "path": "./src"})
 ### Todo (4)
 `todo_add` · `todo_list` · `todo_complete` · `todo_delete`
 
-### Misc (5)
+### Misc (8)
 `brief` · `brief_summary` · `sleep` · `wait_for` · `synthetic_output` · `structured_data` · `enter_worktree` · `exit_worktree` · `list_worktrees`
 
 ---
