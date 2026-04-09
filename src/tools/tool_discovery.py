@@ -4,7 +4,7 @@ import json
 from datetime import datetime
 from typing import Any, Dict, List
 
-from .base import ToolResult
+from .base import BaseTool, ToolResult
 from .registry import tool_registry
 
 

@@ -51,3 +51,6 @@ class ToolRegistry:
 def get_registry() -> ToolRegistry:
     """Get the global ToolRegistry instance."""
     return ToolRegistry()
+
+# Global registry instance
+tool_registry = ToolRegistry()
