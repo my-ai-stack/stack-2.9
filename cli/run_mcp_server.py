@@ -4,8 +4,9 @@
 import sys
 import os
 
-# Ensure src/ is on the path
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# Ensure project root is on the path
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, project_root)
 
 from src.mcp_server import main
 

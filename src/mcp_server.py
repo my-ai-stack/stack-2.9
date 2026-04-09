@@ -86,7 +86,7 @@ def _register_all_tools(mcp: FastMCP) -> int:
 
 
 # Create the FastMCP server
-mcp = FastMCP("stack29")
+mcp = FastMCP("Stack2.9")
 
 
 def main():
