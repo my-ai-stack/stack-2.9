@@ -25,7 +25,7 @@ model-index:
 
 <p align="center">
   <img src="https://img.shields.io/badge/Parameters-1.5B-blue?style=flat-square" alt="Parameters"/>
-  <img src="https://img.shields.io/badge/Context-32K-green?style=flat-square" alt="Context"/>
+  <img src="https://img.shields.io/badge/Context-128K-green?style=flat-square" alt="Context"/>
   <img src="https://img.shields.io/badge/Tools-57-orange?style=flat-square&logo=robot" alt="Tools"/>
   <img src="https://img.shields.io/badge/Agents-Multi--Agent-purple?style=flat-square" alt="Multi-Agent"/>
   <img src="https://img.shields.io/badge/License-Apache--2.0-green?style=flat-square&logo=apache" alt="License"/>
@@ -189,7 +189,7 @@ Once registered, OpenClaw can directly call any tool: `file_read`, `grep`, `task
 | **Base Model** | Qwen/Qwen2.5-Coder-1.5B |
 | **Parameters** | 1.5B |
 | **Fine-tuning** | LoRA (Rank 8) |
-| **Context Length** | 32,768 tokens |
+| **Context Length** | 131,072 tokens |
 | **License** | Apache 2.0 |
 | **Release Date** | April 2026 |
 | **Total Tools** | 57 |

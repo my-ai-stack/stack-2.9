@@ -6,7 +6,7 @@
     <img src="https://img.shields.io/badge/HF%20Space-Demo-green?style=flat-square&logo=huggingface" alt="HuggingFace Space">
   </a>
   <img src="https://img.shields.io/badge/Parameters-1.5B-purple?style=flat-square" alt="Parameters">
-  <img src="https://img.shields.io/badge/Context-32K-orange?style=flat-square" alt="Context">
+  <img src="https://img.shields.io/badge/Context-128K-orange?style=flat-square" alt="Context">
   <img src="https://img.shields.io/badge/License-Apache%202.0-yellow?style=flat-square" alt="License">
 </p>
 
@@ -21,7 +21,7 @@ Stack 2.9 is a specialized code generation model fine-tuned from [Qwen/Qwen2.5-C
 ## Key Features
 
 - **Specialized for Code**: Trained on Stack Overflow patterns for better code generation
-- **32K Context**: Handle larger codebases and complex documentation
+- **128K Context**: Handle larger codebases and complex documentation
 - **Efficient**: Runs on consumer GPUs (RTX 3060+)
 - **Open Source**: Apache 2.0 licensed
 
@@ -33,7 +33,7 @@ Stack 2.9 is a specialized code generation model fine-tuned from [Qwen/Qwen2.5-C
 |-----------|-------|
 | **Base Model** | Qwen/Qwen2.5-Coder-1.5B |
 | **Parameters** | 1.5B |
-| **Context Length** | 32,768 tokens |
+| **Context Length** | 131,072 tokens (128K) |
 | **Fine-tuning Method** | LoRA (Rank 8) |
 | **Precision** | FP16 |
 | **License** | Apache 2.0 |
@@ -186,7 +186,7 @@ Fine-tuned on Stack Overflow code Q&A pairs including:
 |---------|-------------------|-----------|
 | Code Generation | General | Stack Overflow patterns |
 | Python Proficiency | Baseline | Enhanced |
-| Context Length | 32K | 32K |
+| Context Length | 128K | 128K |
 | Specialization | General code | Stack Overflow Q&A |
 
 ---

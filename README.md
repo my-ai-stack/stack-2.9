@@ -31,7 +31,7 @@ model-index:
     <img src="https://img.shields.io/github/license/my-ai-stack/stack-2.9?style=flat-square&logo=apache" alt="License"/>
   </a>
   <img src="https://img.shields.io/badge/Parameters-1.5B-blue?style=flat-square" alt="Parameters"/>
-  <img src="https://img.shields.io/badge/Context-32K-green?style=flat-square" alt="Context"/>
+  <img src="https://img.shields.io/badge/Context-128K-green?style=flat-square" alt="Context"/>
   <img src="https://img.shields.io/badge/Tools-57-orange?style=flat-square&logo=robot" alt="Tools"/>
   <img src="https://img.shields.io/badge/Agents-Multi--Agent-purple?style=flat-square" alt="Multi-Agent"/>
   <img src="https://img.shields.io/badge/Python-3.10+-blue?style=flat-square&logo=python" alt="Python 3.10+"/>
@@ -168,7 +168,7 @@ result = await registry.call("grep", {"pattern": "def main", "path": "./src"})
 | **Base Model** | Qwen/Qwen2.5-Coder-1.5B |
 | **Parameters** | 1.5B |
 | **Fine-tuning** | LoRA (Rank 8) |
-| **Context Length** | 32,768 tokens |
+| **Context Length** | 131,072 tokens (128K) |
 | **License** | Apache 2.0 |
 | **Release Date** | April 2026 |
 | **Total Tools** | 57 |

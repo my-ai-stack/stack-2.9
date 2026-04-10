@@ -4,7 +4,7 @@
 
 **Model Name**: Qwen/Qwen2.5-Coder-32B
 **Fine-Tuned Version**: Stack 2.9 (OpenClaw tool patterns)
-**Context Length**: 32768 tokens
+**Context Length**: 131072 tokens
 **Architecture**: Transformer-based
 **Parameters**: 32 billion
 
@@ -17,7 +17,7 @@
 - **API Compatibility**: OpenAI-compatible endpoints
 
 ### Advanced Features
-- **Context Understanding**: 32K token context window
+- **Context Understanding**: 128K token context window
 - **Multi-file Operations**: Work across entire codebases
 - **Error Detection**: Identify and suggest fixes
 - **Code Review**: Automated quality analysis
