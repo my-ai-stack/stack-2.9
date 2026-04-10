@@ -273,7 +273,7 @@ def main():
     # ── 5. Training Args ──────────────────────────────────────────────
     print("\n[5/6] Setting up training...")
     total_steps = (len(train_ds) // (args.batch_size * args.grad_accum)) * args.epochs
-    warmup = max(10, int(total_steps * 0.05))
+    warmup = max(10, int(total_steps * 0.03))
     print(f"   Total steps: {total_steps} | Warmup: {warmup}")
 
     training_args = TrainingArguments(
@@ -284,8 +284,7 @@ def main():
         num_train_epochs=args.epochs,
         warmup_steps=warmup,
         lr_scheduler_type="cosine",
-        warmup_ratio=0.05,
-        max_grad_norm=0.3,
+                max_grad_norm=0.3,
         weight_decay=0.01,
         fp16=True,
         bf16=False,
@@ -302,7 +301,7 @@ def main():
         seed=42,
         push_to_hub=args.push_to_hub,
         hub_model_id=args.hub_model_id,
-        hub_strategy="save",
+        hub_strategy="every_save",
     )
 
     trainer = Trainer(
