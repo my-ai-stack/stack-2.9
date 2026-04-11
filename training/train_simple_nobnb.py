@@ -20,6 +20,7 @@ from transformers import (
     Trainer,
     DataCollatorForLanguageModeling,
 )
+from data_utils import load_chat_data
 from peft import LoraConfig, get_peft_model, TaskType
 import torch
 
@@ -89,47 +90,8 @@ def load_data(
     max_length: int = 2048,
     train_split: float = 0.9,
 ):
-    """Load and tokenize dataset."""
-    raw_dataset = load_dataset("json", data_files=data_path, split="train")
-
-    def tokenize_function(examples):
-        texts = []
-        for instr, out in zip(
-            examples.get("instruction", [""]), examples.get("output", [""])
-        ):
-            if instr and out:
-                texts.append(
-                    f"### Instruction:\n{instr}\n\n### Response:\n{out}"
-                )
-            elif out:
-                texts.append(out)
-            elif instr:
-                texts.append(instr)
-            else:
-                texts.append("")
-
-        tokenized = tokenizer(
-            texts, truncation=True, max_length=max_length, padding="max_length"
-        )
-        tokenized["labels"] = tokenized["input_ids"].copy()
-        return tokenized
-
-    tokenized_dataset = raw_dataset.map(
-        tokenize_function, batched=True, remove_columns=raw_dataset.column_names
-    )
-
-    # Handle train_split logic
-    total_samples = len(tokenized_dataset)
-    if train_split >= 1.0:
-        n_train = int(train_split)
-        if n_train >= total_samples:
-            return tokenized_dataset, None
-        else:
-            split = tokenized_dataset.train_test_split(train_size=n_train)
-            return split["train"], split["test"]
-    else:
-        split = tokenized_dataset.train_test_split(train_size=train_split)
-        return split["train"], split["test"]
+    """Load and tokenize dataset using messages-format JSONL with tool_calls."""
+    return load_chat_data(data_path, tokenizer, max_length=max_length, train_split=train_split)
 
 
 def train(config: dict):
@@ -225,6 +187,7 @@ def train(config: dict):
         warmup_steps=training_config.get("warmup_steps", 100),
         weight_decay=training_config.get("weight_decay", 0.01),
         max_grad_norm=training_config.get("max_grad_norm", 1.0),
+        max_steps=training_config.get("max_steps", -1),
         logging_steps=training_config.get("logging_steps", 10),
         save_steps=training_config.get("save_steps", 100),
         save_total_limit=training_config.get("save_total_limit", 2),
@@ -266,19 +229,91 @@ def train(config: dict):
     return trainer
 
 
+def make_config_from_args(args) -> dict:
+    """Build a minimal config dict from CLI arguments for quick testing."""
+    return {
+        "model": {
+            "name": args.model_name or "Qwen/Qwen2.5-Coder-1.5B",
+            "trust_remote_code": True,
+        },
+        "data": {
+            "input_path": args.data_path or "training/training-data/tool_examples_combined.jsonl",
+            "max_length": args.max_length or 2048,
+            "train_split": args.train_split or 0.9,
+        },
+        "lora": {
+            "r": args.lora_r or 16,
+            "alpha": args.lora_alpha or 32,
+            "dropout": 0.05,
+            "target_modules": ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
+            "bias": "none",
+        },
+        "training": {
+            "num_epochs": 1,
+            "batch_size": args.per_device_batch_size or 1,
+            "gradient_accumulation": args.gradient_accumulation or 4,
+            "learning_rate": 1e-4,
+            "warmup_steps": 10,
+            "weight_decay": 0.01,
+            "max_grad_norm": 1.0,
+            "logging_steps": 5,
+            "save_steps": 100,
+            "save_total_limit": 1,
+            "gradient_checkpointing": True,
+        },
+        "output": {
+            "lora_dir": args.output_dir or "./output/lora",
+        },
+        "hardware": {
+            "use_4bit": args.use_4bit or False,
+            "use_8bit": args.use_8bit or False,
+        },
+    }
+
+
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--config", type=str, required=True, help="Path to YAML config")
+    parser = argparse.ArgumentParser(description="Stack 2.9 Training")
+    # Config file mode (original)
+    parser.add_argument("--config", type=str, help="Path to YAML config ( mutually exclusive with CLI args)")
+    # CLI mode for quick testing
+    parser.add_argument("--data_path", type=str, default=None, help="Path to JSONL data file")
+    parser.add_argument("--model_name", type=str, default=None, help="Model name or path")
+    parser.add_argument("--output_dir", type=str, default=None, help="Output directory for checkpoints")
+    parser.add_argument("--max_steps", type=int, default=None, help="Max training steps (overrides epochs)")
+    parser.add_argument("--max_length", type=int, default=None, help="Max sequence length")
+    parser.add_argument("--train_split", type=float, default=None, help="Train/eval split ratio")
+    parser.add_argument("--per_device_batch_size", type=int, default=None)
+    parser.add_argument("--gradient_accumulation", type=int, default=None)
+    parser.add_argument("--lora_r", type=int, default=None)
+    parser.add_argument("--lora_alpha", type=int, default=None)
+    parser.add_argument("--use_4bit", action="store_true")
+    parser.add_argument("--use_8bit", action="store_true")
+    
     args = parser.parse_args()
 
     print("=" * 60)
     print("Stack 2.9 Simple Training")
     print("=" * 60)
 
-    config = load_config(args.config)
-    print(f"Config loaded: {args.config}")
-    print(f"Model: {config['model']['name']}")
-    print(f"Data: {config['data']['input_path']}")
+    if args.config:
+        # Original config-file mode
+        config = load_config(args.config)
+        print(f"Config loaded: {args.config}")
+        print(f"Model: {config['model']['name']}")
+        print(f"Data: {config['data']['input_path']}")
+    else:
+        # CLI mode
+        if not args.data_path and not args.output_dir:
+            parser.error("Either --config or (--data_path and --output_dir) is required")
+        config = make_config_from_args(args)
+        print(f"Model: {config['model']['name']}")
+        print(f"Data: {config['data']['input_path']}")
+    
+    # Override max_steps if specified
+    if args.max_steps is not None:
+        config["training"]["max_steps"] = args.max_steps
+        config["training"]["num_epochs"] = 999  # effectively infinite
+        config["training"]["save_steps"] = args.max_steps + 10  # don't save mid-training
 
     try:
         train(config)

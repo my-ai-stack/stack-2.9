@@ -1,0 +1,1 @@
+source /tmp/stack-venv/bin/activate && python3 train_simple_nobnb.py --max_steps 2 --output_dir /tmp/test_train --data_path training/training-data/tool_examples_combined.jsonl --model_name Qwen/Qwen2.5-Coder-1.5B --per_device_batch_size 1 --max_length 512
