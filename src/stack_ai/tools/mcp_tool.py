@@ -29,12 +29,12 @@ class MCPTool(BaseTool):
         "properties": {
             "server_name": {"type": "string", "description": "MCP server name"},
             "tool_name": {"type": "string", "description": "Tool to call on server"},
-            "arguments": {"type": "object", "description": "Arguments for the tool"}
+            "args": {"type": "object", "description": "Arguments for the tool"}
         },
         "required": ["server_name", "tool_name"]
     }
 
-    async def execute(self, server_name: str, tool_name: str, arguments: Optional[Dict] = None) -> ToolResult:
+    async def execute(self, server_name: str, tool_name: str, args: Optional[Dict] = None) -> ToolResult:
         """Call MCP tool."""
         config = _load_mcp_config()
 
@@ -46,7 +46,7 @@ class MCPTool(BaseTool):
         return ToolResult(success=True, data={
             "server": server_name,
             "tool": tool_name,
-            "arguments": arguments or {},
+            "arguments": args or {},
             "status": "simulated",
             "note": f"MCP call to {server_name}/{tool_name} - requires MCP runtime"
         })

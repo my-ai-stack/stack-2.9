@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import asyncio
-import inspect
 import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
@@ -80,8 +79,8 @@ class BaseTool(ABC, Generic[TInput, TOutput]):
     async def call(self, input_data: dict[str, Any]) -> ToolResult[TOutput]:
         """High-level call wrapper: validate → execute → timing.
 
-        Handles both sync and async execute methods, and both
-        execute(input_data: dict) and execute(path: str, ...) signatures.
+        Handles both sync and async execute methods, and provides
+        a hybrid dispatch to support both dictionary and positional arguments.
         """
         valid, error = self.validate_input(input_data)
         if not valid:
@@ -89,20 +88,23 @@ class BaseTool(ABC, Generic[TInput, TOutput]):
 
         start = time.perf_counter()
         try:
-            # Determine if execute takes a dict or named parameters
+            import inspect
+            # Hybrid Dispatcher:
+            # 1. Check if the execute method is designed for a single dictionary input
             sig = inspect.signature(self.execute)
-            params = list(sig.parameters.keys())
+            params = list(sig.parameters.values())
 
-            # If first param is 'input_data' (and only one param), pass dict directly
-            # Otherwise unpack as kwargs
-            if params == ['input_data']:
+            if len(params) == 1 and (params[0].name == 'input_data' or params[0].kind == inspect.Parameter.VAR_KEYWORD):
+                # High-Performance Path: Pass dictionary directly
                 result = self.execute(input_data)
             else:
+                # Compatibility Path: Unpack dictionary into positional/keyword arguments
                 result = self.execute(**input_data)
 
             # Handle async execute methods
-            if inspect.iscoroutine(result):
+            if asyncio.iscoroutine(result):
                 result = await result
+
             result.duration_seconds = time.perf_counter() - start
             return result
         except Exception as exc:

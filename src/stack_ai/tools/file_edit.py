@@ -108,6 +108,7 @@ class FileEditDeleteTool(BaseTool):
         "type": "object",
         "properties": {
             "path": {"type": "string", "description": "File path"},
+            "line": {"type": "number", "description": "Single line to delete (1-indexed)"},
             "line_start": {"type": "number", "description": "Start line (1-indexed)"},
             "line_end": {"type": "number", "description": "End line (1-indexed, inclusive)"},
             "pattern": {"type": "string", "description": "Or delete lines matching this regex"},
@@ -116,7 +117,7 @@ class FileEditDeleteTool(BaseTool):
         "required": ["path"]
     }
 
-    async def execute(self, path: str, line_start: Optional[int] = None, line_end: Optional[int] = None, pattern: Optional[str] = None, create_backup: bool = True) -> ToolResult:
+    async def execute(self, path: str, line: Optional[int] = None, line_start: Optional[int] = None, line_end: Optional[int] = None, pattern: Optional[str] = None, create_backup: bool = True) -> ToolResult:
         """Delete lines from file."""
         if _is_protected_path(path):
             return ToolResult(success=False, error="Cannot edit protected path")
@@ -132,9 +133,14 @@ class FileEditDeleteTool(BaseTool):
             deleted = [i for i, l in enumerate(lines) if regex.search(l)]
             lines = [l for i, l in enumerate(lines) if i not in deleted]
             deleted_count = len(deleted)
+        elif line:
+            if line < 1 or line > len(lines):
+                return ToolResult(success=False, error=f"Line {line} out of range (1-{len(lines)})")
+            del lines[line - 1]
+            deleted_count = 1
         else:
             if line_start is None or line_end is None:
-                return ToolResult(success=False, error="Must specify line_start/line_end or pattern")
+                return ToolResult(success=False, error="Must specify line, line_start/line_end or pattern")
 
             if line_start < 1 or line_end > len(lines) or line_start > line_end:
                 return ToolResult(success=False, error=f"Invalid line range ({line_start}-{line_end})")

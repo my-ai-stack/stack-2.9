@@ -14,7 +14,7 @@ from unittest.mock import MagicMock, patch, mock_open
 # Add stack_cli to path
 sys.path.insert(0, str(Path(__file__).parent.parent / "stack_cli"))
 
-from stack_cli.tools import (
+from tools import (
     TOOLS,
     get_tool,
     list_tools,

@@ -59,10 +59,39 @@ print(f"Available tools: {len(registry.list())}")
 - `src/tools/`: Implementation of the 57 agent tools.
 - `src/enhancements/`: Cognitive modules (EI, Knowledge Graph, NLP).
 - `src/mcp/`: Model Context Protocol client and server.
+- `src/voice/`: TypeScript client for voice synthesis and cloning.
+- `stack/voice/`: Python voice server (FastAPI) and integration tools.
 - `stack/eval/`: Benchmark suites and evaluation results.
 - `stack/training/`: Fine-tuning pipelines and dataset scripts.
 
+## 🎙️ Voice Integration
+
+Stack 2.9 includes a voice synthesis and cloning system that allows the agent to communicate via audio.
+
+### Setting up the Voice Server
+1. Navigate to the voice directory:
+   ```bash
+   cd stack/voice
+   ```
+2. Install dependencies:
+   ```bash
+   pip install fastapi uvicorn requests
+   ```
+3. Start the voice server:
+   ```bash
+   python voice_server.py
+   ```
+   The server will start on `http://localhost:8000`.
+
+### Running a Voice Demo
+You can run the provided demo script to see the voice integration in action:
+```bash
+python samples/demo_voice.py
+```
+This script simulates a voice command, processes it through the `StackAgent`, and generates an audio response.
+
 ## 📄 Documentation
+
 For detailed information, see the [Model Card](docs/MODEL_CARD.md) and [API Reference](docs/API.md).
 
 ---

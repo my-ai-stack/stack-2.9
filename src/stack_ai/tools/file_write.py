@@ -72,12 +72,13 @@ class FileDeleteTool(BaseTool):
         "type": "object",
         "properties": {
             "path": {"type": "string", "description": "File path to delete"},
-            "create_backup": {"type": "boolean", "default": True}
+            "create_backup": {"type": "boolean", "default": True},
+            "force": {"type": "boolean", "default": False, "description": "Force deletion if file is read-only"}
         },
         "required": ["path"]
     }
 
-    async def execute(self, path: str, create_backup: bool = True) -> ToolResult:
+    async def execute(self, path: str, create_backup: bool = True, force: bool = False) -> ToolResult:
         """Delete file."""
         file_path = Path(path)
 

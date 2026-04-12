@@ -1,345 +1,159 @@
-# Stack 2.9 Inference API Documentation
+# Stack AI API Reference
 
-REST API for code generation using the Stack 2.9 fine-tuned Qwen model.
-
-## Quick Start
-
-### 1. Install Dependencies
-
-```bash
-pip install -r requirements_api.txt
-pip install -r requirements.txt  # Core dependencies (transformers, torch, etc.)
-```
-
-### 2. Set Model Path
-
-```bash
-# Option A: Environment variable
-export MODEL_PATH=/path/to/your/merged/model
-
-# Option B: Direct parameter
-MODEL_PATH=/path/to/model uvicorn inference_api:app --port 8000
-```
-
-### 3. Start the Server
-
-```bash
-# Basic usage
-uvicorn inference_api:app --host 0.0.0.0 --port 8000
-
-# With auto-reload (development)
-uvicorn inference_api:app --reload --port 8000
-
-# Using Python directly
-python inference_api.py
-```
-
-### 4. Verify It's Running
-
-```bash
-curl http://localhost:8000/health
-```
-
-Expected response:
-```json
-{
-  "status": "healthy",
-  "model_loaded": true,
-  "model_path": "base_model_qwen7b",
-  "device": "cuda",
-  "cuda_available": true
-}
-```
+This document provides a professional API reference for the `stack_ai` package, detailing the core tool registry, base tool architecture, and specialized enhancement modules.
 
 ---
 
-## API Endpoints
+## 🛠️ Tool Architecture
 
-### `GET /health`
+The tool system is designed for extensibility, allowing developers to register custom capabilities that can be invoked by the AI agent.
 
-Health check endpoint to verify API and model status.
+### `ToolRegistry`
+The `ToolRegistry` is a singleton that manages the lifecycle and invocation of tools.
 
-**Response:**
-```json
-{
-  "status": "healthy",
-  "model_loaded": true,
-  "model_path": "/path/to/model",
-  "device": "cuda",
-  "cuda_available": true
-}
-```
+**Class Signature:** `class ToolRegistry`
 
----
+#### Methods
+- `register(tool: BaseTool) -> None`
+  - Registers a tool instance. The tool must have a non-empty `name`.
+  - **Throws:** `ValueError` if tool name is empty.
+- `get(name: str) -> BaseTool | None`
+  - Retrieves a registered tool by its unique name.
+- `list() -> list[str]`
+  - Returns a list of all registered tool names.
+- `list_tools() -> dict[str, dict[str, Any]]`
+  - Returns a mapping of tool names to their metadata, including `name`, `description`, and `input_schema`.
+- `call(name: str, input_data: dict[str, Any]) -> Any`
+  - A convenience method that retrieves a tool and executes it in one step.
+  - **Throws:** `KeyError` if the tool is not found.
+- `unregister(name: str) -> bool`
+  - Removes a tool from the registry. Returns `True` if the tool existed.
 
-### `GET /model-info`
-
-Get information about the currently loaded model.
-
-**Response:**
-```json
-{
-  "model_path": "/path/to/model",
-  "device": "cuda:0",
-  "dtype": "torch.float16"
-}
-```
-
----
-
-### `POST /generate`
-
-Generate code completion for a prompt.
-
-**Request Body:**
-```json
-{
-  "prompt": "def two_sum(nums, target):\n    \"\"\"Return indices of two numbers that add up to target.\"\"\"\n",
-  "max_tokens": 128,
-  "temperature": 0.2,
-  "top_p": 0.95,
-  "do_sample": true,
-  "repetition_penalty": 1.1,
-  "num_return_sequences": 1
-}
-```
-
-**Parameters:**
-| Parameter | Type | Default | Range | Description |
-|-----------|------|---------|-------|-------------|
-| `prompt` | string | required | - | Input prompt to complete |
-| `max_tokens` | int | 512 | 1-4096 | Maximum tokens to generate |
-| `temperature` | float | 0.2 | 0.0-2.0 | Sampling temperature (higher = more creative) |
-| `top_p` | float | 0.95 | 0.0-1.0 | Nucleus sampling threshold |
-| `do_sample` | bool | true | - | Whether to use sampling vs greedy |
-| `repetition_penalty` | float | 1.1 | 1.0-2.0 | Penalize repeated tokens |
-| `num_return_sequences` | int | 1 | 1-10 | Number of sequences to generate |
-
-**Response:**
-```json
-{
-  "generated_text": "    seen = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in seen:\n            return [seen[complement], i]\n        seen[num] = i\n    return []",
-  "prompt": "def two_sum(nums, target):\n    \"\"\"Return indices of two numbers that add up to target.\"\"\"\n",
-  "model": "base_model_qwen7b",
-  "num_tokens": 45,
-  "finish_reason": "stop"
-}
-```
-
-**Example with curl:**
-```bash
-curl -X POST http://localhost:8000/generate \
-  -H "Content-Type: application/json" \
-  -d '{
-    "prompt": "def fibonacci(n):\n    \"\"\"Return first n Fibonacci numbers.\"\"\"\n",
-    "max_tokens": 100,
-    "temperature": 0.2
-  }'
-```
+**Lifecycle:**
+1. **Initialization:** The registry is instantiated as a singleton via `get_registry()` or the global `tool_registry` instance.
+2. **Registration:** Tools inheriting from `BaseTool` are instantiated and added via `register()`.
+3. **Discovery:** The AI agent calls `list_tools()` to understand available capabilities and their required parameters.
+4. **Execution:** The agent provides parameters, which are passed to `call()`, triggering the tool's internal validation and execution logic.
 
 ---
 
-### `POST /chat`
+### `BaseTool`
+The abstract base class for all tools in Stack 2.9.
 
-Conversational interface for multi-turn interactions.
+**Class Signature:** `class BaseTool(ABC, Generic[TInput, TOutput])`
 
-**Request Body:**
-```json
-{
-  "messages": [
-    {"role": "user", "content": "Write a function to reverse a string in Python"},
-    {"role": "assistant", "content": "def reverse_string(s):\n    return s[::-1]"},
-    {"role": "user", "content": "Make it recursive instead"}
-  ],
-  "max_tokens": 128,
-  "temperature": 0.2,
-  "top_p": 0.95
-}
-```
+#### Required Implementation
+- `name: str`: Unique identifier for the tool.
+- `description: str`: Human-readable description used by the AI for tool selection.
+- `execute(self, input_data: TInput) -> ToolResult[TOutput]`: The core logic of the tool. Must return a `ToolResult`.
 
-**Message Roles:**
-- `user` - User's message
-- `assistant` - Model's previous response (for conversation history)
+#### Optional Overrides
+- `input_schema: dict`: JSON schema defining the expected input parameters.
+- `output_schema: dict`: JSON schema defining the tool's output.
+- `validate_input(self, input_data: dict) -> tuple[bool, str | None]`: Validates input before execution.
+- `is_enabled() -> bool`: Determines if the tool is currently available.
+- `map_result_to_message(self, result: TOutput, tool_use_id: str | None = None) -> str`: Formats the result for display.
 
-**Response:**
-```json
-{
-  "message": {
-    "role": "assistant",
-    "content": "def reverse_string(s):\n    if len(s) <= 1:\n        return s\n    return s[-1] + reverse_string(s[:-1])"
-  },
-  "model": "base_model_qwen7b",
-  "num_tokens": 67,
-  "finish_reason": "stop"
-}
-```
+#### Helper Methods
+- `call(self, input_data: dict[str, Any]) -> ToolResult[TOutput]`
+  - The high-level wrapper that orchestrates: `validate_input` $\rightarrow$ `execute` $\rightarrow$ `timing`.
+  - Supports both synchronous and asynchronous `execute` methods.
 
-**Example with curl:**
-```bash
-curl -X POST http://localhost:8000/chat \
-  -H "Content-Type: application/json" \
-  -d '{
-    "messages": [
-      {"role": "user", "content": "Write a binary search function"}
-    ],
-    "max_tokens": 150
-  }'
-```
+#### Data Structures
+- `ToolResult`: Contains `success` (bool), `data` (Any), `error` (str | None), and `duration_seconds` (float).
+- `ToolParam`: Defines a parameter with `name`, `description`, `type`, `required`, and `default`.
 
 ---
 
-### `POST /generate/raw`
+## 🚀 Implementing a Custom Tool
 
-Same as `/generate` but returns raw output without extracting code from markdown blocks.
+To create a new tool, subclass `BaseTool` and implement the `execute` method.
 
-**Example with curl:**
-```bash
-curl -X POST http://localhost:8000/generate/raw \
-  -H "Content-Type: application/json" \
-  -d '{
-    "prompt": "def quick_sort(arr):",
-    "max_tokens": 200
-  }'
-```
+### Implementation Guide
+1. **Define Metadata**: Set the `name` and `description` as class attributes.
+2. **Define Schema**: Implement the `input_schema` property to tell the AI what parameters are needed.
+3. **Implement Execution**: Override the `execute` method to perform the tool's logic.
+4. **Register**: Add the tool instance to the global registry.
 
----
-
-### `POST /extract-code`
-
-Extract code from a text response that may contain markdown code blocks.
-
-**Request Body:**
-```json
-{
-  "prompt": "```python\ndef hello():\n    print(\"world\")\n```"
-}
-```
-
-**Response:**
-```json
-{
-  "code": "def hello():\n    print(\"world\")"
-}
-```
-
----
-
-## Environment Variables
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `MODEL_PATH` | `base_model_qwen7b` | Path to model directory |
-| `DEVICE` | `cuda` (if available) | Device to use: `cuda` or `cpu` |
-| `PORT` | `8000` | Server port |
-| `HOST` | `0.0.0.0` | Server host |
-| `RELOAD` | `false` | Enable auto-reload for development |
-| `DEFAULT_MAX_TOKENS` | `512` | Default max tokens |
-| `DEFAULT_TEMPERATURE` | `0.2` | Default temperature |
-| `DEFAULT_TOP_P` | `0.95` | Default top_p |
-
----
-
-## Usage Examples
-
-### Python Client
-
+**Example:**
 ```python
-import requests
+from stack_ai.tools.base import BaseTool, ToolResult
+from stack_ai.tools.registry import tool_registry
 
-API_URL = "http://localhost:8000"
+class CalculatorTool(BaseTool):
+    name = "calculator"
+    description = "Performs basic arithmetic operations"
 
-# Health check
-health = requests.get(f"{API_URL}/health").json()
-print(f"Model loaded: {health['model_loaded']}")
+    @property
+    def input_schema(self):
+        return {
+            "type": "object",
+            "properties": {
+                "operation": {"type": "string", "enum": ["add", "sub"]},
+                "a": {"type": "number"},
+                "b": {"type": "number"}
+            }
+        }
 
-# Code completion
-response = requests.post(
-    f"{API_URL}/generate",
-    json={
-        "prompt": "def merge_sort(arr):\n    \"\"\"Return sorted array.\"\"\"\n",
-        "max_tokens": 200,
-        "temperature": 0.3,
-    }
-).json()
+    def execute(self, input_data):
+        op = input_data.get("operation")
+        a, b = input_data.get("a", 0), input_data.get("b", 0)
+        result = a + b if op == "add" else a - b
+        return ToolResult(data=result)
 
-print(response["generated_text"])
-```
-
-### JavaScript/Node.js Client
-
-```javascript
-const API_URL = "http://localhost:8000";
-
-// Code completion
-async function generate(prompt) {
-  const response = await fetch(`${API_URL}/generate`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      prompt,
-      max_tokens: 128,
-      temperature: 0.2,
-    }),
-  });
-  return response.json();
-}
-
-const result = await generate("def binary_search(arr, target):");
-console.log(result.generated_text);
-```
-
-### Using with OpenAI SDK (with base_url replacement)
-
-```python
-from openai import OpenAI
-
-client = OpenAI(
-    api_key="not-needed",
-    base_url="http://localhost:8000"
-)
-
-# Note: This works for basic completions but may need adapter code
-# for full OpenAI compatibility
-response = client.completions.create(
-    model="stack-2.9",
-    prompt="def factorial(n):",
-    max_tokens=100,
-)
+tool_registry.register(CalculatorTool())
 ```
 
 ---
 
-## Performance Tips
+## 🧠 Enhancement Modules
 
-1. **GPU Recommended**: For fastest inference, run on GPU with CUDA
-2. **Batch Processing**: For multiple prompts, process sequentially (model is loaded once)
-3. **Memory**: Ensure adequate GPU memory; reduce `max_tokens` if needed
-4. **Temperature**: Use lower temperature (0.1-0.3) for deterministic code, higher for creative tasks
+Stack 2.9 includes specialized modules to enhance the AI's cognitive capabilities.
 
----
+### 🎭 Emotional Intelligence (EI)
+Focused on understanding and responding to user emotions.
 
-## Error Handling
+#### `SentimentAnalyzer`
+Analyzes text for sentiment and specific emotional markers.
+- `analyze_sentiment(text: str, return_scores: bool = True) -> Dict`: Returns sentiment (positive/negative/neutral), confidence score, and detected emotions.
+- `detect_emotions(text: str) -> List[Dict]`: Returns the top 3 detected emotions and their scores.
+- `get_tone_adjustment(text: str) -> str`: Recommends a tone (e.g., "empathetic", "supportive") based on the user's state.
 
-**503 Service Unavailable**: Model not loaded or loading failed
-```json
-{"detail": "Model not loaded. Check /health for status."}
-```
+#### `EmpathyEngine`
+Generates empathetic responses and adjusts tone.
+- `generate_empathetic_response(user_message: str, base_response: str) -> str`: Wraps a base response with empathetic prefixes and reassurance.
+- `get_response_tone(user_message: str) -> Dict`: Provides a full analysis of the recommended tone and user emotional state.
 
-**500 Internal Server Error**: Generation failed
-```json
-{"detail": "Generation failed: <error message>"}
-```
+### 🕸️ Knowledge Graph
+Provides structured memory and relationship tracking.
 
-**400 Bad Request**: Invalid input
-```json
-{"detail": "Last message must be from user"}
-```
+#### `KnowledgeGraph`
+A graph-based representation of entities and their relationships using `networkx`.
+- `add_entity(entity_id, entity_type, properties=None)`: Adds a node to the graph.
+- `add_relationship(source_id, target_id, relationship_type, properties=None)`: Creates a directed edge between entities.
+- `find_similar_entities(entity_id, max_results=5)`: Uses Jaccard-like similarity based on common neighbors to find related entities.
+- `get_subgraph(entity_ids, depth=1)`: Extracts a local neighborhood around specific entities for context.
 
----
+#### `RAGEngine`
+Retrieval-Augmented Generation for accessing unstructured document data.
+- `add_document(doc_id, content, metadata=None, embedding=None)`: Indexes a document.
+- `retrieve(query, top_k=None, use_keyword_index=True)`: Returns the most relevant documents using a hybrid of keyword and vector similarity.
+- `retrieve_as_context(query, max_context_length=1000)`: Formats retrieved documents into a single string for LLM context windows.
 
-## Architecture Notes
+### ✍️ NLP Modules
+Advanced Natural Language Processing for text understanding.
 
-- **Single Model Instance**: Model is loaded once at startup and reused
-- **Synchronous Generation**: Uses `torch.no_grad()` for inference
-- **CORS Enabled**: Accepts requests from any origin (configure for production)
-- **No Authentication**: Add middleware (e.g., API key) for production deployments
+#### `ContextualEmbedder`
+Generates high-dimensional vectors using BERT/RoBERTa.
+- `get_embedding(text, layer=-1)`: Returns the mean of the last hidden state for a given text.
+- `compute_similarity(text1, text2, method="cosine")`: Calculates the similarity between two texts.
+
+#### `EntityRecognizer`
+Extracts named entities using a hybrid of Transformers and Regex.
+- `recognize_entities(text)`: Extracts a list of entities (PERSON, ORGANIZATION, LOCATION, EMAIL, etc.) with their positions and scores.
+- `extract_entities_by_type(text, entity_type)`: Filters entities by a specific type.
+
+#### `IntentDetector`
+Maps user input to specific goal-oriented intents.
+- `detect_intent(text)`: Returns the primary intent (e.g., `code_request`, `debug_request`, `explain`) and confidence score.
+- `detect_multiple_intents(text)`: Identifies all intents that exceed the confidence threshold.

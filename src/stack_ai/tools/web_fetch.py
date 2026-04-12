@@ -54,8 +54,12 @@ class WebFetchTool(BaseTool):
         "required": ["url"]
     }
 
-    async def execute(self, url: str, max_chars: int = 10000, extract_links: bool = False) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """Fetch URL content."""
+        url = input_data.get("url")
+        max_chars = input_data.get("max_chars", 10000)
+        extract_links = input_data.get("extract_links", False)
+
         if not HAS_HTTPX:
             return ToolResult(success=False, error="httpx library not installed")
 
@@ -118,8 +122,9 @@ class WebFetchMetaTool(BaseTool):
         "required": ["url"]
     }
 
-    async def execute(self, url: str) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """Get URL metadata."""
+        url = input_data.get("url")
         if not HAS_HTTPX:
             return ToolResult(success=False, error="httpx library not installed")
 

@@ -83,17 +83,54 @@ def parse_cron(cron: str) -> tuple[bool, str | None]:
                 return None
             return f"{name}={v} out of range [0,{max_val}]"
         if "/" in value:
-            base, step = value.split("/", 1)
+            parts = value.split("/")
+            if len(parts) != 2:
+                return f"Invalid {name} step format: {value}"
+            base, step = parts
             if step.isdigit() and int(step) > 0:
                 if base == "*" or (base.isdigit() and 0 <= int(base) <= max_val):
                     return None
             return f"Invalid {name} step: {value}"
         if "-" in value:
-            start, end = value.split("-", 1)
+            parts = value.split("-")
+            if len(parts) != 2:
+                return f"Invalid {name} range format: {value}"
+            start, end = parts
             if start.isdigit() and end.isdigit():
-                if 0 <= int(start) <= max_val and 0 <= int(end) <= max_val:
+                s, e = int(start), int(end)
+                if 0 <= s <= max_val and 0 <= e <= max_val and s <= e:
                     return None
             return f"Invalid {name} range: {value}"
+        if "," in value:
+            parts = value.split(",")
+            for p in parts:
+                if not p:
+                    return f"Empty value in {name} list: {value}"
+                if p == "*":
+                    continue
+                if p.isdigit():
+                    v = int(p)
+                    if not (0 <= v <= max_val):
+                        return f"Value {v} in {name} list out of range [0,{max_val}]"
+                elif "/" in p:
+                    # Simplified check for steps in list
+                    s_parts = p.split("/")
+                    if len(s_parts) == 2 and s_parts[1].isdigit() and int(s_parts[1]) > 0:
+                        base = s_parts[0]
+                        if base == "*" or (base.isdigit() and 0 <= int(base) <= max_val):
+                            continue
+                    return f"Invalid {name} step in list: {p}"
+                elif "-" in p:
+                    # Simplified check for ranges in list
+                    r_parts = p.split("-")
+                    if len(r_parts) == 2 and r_parts[0].isdigit() and r_parts[1].isdigit():
+                        s, e = int(r_parts[0]), int(r_parts[1])
+                        if 0 <= s <= max_val and 0 <= e <= max_val and s <= e:
+                            continue
+                    return f"Invalid {name} range in list: {p}"
+                else:
+                    return f"Invalid {name} value: {p}"
+            return None
         return f"Invalid {name}: {value}"
 
     for name, val, maxv in [

@@ -55,7 +55,7 @@ def load_model_and_tokenizer(
             quantization_config=bnb_config,
             trust_remote_code=trust_remote_code,
             device_map="auto",
-            torch_dtype=torch.bfloat16,
+            dtype=torch.bfloat16,
         )
     elif use_8bit:
         from transformers import BitsAndBytesConfig
@@ -68,14 +68,14 @@ def load_model_and_tokenizer(
             quantization_config=bnb_config,
             trust_remote_code=trust_remote_code,
             device_map="auto",
-            torch_dtype=torch.bfloat16,
+            dtype=torch.bfloat16,
         )
     else:
         # No quantization - load in FP32 for AMP compatibility
         # Trainer with fp16=True will handle casting during training
         model = AutoModelForCausalLM.from_pretrained(
             model_name,
-            torch_dtype=torch.float32,
+            dtype=torch.float32,
             trust_remote_code=trust_remote_code,
             device_map="auto",
             use_cache=False,

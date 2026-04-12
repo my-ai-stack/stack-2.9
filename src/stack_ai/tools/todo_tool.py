@@ -97,6 +97,9 @@ class TodoWriteTool(BaseTool[dict[str, Any], dict[str, Any]]):
         todos = _load_todos()
 
         if op == "add":
+            # Support both 'item' and 'task' for flexibility
+            if "item" in input_data and "task" not in input_data:
+                input_data["task"] = input_data["item"]
             return self._add(todos, input_data)
         elif op == "complete":
             return self._complete(todos, input_data)

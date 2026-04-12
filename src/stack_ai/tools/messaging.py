@@ -60,8 +60,14 @@ class MessageSendTool(BaseTool):
         "required": ["recipient", "content"]
     }
 
-    async def execute(self, recipient: str, content: str, channel: str = "default", priority: str = "normal", template: Optional[str] = None) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """Send a message."""
+        recipient = input_data.get("recipient")
+        content = input_data.get("content")
+        channel = input_data.get("channel", "default")
+        priority = input_data.get("priority", "normal")
+        template = input_data.get("template")
+
         data = _load_messages()
 
         msg_id = str(uuid.uuid4())[:12]
@@ -119,8 +125,12 @@ class MessageListTool(BaseTool):
         "required": []
     }
 
-    async def execute(self, channel: Optional[str] = None, recipient: Optional[str] = None, limit: int = 50) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """List messages."""
+        channel = input_data.get("channel")
+        recipient = input_data.get("recipient")
+        limit = input_data.get("limit", 50)
+
         data = _load_messages()
         messages = data.get("messages", [])
 
@@ -163,8 +173,12 @@ class MessageChannelTool(BaseTool):
         "required": ["action"]
     }
 
-    async def execute(self, action: str, name: Optional[str] = None, description: Optional[str] = None) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """Manage channels."""
+        action = input_data.get("action")
+        name = input_data.get("name")
+        description = input_data.get("description")
+
         data = _load_messages()
 
         if action == "list":
@@ -210,7 +224,7 @@ class MessageTemplateTool(BaseTool):
         "properties": {
             "action": {
                 "type": "string",
-                "enum": ["create", "list", "use"],
+                "enum": ["create", "list", "use", "get"],
                 "description": "Action to perform"
             },
             "name": {
@@ -229,8 +243,13 @@ class MessageTemplateTool(BaseTool):
         "required": ["action"]
     }
 
-    async def execute(self, action: str, name: Optional[str] = None, template: Optional[str] = None, variables: Optional[Dict] = None) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """Manage templates."""
+        action = input_data.get("action")
+        name = input_data.get("name")
+        template = input_data.get("template")
+        variables = input_data.get("variables")
+
         data = _load_messages()
 
         if "templates" not in data:
@@ -240,6 +259,15 @@ class MessageTemplateTool(BaseTool):
             return ToolResult(success=True, data={
                 "templates": list(data["templates"].keys()),
                 "count": len(data["templates"])
+            })
+
+        if action == "get" and name:
+            if name not in data["templates"]:
+                return ToolResult(success=False, error=f"Template '{name}' not found")
+            return ToolResult(success=True, data={
+                "name": name,
+                "content": data["templates"][name]["content"],
+                "created_at": data["templates"][name].get("created_at")
             })
 
         if action == "create" and name and template:

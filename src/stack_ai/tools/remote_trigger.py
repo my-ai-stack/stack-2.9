@@ -69,8 +69,13 @@ class RemoteAddTool(BaseTool):
         "required": ["name", "url"]
     }
 
-    async def execute(self, name: str, url: str, api_key: Optional[str] = None, capabilities: Optional[List[str]] = None) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """Add remote."""
+        name = input_data.get("name")
+        url = input_data.get("url")
+        api_key = input_data.get("api_key")
+        capabilities = input_data.get("capabilities")
+
         data = _load_remotes()
 
         data["remotes"][name] = {
@@ -102,7 +107,7 @@ class RemoteListTool(BaseTool):
         "required": []
     }
 
-    async def execute(self) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """List remotes."""
         data = _load_remotes()
         remotes = data.get("remotes", {})
@@ -146,8 +151,13 @@ class RemoteTriggerTool(BaseTool):
         "required": ["remote", "action"]
     }
 
-    async def execute(self, remote: str, action: str, parameters: Optional[Dict] = None, wait_for_response: bool = True) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """Trigger remote action."""
+        remote = input_data.get("remote")
+        action = input_data.get("action")
+        parameters = input_data.get("parameters")
+        wait_for_response = input_data.get("wait_for_response", True)
+
         data = _load_remotes()
         remotes = data.get("remotes", {})
 
@@ -195,8 +205,9 @@ class RemoteRemoveTool(BaseTool):
         "required": ["name"]
     }
 
-    async def execute(self, name: str) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """Remove remote."""
+        name = input_data.get("name")
         data = _load_remotes()
 
         if name not in data["remotes"]:

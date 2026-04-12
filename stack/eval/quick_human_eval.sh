@@ -10,7 +10,7 @@ cd "$SCRIPT_DIR"
 
 # Defaults
 PROVIDER="${1:-ollama}"
-MODEL="${2:-qwen2.5-coder:32b}"
+MODEL="${2:-gemma4:31b-cloud}"
 MAX_PROBLEMS="${3:-20}"
 
 echo "========================================"

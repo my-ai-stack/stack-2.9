@@ -64,8 +64,13 @@ class TeamCreateTool(BaseTool):
         "required": ["team_name", "agents"]
     }
 
-    async def execute(self, team_name: str, agents: List[Dict], task: str = "", coordination_mode: str = "parallel") -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """Create a new team."""
+        team_name = input_data.get("team_name")
+        agents = input_data.get("agents")
+        task = input_data.get("task", "")
+        coordination_mode = input_data.get("coordination_mode", "parallel")
+
         data = _load_teams()
 
         team_id = str(uuid.uuid4())[:8]
@@ -87,7 +92,7 @@ class TeamCreateTool(BaseTool):
             "team_id": team_id,
             "team_name": team_name,
             "status": "created",
-            "agents_count": len(agents),
+            "agents_count": len(agents) if agents else 0,
             "coordination_mode": coordination_mode,
             "created_at": team["created_at"]
         })
@@ -110,8 +115,9 @@ class TeamDisbandTool(BaseTool):
         "required": ["team_id"]
     }
 
-    async def execute(self, team_id: str) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """Disband team."""
+        team_id = input_data.get("team_id")
         data = _load_teams()
         teams = data["teams"]
         original_count = len(teams)
@@ -141,7 +147,7 @@ class TeamListTool(BaseTool):
         "required": []
     }
 
-    async def execute(self) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """List teams."""
         data = _load_teams()
         return ToolResult(success=True, data={
@@ -167,8 +173,9 @@ class TeamStatusTool(BaseTool):
         "required": ["team_id"]
     }
 
-    async def execute(self, team_id: str) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """Get team status."""
+        team_id = input_data.get("team_id")
         data = _load_teams()
         for team in data.get("teams", []):
             if team["id"] == team_id:
@@ -202,8 +209,12 @@ class TeamAssignTaskTool(BaseTool):
         "required": ["team_id", "task"]
     }
 
-    async def execute(self, team_id: str, task: str, agent_name: Optional[str] = None) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """Assign task to team."""
+        team_id = input_data.get("team_id")
+        task = input_data.get("task")
+        agent_name = input_data.get("agent_name")
+
         data = _load_teams()
         for team in data.get("teams", []):
             if team["id"] == team_id:

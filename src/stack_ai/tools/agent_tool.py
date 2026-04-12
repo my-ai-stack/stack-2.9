@@ -41,8 +41,13 @@ class AgentSpawnTool(BaseTool):
         "required": ["task"]
     }
 
-    async def execute(self, task: str, runtime: str = "subagent", model: Optional[str] = None, timeout: int = 300) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """Spawn a sub-agent to execute the task."""
+        task = input_data.get("task")
+        runtime = input_data.get("runtime", "subagent")
+        model = input_data.get("model")
+        timeout = input_data.get("timeout", 300)
+
         agent_id = str(uuid.uuid4())[:8]
 
         return ToolResult(success=True, data={
@@ -74,8 +79,9 @@ class AgentStatusTool(BaseTool):
         "required": ["agent_id"]
     }
 
-    async def execute(self, agent_id: str) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """Check agent status."""
+        agent_id = input_data.get("agent_id")
         return ToolResult(success=True, data={
             "agent_id": agent_id,
             "status": "unknown",
@@ -95,7 +101,7 @@ class AgentListTool(BaseTool):
         "required": []
     }
 
-    async def execute(self) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """List agents."""
         return ToolResult(success=True, data={
             "agents": [],

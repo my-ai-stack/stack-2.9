@@ -70,8 +70,9 @@ class SkillListTool(BaseTool):
         "required": []
     }
 
-    async def execute(self, search: str = "") -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """List skills."""
+        search = input_data.get("search", "")
         data = _load_skills()
         discovered = _discover_skills()
 
@@ -111,8 +112,12 @@ class SkillExecuteTool(BaseTool):
         "required": ["skill_name"]
     }
 
-    async def execute(self, skill_name: str, parameters: Optional[Dict] = None, chain: Optional[List[str]] = None) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """Execute a skill."""
+        skill_name = input_data.get("skill_name")
+        parameters = input_data.get("parameters")
+        chain = input_data.get("chain")
+
         skill_path = None
         for dir in SKILL_DIRS:
             potential = dir / skill_name
@@ -160,8 +165,9 @@ class SkillInfoTool(BaseTool):
         "required": ["skill_name"]
     }
 
-    async def execute(self, skill_name: str) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """Get skill info."""
+        skill_name = input_data.get("skill_name")
         skill_path = None
         for dir in SKILL_DIRS:
             potential = dir / skill_name
@@ -211,8 +217,9 @@ class SkillChainTool(BaseTool):
         "required": ["skills"]
     }
 
-    async def execute(self, skills: List[Dict]) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """Execute skill chain."""
+        skills = input_data.get("skills")
         results = []
         for i, step in enumerate(skills):
             skill_name = step.get("skill_name")
@@ -260,8 +267,9 @@ class SkillSearchTool(BaseTool):
         "required": ["query"]
     }
 
-    async def execute(self, query: str) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """Search skills."""
+        query = input_data.get("query")
         discovered = _discover_skills()
         matches = [s for s in discovered if query.lower() in s["name"].lower() or query.lower() in s.get("description", "").lower()]
 

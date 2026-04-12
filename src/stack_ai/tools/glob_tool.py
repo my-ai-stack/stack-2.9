@@ -102,7 +102,7 @@ class GlobTool(BaseTool):
         "type": "object",
         "properties": {
             "pattern": {"type": "string", "description": "Glob pattern (e.g., **/*.py, *.js)"},
-            "base_path": {"type": "string", "description": "Base directory to search"},
+            "path": {"type": "string", "description": "Base directory to search"},
             "exclude": {"type": "array", "items": {"type": "string"}, "description": "Patterns to exclude"},
             "max_results": {"type": "number", "default": 1000, "description": "Maximum results"},
             "files_only": {"type": "boolean", "default": True, "description": "Only return files"}
@@ -110,10 +110,19 @@ class GlobTool(BaseTool):
         "required": ["pattern"]
     }
 
-    async def execute(self, pattern: str, base_path: Optional[str] = None, exclude: Optional[List[str]] = None, max_results: int = 1000, files_only: bool = True) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """Find files matching pattern."""
-        if base_path:
-            search_path = Path(base_path)
+        pattern = input_data.get("pattern")
+        if not pattern:
+            return ToolResult(success=False, error="Missing required parameter: pattern")
+
+        path = input_data.get("path")
+        exclude = input_data.get("exclude")
+        max_results = input_data.get("max_results", 1000)
+        files_only = input_data.get("files_only", True)
+
+        if path:
+            search_path = Path(path)
         else:
             search_path = Path.cwd()
 
@@ -179,8 +188,16 @@ class GlobListTool(BaseTool):
         "required": ["path"]
     }
 
-    async def execute(self, path: str, pattern: Optional[str] = None, recursive: bool = False, max_results: int = 500) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """List directory contents."""
+        path = input_data.get("path")
+        if not path:
+            return ToolResult(success=False, error="Missing required parameter: path")
+
+        pattern = input_data.get("pattern")
+        recursive = input_data.get("recursive", False)
+        max_results = input_data.get("max_results", 500)
+
         dir_path = Path(path)
         if not dir_path.exists():
             return ToolResult(success=False, error=f"Path not found: {path}")

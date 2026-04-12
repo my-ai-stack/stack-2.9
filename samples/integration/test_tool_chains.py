@@ -12,7 +12,7 @@ from unittest.mock import MagicMock, patch
 # Add stack_cli to path
 sys.path.insert(0, str(Path(__file__).parent.parent / "stack_cli"))
 
-from stack_cli.agent import StackAgent, create_agent
+from agent import StackAgent, create_agent
 from stack_cli.tools import get_tool, list_tools
 
 

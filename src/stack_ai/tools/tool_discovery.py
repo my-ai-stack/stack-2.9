@@ -29,8 +29,13 @@ class ToolSearchTool(BaseTool):
         "required": ["query"]
     }
 
-    async def execute(self, query: str, capability: Optional[str] = None) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """Search tools."""
+        query = input_data.get("query")
+        if not query:
+            return ToolResult(success=False, error="Missing required parameter: query")
+
+        capability = input_data.get("capability")
         all_tools = tool_registry.list_tools()
         query_lower = query.lower()
 
@@ -69,8 +74,9 @@ class ToolListAllTool(BaseTool):
         "required": []
     }
 
-    async def execute(self, category: Optional[str] = None) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """List all tools."""
+        category = input_data.get("category")
         all_tools = tool_registry.list_tools()
 
         if category:
@@ -105,9 +111,13 @@ class ToolInfoTool(BaseTool):
         "required": ["name"]
     }
 
-    async def execute(self, name: str) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """Get tool info."""
-        tool = tool_registry.get_tool(name)
+        name = input_data.get("name")
+        if not name:
+            return ToolResult(success=False, error="Missing required parameter: name")
+
+        tool = tool_registry.get(name)
 
         if not tool:
             return ToolResult(success=False, error=f"Tool '{name}' not found")
@@ -131,7 +141,7 @@ class ToolCapabilitiesTool(BaseTool):
         "required": []
     }
 
-    async def execute(self) -> ToolResult:
+    async def execute(self, input_data: dict[str, Any]) -> ToolResult:
         """List capabilities."""
         all_tools = tool_registry.list_tools()
 
