@@ -3,14 +3,14 @@
     <img src="https://img.shields.io/github/stars/my-ai-stack/stack-2.9?style=flat-square" alt="GitHub stars"/>
   </a>
   <a href="https://github.com/my-ai-stack/stack-2.9/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/my-ai-stack/stack-2.9?style=flat-square&logo=apache" alt="License"/>
+    <img src="https://img.shields.io/badge/License-Apache%202.0-blue?style=flat-square" alt="License"/>
   </a>
   <img src="https://img.shields.io/badge/Parameters-1.5B-blue?style=flat-square" alt="Parameters"/>
   <img src="https://img.shields.io/badge/Context-128K-green?style=flat-square" alt="Context"/>
   <img src="https://img.shields.io/badge/Tools-69-orange?style=flat-square&logo=robot" alt="Tools"/>
   <img src="https://img.shields.io/badge/Agents-Multi--Agent-purple?style=flat-square" alt="Multi-Agent"/>
   <img src="https://img.shields.io/badge/Python-3.10+-blue?style=flat-square&logo=python" alt="Python 3.10+"/>
-  <img src="https://huggingface.co/common-database-badges/blob/main/loved.svg?raw=true" alt="Loved"/>
+  <img src="https://huggingface.co/common-database-badges/loved.svg" alt="Loved"/>
 </p>
 
 # Stack 2.9 - AI Agent Framework 🔧
